@@ -1,0 +1,27 @@
+<section>
+  <h2>Carrito</h2>
+  <div>
+    {{#each products}}
+      <div>
+        <div>
+          <img
+            src={{this.product.thumbnails}}
+            alt={{this.product.title}}/>
+        </div>
+        <div>
+          <h2>{{this.product.title}}</h2>
+          <h4>${{this.product.price}}</h4>
+        </div>
+      </div>
+    {{/each}}
+  </div>
+
+  <div>
+    {{#if hasPrevPage}}
+      <a href="{{prevLink}}">Anterior</a>
+    {{/if}}
+    {{#if hasNextPage}}
+      <a href="{{nextLink}}">Siguiente</a>
+    {{/if}}
+  </div>
+</section>

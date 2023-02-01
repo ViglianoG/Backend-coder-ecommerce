@@ -1,0 +1,28 @@
+<div class="saludo">
+  <h2>Lista de todos los productos agregados hasta el momento:</h2>
+  {{#if products}}
+    <div class="products">
+      {{#each products}}
+        <div>
+          <h3>{{this.title}}</h3>
+          <p>{{this.description}}</p>
+          <h4>${{this.price}}</h4>
+          <h5>Stock disponible: {{this.stock}}</h5>
+          <a href="/products/{{this._id}}" class="btn">Ver detalle</a>
+          <hr />
+        </div>
+      {{/each}}
+    </div>
+  {{else}}
+    <h3>No existen productos...</h3>
+  {{/if}}
+</div>
+<div>
+  {{#if hasPrevPage}}
+    <a href="{{prevLink}}" class="btn">Anterior</a>
+  {{/if}}
+  {{#if hasNextPage}}
+    <a href="{{nextLink}}" class="btn">Siguiente</a>
+  {{/if}}
+</div>
+<script src="/socket.io/socket.io.js"></script>
