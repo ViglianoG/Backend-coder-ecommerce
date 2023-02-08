@@ -4,6 +4,8 @@ import handlebars from "express-handlebars";
 import { Server } from "socket.io";
 import mongoose from "mongoose";
 import run from "./run.js";
+import session from "express-session";
+import MongoStore from "connect-mongo";
 
 const port = 8080;
 const app = express();
@@ -18,6 +20,18 @@ app.set("view engine", "handlebars");
 
 const uri =
   "mongodb+srv://GVigliano:ljJ5SrK15NEK9EuA@ecommerce.qtnsooy.mongodb.net/?retryWrites=true&w=majority";
+
+app.use(
+  session({
+    store: MongoStore.create({
+      mongoUrl: uri,
+      dbName: "ecommerce",
+    }),
+    secret: "secretsecret",
+    resave: true,
+    saveUninitialized: true,
+  })
+);
 
 mongoose.set("strictQuery", false);
 mongoose.connect(

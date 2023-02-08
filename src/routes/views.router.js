@@ -1,22 +1,34 @@
 import { Router } from "express";
 import productModel from "../dao/models/product.model.js";
 import cartModel from "../dao/models/cart.model.js";
+import userModel from "../dao/models/users.model.js";
 
 const router = Router();
 
-// RUTA BASE
-router.get("/", async (req, res) => {
-  try {
-    const products = await productModel.find().lean().exec();
-    res.render("home", { products, style: "index.css" });
-  } catch (error) {
-    console.log(error);
-    res.json({ result: "Error...", error });
+//FUNCIONES
+function auth(req, res, next) {
+  if (req.session?.user) {
+    return next();
+  } else {
+    res.status(401).redirect("/sessions/login");
+    return next();
   }
-});
+}
+
+function logged(req, res, next) {
+  if (!req.session?.user) {
+    return next();
+  } else {
+    res.status(400).redirect("/products");
+    return next();
+  }
+}
+
+// RUTA BASE
+router.get("/", auth);
 
 //VER PRODUCTOS AGREGADOS CON QUERY
-router.get("/products", async (req, res) => {
+router.get("/products", auth, async (req, res) => {
   try {
     const category = req.query.category;
     const stock = req.query.stock;
@@ -48,7 +60,29 @@ router.get("/products", async (req, res) => {
         }${stock ? `&stock=${stock}` : ""}`
       : "";
 
-    res.render("home", { products });
+    const user = req.session.user;
+
+    res.render("products", { products, user });
+  } catch (error) {
+    console.log(error);
+    res.json({ result: "Error...", error });
+  }
+});
+
+//FORMULARIO PARA CREAR PRODS
+router.get("/products/create", async (req, res) => {
+  const user = req.session.user;
+  res.render("create", { user });
+});
+
+//AGREGAR PROD
+router.post("/products", async (req, res) => {
+  try {
+    const product = req.body;
+    const newProduct = new productModel(product);
+    await newProduct.save();
+
+    res.redirect("/products/" + newProduct._id);
   } catch (error) {
     console.log(error);
     res.json({ result: "Error...", error });
@@ -60,22 +94,9 @@ router.get("/products/:pid", async (req, res) => {
   try {
     const pID = req.params.pid;
     const product = await productModel.findOne({ _id: pID }).lean().exec();
+    const user = req.session.user;
 
-    res.render("oneProduct", { product });
-  } catch (error) {
-    console.log(error);
-    res.json({ result: "Error...", error });
-  }
-});
-
-//AGREGAR PROD
-router.post("/products", async (req, res) => {
-  try {
-    const product = req.body;
-    const newProduct = new productModel(product);
-    await newProduct.save();
-
-    res.redirect("/" + newProduct._id);
+    res.render("oneProduct", { product, user });
   } catch (error) {
     console.log(error);
     res.json({ result: "Error...", error });
@@ -95,11 +116,6 @@ router.get("/products/delete/:pid", async (req, res) => {
   }
 });
 
-//FORMULARIO PARA CREAR PRODS
-router.get("/products/create", async (req, res) => {
-  res.render("create", {});
-});
-
 //MUESTRA EL CARRITO
 router.get("/carts/:cid", async (req, res) => {
   try {
@@ -110,7 +126,9 @@ router.get("/carts/:cid", async (req, res) => {
       .populate("products.product")
       .lean();
 
-    res.render("cart", products);
+    const user = req.session.user;
+
+    res.render("cart", products, user);
   } catch (error) {
     console.log(error);
     res.json({ result: "error", error });
@@ -164,6 +182,79 @@ router.post("/products/category", async (req, res) => {
     console.log(error);
     res.json({ result: "Error...", error });
   }
+});
+
+// SESSIONS
+
+//VISTA REGISTRO USERS
+router.get("/sessions/register", logged, (req, res) => {
+  res.render("sessions/register");
+});
+
+//CREAR USERS EN DB
+router.post("/sessions/register", async (req, res) => {
+  const newUser = req.body;
+
+  const user = new userModel(newUser);
+  await user.save();
+
+  res.redirect("/sessions/login");
+});
+
+//LOGIN
+router.post("/sessions/login", async (req, res) => {
+  const { email, password } = req.body;
+
+  if (email === "adminCoder@coder.com" && password === "adminCod3r123") {
+    const admin = {
+      email,
+      password,
+      first_name: "Admin",
+      last_name: "Coder",
+      age: 26,
+      role: "admin",
+    };
+
+    req.session.user = admin;
+    res.redirect("/products");
+  }
+
+  const user = await userModel.findOne({ email, password }).lean().exec();
+  if (!user) {
+    return res.status(401).render("errors/default", {
+      error: "Error en email y/o password",
+    });
+  }
+
+  req.session.user = user;
+  res.redirect("/products");
+});
+
+//VIEW DEL LOGIN
+router.get("/sessions/login", logged, (req, res) => {
+  res.render("sessions/login");
+});
+
+//LOGOUT
+router.get("/sessions/logout", (req, res) => {
+  req.session.destroy((err) => {
+    if (err) {
+      res.status(500).render("errors/default", { error: err });
+    } else res.redirect("/sessions/login");
+  });
+});
+
+//PERFIL DEL USER
+router.get("/sessions/user", auth, (req, res) => {
+  const user = req.session.user;
+
+  if (!user) {
+    return res.status(404).render("errors/default", {
+      error: "User not found",
+    });
+  }
+
+  res.render("sessions/user", { user });
 });
 
 export default router;

@@ -3,6 +3,7 @@ import cartsRouter from "./routes/cartsRouter.js";
 import chatRouter from "./routes/chat.router.js";
 import messagesModel from "./dao/models/message.model.js";
 import viewsRouter from "./routes/views.router.js";
+import sessionRouter from "./routes/sessions.router.js";
 
 const run = (socketServer, app) => {
   app.use((req, res, next) => {
@@ -10,11 +11,22 @@ const run = (socketServer, app) => {
     next();
   });
 
-  app.use("/products", viewsRouter);
+  //MIDDLEWARE AUTH
+  function auth(req, res, next) {
+    if (req.session?.user) {
+      return next();
+    } else {
+      return res
+        .status(401)
+        .json({ status: "ERROR", payload: "Not authenticated!" });
+    }
+  }
 
-  app.use("/api/products", productsRouter);
-  app.use("/api/carts", cartsRouter);
-  app.use("/chat", chatRouter);
+  app.use("/", viewsRouter);
+  app.use("/api/products", auth, productsRouter);
+  app.use("/api/carts", auth, cartsRouter);
+  app.use("/chat", auth, chatRouter);
+  app.use("/api/sessions", sessionRouter);
 
   socketServer.on("connection", (socket) => {
     console.log("New client connected");
