@@ -1,3 +1,7 @@
+@import url('https://fonts.googleapis.com/css2?family=Josefin+Slab:wght@300&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Poiret+One&display=swap');
+
+
 :root{
     --primary: rgb(255, 235, 197);
 }
@@ -41,16 +45,36 @@ button{
 
 
 nav{
-    border: 2px black solid;
     width: 100%;
     height: 80px;
-    background-color: lightgrey;
     display: flex;
     justify-content: space-around;
     align-items: center;
     gap: 10%;
+    font-family: 'Poiret One', cursive;
+    font-size: 20px;
+    font-weight: bold;
 }
 nav div a{
+    color:black;
     text-decoration: none;
     gap: 10px;
+    padding: 10px;
+}
+nav div a:hover{
+    background-color: black;
+    color: white;
+    text-decoration: underline;
+}
+
+.vertical-menu{
+    position: absolute;
+    display: none;
+    list-style: none;
+    width: 300px;
+    background-color: white;
+}
+
+nav div a:hover{
+    display: block;
 }

@@ -1,3 +1,26 @@
+<nav>
+  <div>
+    <a href="#">MENU</a>
+    <ul class="vertical-menu">
+      <li><a class="nav-link" href="/products">Todos los productos</a></li>
+      <li><a class="nav-link" href="/products/create">Agregar producto</a></li>
+      <li><a class="nav-link" href="/chat">Chat en tiempo real</a></li>
+    </ul>
+  </div>
+  <div>
+    <a href="/products">HOME</a>
+  </div>
+  <div>
+    {{#if user}}
+      <a href="/sessions/user">MI PERFIL</a>
+    {{else}}
+      <div>
+        <a href="/sessions/login">INICIAR SESIÓN</a>
+        <a href="/sessions/register">REGISTRARSE</a>
+      </div>
+    {{/if}}
+  </div>
+</nav>
 <div>
   {{#if user}}
     <h4>Bienvenido, {{user.first_name}}</h4>
@@ -13,7 +36,7 @@
           <p>{{this.description}}</p>
           <h4>${{this.price}}</h4>
           <h5>Stock disponible: {{this.stock}}</h5>
-          <hr>
+          <hr />
           <a href="/products/{{this._id}}" class="btn">Ver detalle</a>
         </div>
       {{/each}}

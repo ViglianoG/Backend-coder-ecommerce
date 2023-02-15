@@ -1,3 +1,26 @@
+<nav>
+      <div>
+        <a href="#">MENU</a>
+        <ul class="vertical-menu">
+          <li><a class="nav-link" href="/products">Todos los productos</a></li>
+          <li><a class="nav-link" href="/products/create">Agregar producto</a></li>
+          <li><a class="nav-link" href="/chat">Chat en tiempo real</a></li>
+        </ul>
+      </div>
+      <div>
+        <a href="/products">HOME</a>
+      </div>
+      <div>
+        {{#if user}}
+          <a href="/sessions/user">MI PERFIL</a>
+        {{else}}
+          <div>
+            <a href="/sessions/login">INICIAR SESIÓN</a>
+            <a href="/sessions/register">REGISTRARSE</a>
+          </div>
+        {{/if}}
+      </div>
+    </nav>
 <section>
   <h2>Carrito</h2>
   <div>

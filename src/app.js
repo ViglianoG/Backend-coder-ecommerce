@@ -6,6 +6,8 @@ import mongoose from "mongoose";
 import run from "./run.js";
 import session from "express-session";
 import MongoStore from "connect-mongo";
+import passport from "passport";
+import initPassport from "./config/passport.config.js"
 
 const port = 8080;
 const app = express();
@@ -32,6 +34,10 @@ app.use(
     saveUninitialized: true,
   })
 );
+
+initPassport()
+app.use(passport.initialize())
+app.use(passport.session())
 
 mongoose.set("strictQuery", false);
 mongoose.connect(

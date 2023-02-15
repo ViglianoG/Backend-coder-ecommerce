@@ -36,8 +36,6 @@ const run = (socketServer, app) => {
       socketServer.emit("logs", messages);
     });
   });
-
-  app.use("/", viewsRouter);
 };
 
 export default run;

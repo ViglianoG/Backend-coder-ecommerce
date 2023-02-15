@@ -4,31 +4,9 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Segunda entrega</title>
-    <link rel="stylesheet" href="css/index.css" />
+    <link rel="stylesheet" href="css/index.css" type="text/css"/>
   </head>
   <body>
-    <nav>
-      <div>
-        <ul>
-          <li><a class="nav-link" href="/products">Todos los productos</a></li>
-          <li><a class="nav-link" href="/products/create">Agregar producto</a></li>
-          <li><a class="nav-link" href="/chat">Chat en tiempo real</a></li>
-        </ul>
-      </div>
-      <div>
-        <a href="/products">Home</a>
-      </div>
-      <div>
-        {{#if user}}
-          <a href="/sessions/user">Mi perfil</a>
-        {{else}}
-          <div>
-            <a href="/sessions/login">Iniciar sesión</a>
-            <a href="/sessions/register">Registrarse</a>
-          </div>
-        {{/if}}
-      </div>
-    </nav>
     <main>
       {{{body}}}
     </main>

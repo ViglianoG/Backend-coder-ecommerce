@@ -2,6 +2,8 @@ import { Router } from "express";
 import productModel from "../dao/models/product.model.js";
 import cartModel from "../dao/models/cart.model.js";
 import userModel from "../dao/models/users.model.js";
+import passport from "passport";
+import { createHash, isValidPassword } from "../utils.js";
 
 const router = Router();
 
@@ -192,47 +194,56 @@ router.get("/sessions/register", logged, (req, res) => {
 });
 
 //CREAR USERS EN DB
-router.post("/sessions/register", async (req, res) => {
-  const newUser = req.body;
-
-  const user = new userModel(newUser);
-  await user.save();
-
-  res.redirect("/sessions/login");
-});
-
-//LOGIN
-router.post("/sessions/login", async (req, res) => {
-  const { email, password } = req.body;
-
-  if (email === "adminCoder@coder.com" && password === "adminCod3r123") {
-    const admin = {
-      email,
-      password,
-      first_name: "Admin",
-      last_name: "Coder",
-      age: 26,
-      role: "admin",
-    };
-
-    req.session.user = admin;
-    res.redirect("/products");
+router.post(
+  "/sessions/register",
+  passport.authenticate("register", {
+    failureRedirect: "/failregister",
+  }),
+  async (req, res) => {
+    res.redirect("/sessions/login");
   }
+);
 
-  const user = await userModel.findOne({ email, password }).lean().exec();
-  if (!user) {
-    return res.status(401).render("errors/default", {
-      error: "Error en email y/o password",
-    });
-  }
-
-  req.session.user = user;
-  res.redirect("/products");
+//FAIL REGISTER
+router.get("/failregister", (req, res) => {
+  res.status(400).render("errors/default", { error: "Failed to register" });
 });
 
 //VIEW DEL LOGIN
 router.get("/sessions/login", logged, (req, res) => {
   res.render("sessions/login");
+});
+
+//LOGIN
+router.post(
+  "/sessions/login",
+  passport.authenticate("login", {
+    failureRedirect: "/faillogin",
+  }),
+  async (req, res) => {
+    const user = req.user;
+
+    if (!user) {
+      return res
+        .status(400)
+        .json({ status: "error", error: "Invalid credentials" });
+    }
+
+    req.session.user = {
+      first_name: user.first_name,
+      last_name: user.last_name,
+      age: user.age,
+      email: user.email,
+      role: user.role,
+    };
+
+    res.redirect("/products");
+  }
+);
+
+//FAIL LOGIN
+router.get("/faillogin", (req, res) => {
+  res.status(400).render("errors/default", { error: "Failed login" });
 });
 
 //LOGOUT
@@ -257,4 +268,13 @@ router.get("/sessions/user", auth, (req, res) => {
   res.render("sessions/user", { user });
 });
 
+// GITHUB LOGIN
+router.get(
+  "/api/sessions/githubcallback",
+  passport.authenticate("github", { failureRedirect: "/login" }),
+  async (req, res) => {
+    req.session.user = req.user;
+    return res.redirect("/products");
+  }
+);
 export default router;
