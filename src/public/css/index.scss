@@ -1,12 +1,12 @@
 @import url("https://fonts.googleapis.com/css2?family=Josefin+Slab:wght@300&display=swap");
 @import url("https://fonts.googleapis.com/css2?family=Poiret+One&display=swap");
 @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap");
+
 * {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
 }
-
 :root {
   --brand-color: #f59e0b;
   --dark-color: #18181b;
@@ -20,18 +20,18 @@ body {
   cursor: default;
 }
 
+//NAV
 nav {
   background-color: var(--dark-color);
   color: var(--light-color);
   font-weight: bold;
   font-size: 3vh;
   text-decoration: none;
+  a {
+    text-decoration: none;
+    color: var(--light-color);
+  }
 }
-nav a {
-  text-decoration: none;
-  color: var(--light-color);
-}
-
 .horizontal-menu {
   animation: ease 0.5s;
   display: flex;
@@ -41,18 +41,18 @@ nav a {
   width: 100%;
   gap: 10%;
   font-family: "Poiret One", cursive;
+  li {
+    color: var(--light-color);
+    padding: 5px;
+    //border: 1px var(--light-color) solid;
+    border-radius: 5px;
+    :hover {
+      background-color: var(--brand-color);
+      color: var(--dark-color);
+      text-decoration: underline;
+    }
+  }
 }
-.horizontal-menu li {
-  color: var(--light-color);
-  padding: 5px;
-  border-radius: 5px;
-}
-.horizontal-menu li :hover {
-  background-color: var(--brand-color);
-  color: var(--dark-color);
-  text-decoration: underline;
-}
-
 .vertical-menu {
   padding-top: 5px;
   position: absolute;
@@ -61,12 +61,13 @@ nav a {
   background-color: var(--dark-color);
   font-size: 2.5vh;
   z-index: 3;
-}
-.vertical-menu li :hover {
-  background-color: var(--brand-color);
-  color: var(--dark-color);
-  -webkit-text-decoration: dotted;
-          text-decoration: dotted;
+  li {
+    :hover {
+      background-color: var(--brand-color);
+      color: var(--dark-color);
+      text-decoration: dotted;
+    }
+  }
 }
 
 .horizontal-menu,
@@ -89,6 +90,7 @@ nav a {
   border-radius: 0 0 5px 0;
 }
 
+//PRODUCTS
 .products {
   width: 100%;
   text-align: center;
@@ -109,25 +111,24 @@ nav a {
   transition: all 0.3s ease-in-out;
   margin: 10px;
   overflow: hidden;
-}
-.card img {
-  background-color: var(--light-color);
-  border: 1px solid black;
-  border-radius: 5px;
-  padding: 10%;
-  width: 100%;
-  height: 100%;
-  -o-object-fit: contain;
-     object-fit: contain;
-  border-top-left-radius: 8px;
-  border-top-right-radius: 8px;
+  img {
+    background-color: var(--light-color);
+    border: 1px solid black;
+    border-radius: 5px;
+    padding: 10%;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
+  }
 }
 
 .card::after {
   content: "";
   width: 100%;
   height: 100%;
-  background: rgba(245, 158, 11, 0.5019607843);
+  background: #f59e0b80;
   position: absolute;
   z-index: 1;
   left: -500px;
@@ -142,18 +143,18 @@ nav a {
   margin: 10px;
   cursor: default;
   color: var(--dark-color);
-}
-.card-info h3 {
-  font-size: 16px;
-}
-.card-info p {
-  display: inline-block;
-  padding: 8px;
-  border-radius: 8px;
-  font-size: 12px;
-}
-.card-info h4 {
-  margin: 8px 0px;
+  h3 {
+    font-size: 16px;
+  }
+  p {
+    display: inline-block;
+    padding: 8px;
+    border-radius: 8px;
+    font-size: 12px;
+  }
+  h4 {
+    margin: 8px 0px;
+  }
 }
 
 .card img,
@@ -167,14 +168,15 @@ nav a {
   border-radius: 0px 0px 8px 8px;
 }
 
+//FORM
+
 .login-container,
 .login-form,
 .login-inputs {
   font-family: "Poppins", sans-serif;
   display: grid;
 }
-
-.login-container {
+.login-container{
   background-image: url(../assets/img/background-image3.png);
   position: relative;
   height: 100vh;
@@ -188,8 +190,7 @@ nav a {
   border: 2px solid rgba(232, 231, 238, 0.75);
   margin-inline: 1.5rem;
   row-gap: 1.25rem;
-  -webkit-backdrop-filter: blur(20px);
-          backdrop-filter: blur(20px);
+  backdrop-filter: blur(20px);
   padding: 2rem;
   border-radius: 1rem;
 }
@@ -198,7 +199,6 @@ nav a {
   color: var(--dark-color);
   margin-bottom: 0.5rem;
 }
-
 .login-inputs {
   row-gap: 0.75rem;
   margin-bottom: 0.5rem;
@@ -217,15 +217,11 @@ nav a {
   padding: 14px 12px;
   border-radius: 6px;
   border: 2px solid var(--dark-color);
-  background-color: hsla(244deg, 16%, 92%, 0.6);
+  background-color: hsla(244, 16%, 92%, 0.6);
   color: var(--dark-color);
   font-size: 15px;
   font-weight: bold;
   transition: border 0.4s;
-}
-
-.login-input::-moz-placeholder {
-  color: var(--dark-color);
 }
 
 .login-input::placeholder {
@@ -244,8 +240,7 @@ nav a {
 .login-buttons {
   font-family: "Poppins", sans-serif;
   display: flex;
-  -moz-column-gap: 0.75rem;
-       column-gap: 0.75rem;
+  column-gap: 0.75rem;
 }
 
 .login-button {
@@ -256,7 +251,7 @@ nav a {
   color: #fff;
   font-size: 15px;
   font-weight: bold;
-  box-shadow: 0 6px 24px hsla(244deg, 75%, 48%, 0.5);
+  box-shadow: 0 6px 24px hsla(244, 75%, 48%, 0.5);
   margin-bottom: 1rem;
   cursor: pointer;
 }
@@ -264,8 +259,11 @@ nav a {
 .login-button-ghost {
   display: flex;
   align-items: center;
-  background: rgba(232, 231, 238, 0.6);
+  background: #e8e7ee99;
   border: 2px solid var(--first-color);
   color: var(--first-color);
   box-shadow: none;
-}/*# sourceMappingURL=index.css.map */
+}
+
+
+

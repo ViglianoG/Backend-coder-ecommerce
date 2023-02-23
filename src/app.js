@@ -5,9 +5,10 @@ import { Server } from "socket.io";
 import mongoose from "mongoose";
 import run from "./run.js";
 import session from "express-session";
-import MongoStore from "connect-mongo";
 import passport from "passport";
-import initPassport from "./config/passport.config.js"
+import initPassport from "./config/passport.config.js";
+import cookieParser from "cookie-parser";
+//import MongoStore from "connect-mongo";
 
 const port = 8080;
 const app = express();
@@ -20,24 +21,21 @@ app.use(express.static(__dirname + "/public"));
 app.set("views", __dirname + "/views");
 app.set("view engine", "handlebars");
 
-const uri =
-  "mongodb+srv://GVigliano:ljJ5SrK15NEK9EuA@ecommerce.qtnsooy.mongodb.net/?retryWrites=true&w=majority";
-
+app.use(cookieParser("cookieSecret"));
 app.use(
   session({
-    store: MongoStore.create({
-      mongoUrl: uri,
-      dbName: "ecommerce",
-    }),
-    secret: "secretsecret",
-    resave: true,
+    secret: "secret321secret321",
+    resave: false,
     saveUninitialized: true,
   })
 );
 
-initPassport()
-app.use(passport.initialize())
-app.use(passport.session())
+initPassport();
+app.use(passport.initialize());
+app.use(passport.session());
+
+const uri =
+  "mongodb+srv://GVigliano:ljJ5SrK15NEK9EuA@ecommerce.qtnsooy.mongodb.net/?retryWrites=true&w=majority";
 
 mongoose.set("strictQuery", false);
 mongoose.connect(

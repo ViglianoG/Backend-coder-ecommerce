@@ -12,29 +12,33 @@
     </li>
     {{#if user}}
       <li><a href="/sessions/user">MI PERFIL</a></li>
+      {{!-- <li><a href="/carts/{{user.cart}}">Carrito</a></li> --}}
     {{else}}
       <li><a href="/sessions/login">INICIAR SESIÓN</a></li>
       <li><a href="/sessions/register">REGISTRARSE</a></li>
     {{/if}}
   </ul>
 </nav>
-<div>
   {{#if user}}
+<div class="benvenuti">
     <h4>Bienvenido, {{user.first_name}}</h4>
-  {{/if}}
 </div>
+  {{/if}}
 <div class="saludo">
   <h2>Lista de todos los productos agregados hasta el momento:</h2>
   {{#if products}}
     <div class="products">
       {{#each products.docs}}
-        <div>
-          <h3>{{this.title}}</h3>
-          <p>{{this.description}}</p>
-          <h4>${{this.price}}</h4>
-          <h5>Stock disponible: {{this.stock}}</h5>
-          <hr />
-          <a href="/products/{{this._id}}" class="btn">Ver detalle</a>
+        <div class="card">
+          <img src="{{this.tumbnails}}" alt="{{this.title}}">
+          <div class="card-info">
+            <h3>{{this.title}}</h3>
+            <p>{{this.description}}</p>
+            <h4>${{this.price}}</h4>
+            <h5>Stock disponible: {{this.stock}}</h5>
+            <hr />
+            <a href="/products/{{this._id}}" class="btn">Ver detalle</a>
+          </div>
         </div>
       {{/each}}
     </div>

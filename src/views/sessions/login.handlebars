@@ -1,12 +1,32 @@
-<h2>Iniciar sesión</h2>
+<div class="login-container">
+  <div class="login-image"></div>
+  <form class="login-form" action="/sessions/login" method="post">
+    <h2 class="login-title">Iniciar sesión</h2>
+    <div class="login-inputs">
+      <label class="login-label">Email</label>
+      <input
+        class="login-input"
+        type="email"
+        name="email"
+        placeholder="Ingresa tu correo electrónico"
+      /><br />
+      <label class="login-label">Password</label>
+      <div class="password-box"></div>
+      <input
+        class="login-input"
+        type="password"
+        name="password"
+        placeholder="Ingresa tu contraseña"
+      /><br />
+    </div>
+    <div class="login-buttons">
+      <button class="login-button" type="submit">Log In</button>
+      <a class="login-button" href="/api/sessions/github">Ingresar con Github</a>
+      <a
+        class="login-button login-button-ghost"
+        href="/sessions/register"
+      >Registrate</a>
 
-<form action="/sessions/login" method="post">
-  <input type="email" name="email" placeholder="Email" /><br />
-  <input type="password" name="password" placeholder="Password" /><br />
-  <button type="submit">Enviar</button>
-</form>
-
-<h3>¿No tenés cuenta?</h3>
-<h4><a href="/sessions/register">Registrate</a></h4>
-
-<a href="/api/sessions/github">Ingresar con Github</a>
+    </div>
+  </form>
+</div>
