@@ -1,10 +1,8 @@
-import { Router } from "express";
 import productModel from "../dao/models/product.model.js";
 
-const router = Router();
+/////////////////////////GET CON QUERY LIMITS
 
-//GET CON QUERY LIMITS
-router.get("/", async (req, res) => {
+export const getProducts = async (req, res) => {
   try {
     const category = req.query.category;
     const stock = req.query.stock;
@@ -29,10 +27,11 @@ router.get("/", async (req, res) => {
     console.log(error);
     res.json({ result: "Error...", error });
   }
-});
+};
 
-//GET PRODUCT POR EL ID
-router.get("/:pid", async (req, res) => {
+/////////////////////////GET PRODUCT POR EL ID
+
+export const getProduct = async (req, res) => {
   try {
     const pID = req.params.pid;
     const product = await productModel.findOne({ _id: pID }).lean().exec();
@@ -41,10 +40,11 @@ router.get("/:pid", async (req, res) => {
     console.log(error);
     res.json({ result: "Error...", error });
   }
-});
+};
 
-//AGREGAR PRODUCTO
-router.post("/", async (req, res) => {
+/////////////////////////AGREGAR PRODUCTO
+
+export const addProduct = async (req, res) => {
   try {
     const product = req.body;
     const addedProduct = new productModel(product);
@@ -54,10 +54,11 @@ router.post("/", async (req, res) => {
     console.log(error);
     res.json({ result: "Error...", error });
   }
-});
+};
 
-//BORRAR PRODUCTO
-router.delete("/:pid", async (req, res) => {
+/////////////////////////BORRAR PRODUCTO
+
+export const deleteProduct = async (req, res) => {
   try {
     const pID = req.params.pid;
     const result = await productModel.deleteOne({ _id: pID });
@@ -67,10 +68,11 @@ router.delete("/:pid", async (req, res) => {
     console.log(error);
     res.json({ result: "Error...", error });
   }
-});
+};
 
-//MODIFICAR PRODUCTO
-router.put("/:pid", async (req, res) => {
+/////////////////////////MODIFICAR PRODUCTO
+
+export const updateProduct = async (req, res) => {
   try {
     const pID = req.params.pid;
     const updateFields = req.body;
@@ -81,6 +83,4 @@ router.put("/:pid", async (req, res) => {
     console.log(error);
     res.json({ result: "Error...", error });
   }
-});
-
-export default router;
+};

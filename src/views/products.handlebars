@@ -1,5 +1,13 @@
 <nav>
   <ul class="horizontal-menu">
+    <li>
+      <input type="checkbox" id="toggle" />
+      <label class="toggle" for="toggle">
+        <i class="bx bxs-sun"></i>
+        <i class="bx bx-moon"></i>
+        <span class="ball"></span>
+      </label>
+    </li>
     <li><a href="#">MENU</a>
       <ul class="vertical-menu">
         <li><a class="nav-link" href="/products">Todos los productos</a></li>
@@ -19,18 +27,18 @@
     {{/if}}
   </ul>
 </nav>
-  {{#if user}}
-<div class="benvenuti">
+{{#if user}}
+  <div class="benvenuti">
     <h4>Bienvenido, {{user.first_name}}</h4>
-</div>
-  {{/if}}
+  </div>
+{{/if}}
 <div class="saludo">
   <h2>Lista de todos los productos agregados hasta el momento:</h2>
   {{#if products}}
     <div class="products">
       {{#each products.docs}}
         <div class="card">
-          <img src="{{this.tumbnails}}" alt="{{this.title}}">
+          <img src="{{this.tumbnails}}" alt="{{this.title}}" />
           <div class="card-info">
             <h3>{{this.title}}</h3>
             <p>{{this.description}}</p>

@@ -5,14 +5,23 @@ import userModel from "../dao/models/users.model.js";
 import cartModel from "../dao/models/cart.model.js";
 import jwt from "passport-jwt";
 import { createHash, isValidPassword, generateToken } from "../utils.js";
+import config from "./config.js"
 
-const PRIVATE_KEY = "secret321secret321";
+const {
+  PRIVATE_KEY,
+  COOKIE_NAME,
+  ADMIN_EMAIL,
+  ADMIN_PASSWORD,
+  GITHUB_CLIENT_ID,
+  GITHUB_CLIENT_SECRET,
+  GITHUB_CALLBACK_URL,
+} = config;
 
 const JWTStrategy = jwt.Strategy;
 const ExtractJWT = jwt.ExtractJwt;
 
 const cookieExtractor = (req) => {
-  const token = req && req.cookies ? req.cookies["cookieToken"] : null;
+  const token = req && req.cookies ? req.cookies[COOKIE_NAME] : null;
   return token;
 };
 
@@ -72,8 +81,8 @@ const initPassport = () => {
       async (username, password, done) => {
         try {
           if (
-            username === "adminCoder@coder.com" &&
-            password === "adminCod3r123"
+            username === ADMIN_EMAIL &&
+            password === ADMIN_PASSWORD
           ) {
             const admin = {
               email: username,
@@ -116,9 +125,9 @@ const initPassport = () => {
     "github",
     new GithubStrategy(
       {
-        clientID: "Iv1.f0ec593f6296224a",
-        clientSecret: "950753c04d89fc54bc5d6092dd6be52369565cd0",
-        callbackURL: "http://127.0.0.1:8080/api/sessions/githubcallback",
+        clientID: GITHUB_CLIENT_ID,
+        clientSecret: GITHUB_CLIENT_SECRET,
+        callbackURL: GITHUB_CALLBACK_URL,
       },
       async (accessToken, refreshToken, profile, done) => {
         try {

@@ -3,13 +3,15 @@ import { dirname } from "path";
 import bcrypt from "bcrypt";
 import passport from "passport";
 import jwt from "jsonwebtoken";
+import config from "./config/config.js";
+
+const { PRIVATE_KEY } = config;
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 export default __dirname;
 
 //GEN/AUTH TOKEN
-const PRIVATE_KEY = "secret321secret321";
 export const generateToken = (user) => {
   const token = jwt.sign({ user }, PRIVATE_KEY, { expiresIn: "24h" });
   return token;

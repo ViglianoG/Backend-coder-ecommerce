@@ -1,32 +1,33 @@
 <div class="login-container">
-  <div class="login-image"></div>
-  <form class="login-form" action="/sessions/login" method="post">
-    <h2 class="login-title">Iniciar sesión</h2>
-    <div class="login-inputs">
-      <label class="login-label">Email</label>
-      <input
-        class="login-input"
-        type="email"
-        name="email"
-        placeholder="Ingresa tu correo electrónico"
-      /><br />
-      <label class="login-label">Password</label>
-      <div class="password-box"></div>
-      <input
-        class="login-input"
-        type="password"
-        name="password"
-        placeholder="Ingresa tu contraseña"
-      /><br />
-    </div>
-    <div class="login-buttons">
-      <button class="login-button" type="submit">Log In</button>
-      <a class="login-button" href="/api/sessions/github">Ingresar con Github</a>
-      <a
-        class="login-button login-button-ghost"
-        href="/sessions/register"
-      >Registrate</a>
-
-    </div>
-  </form>
+  <div class="login-form-container">
+    <form class="login-form" action="/sessions/login" method="post">
+      <h2 class="login-title">Iniciar sesión</h2>
+      <div class="login-inputs">
+        <label class="login-label">Email</label>
+        <input
+          class="login-input"
+          type="email"
+          name="email"
+          placeholder="Ingresa tu correo electrónico"
+        />
+        <br />
+        <label class="login-label">Password</label>
+        <input
+          class="login-input"
+          type="password"
+          name="password"
+          placeholder="Ingresa tu contraseña"
+        />
+      </div>
+      <div class="login-buttons">
+        <button class="login-button" type="submit">Log In</button>
+        <button class="login-button"><a href="/api/sessions/github">Ingresar con
+            Github</a>
+        </button>
+        <button
+          class="login-button login-button-ghost"><a href="/sessions/register">Registrate</a>
+        </button>
+      </div>
+    </form>
+  </div>
 </div>

@@ -1,78 +1,33 @@
 import { Router } from "express";
 import { passportCall } from "../utils.js";
 import passport from "passport";
-//import userModel from "../dao/models/users.model.js";
+import {
+  register,
+  failRegister,
+  login,
+  failLogin,
+  logout,
+  getUser,
+} from "../controllers/sessions.controller.js";
 
 const router = Router();
-
-//FUNCIONES MIDDLEWARE
-// function logged(req, res, next) {
-//   if (!req.session?.user) {
-//     return next();
-//   } else {
-//     return res
-//       .status(400)
-//       .json({ status: "ERROR", payload: "Already logged in!" });
-//   }
-// }
-// function auth(req, res, next) {
-//   if (req.session?.user) {
-//     return next();
-//   } else {
-//     return res
-//       .status(401)
-//       .json({ status: "ERROR", payload: "Not authenticated!" });
-//   }
-// }
-
 //CREAR USERS EN DB ✔
-router.post("/register", passportCall("register"), async (req, res) => {
-  res.json({ status: "success", payload: req.user });
-});
+router.post("/register", passportCall("register"), register);
 
 //FAIL REGISTER ✔
-router.get("/failregister", async (req, res) => {
-  res.json({ status: "error", error: "Failed to register" });
-});
+router.get("/failregister", failRegister);
 
 //LOGIN ✔
-router.post("/login", passportCall("login"), async (req, res) => {
-  const user = req.user;
-
-  if (!user)
-    return res
-      .status(400)
-      .json({ status: "error", error: "Invalid credentials" });
-
-  res
-    .cookie("cookieToken", req.user.token)
-    .json({ status: "success", payload: user });
-});
+router.post("/login", passportCall("login"), login);
 
 //FAIL LOGIN ✔
-router.get("/faillogin", (req, res) => {
-  res.json({ status: "error", error: "Failed login" });
-});
+router.get("/faillogin", failLogin);
 
 //CERRAR SESSION ✔
-router.get("/logout", (req, res) => {
-  res
-    .clearCookie("cookieToken")
-    .send({ status: "success", payload: "Logged out..." });
-});
+router.get("/logout", logout);
 
 //PERFIL DEL USER ✔
-router.get("/current", passportCall("current"), (req, res) => {
-  const user = req.session.user;
-
-  if (!user) {
-    return res.status(404).render("errors/default", {
-      error: "User not found",
-    });
-  }
-
-  res.json({ status: "success", payload: user });
-});
+router.get("/current", passportCall("current"), getUser);
 
 //GITHUB LOGIN ✔
 router.get(

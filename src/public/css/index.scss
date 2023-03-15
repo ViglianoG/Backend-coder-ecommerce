@@ -18,22 +18,101 @@
 
 body {
   cursor: default;
+  &.light {
+    background: var(--light-color);
+  }
+  &.dark {
+    transition: 0.4s ease all;
+    background-color: var(--dark-color);
+  }
 }
 
-//NAV
-nav {
-  background-color: var(--dark-color);
+//////////////////// NAV ////////////////////////////////////
+
+// DARK MODE SWITCH
+
+#toggle {
+  display: none;
+}
+
+.toggle {
+  cursor: pointer;
+  position: relative;
+  display: flex;
+  justify-content: space-between;
+  width: 63px;
+  height: 33px;
+  border-radius: 50px;
+  transition: 0.2s;
+  i {
+    width: 50%;
+    line-height: 35px;
+    text-align: center;
+    font-size: 20px;
+    z-index: 1;
+  }
+}
+
+.toggle .ball {
+  position: absolute;
+  width: 35px;
+  height: 35px;
+  margin: -1px;
+  border-radius: 50%;
+  transition: 0.3s ease-out;
+}
+
+.light .toggle {
+  background: linear-gradient(145deg, #e1e1e1, #fff);
+  box-shadow: 3px 3px 5px rgba(0,0,0, 0.3), -3px -3px 5px rgba(0,0,0, 0.3);
+}
+
+.light .toggle .bxs-sun {
   color: var(--light-color);
+}
+
+.light .toggle .bx-moon {
+  color: var(--dark-color);
+}
+
+.light .toggle .ball {
+  background: var(--dark-color);
+}
+
+.dark .toggle {
+  background: var(--dark-color);
+  box-shadow: 3px 3px 5px rgba(0,0,0, 0.3), -3px -3px 5px rgba(0,0,0, 0.3);
+}
+
+.dark .toggle .bx-sun {
+  color: var(--light-color);
+}
+
+.dark .toggle .bxs-moon {
+  color: var(--dark-color);
+}
+
+.dark .toggle .ball {
+  background: #fafafa;
+  transform: translateX(30px);
+}
+
+/////////////////////////////////////////////// NAV
+
+nav {
+  background-color: var(--light-color);
   font-weight: bold;
   font-size: 3vh;
   text-decoration: none;
+  &.dark{
+    background-color: var(--dark-color);
+  }
   a {
     text-decoration: none;
-    color: var(--light-color);
+    color: var(--dark-color);
   }
 }
 .horizontal-menu {
-  animation: ease 0.5s;
   display: flex;
   justify-content: space-around;
   align-items: center;
@@ -41,11 +120,18 @@ nav {
   width: 100%;
   gap: 10%;
   font-family: "Poiret One", cursive;
+  box-shadow: 0 10px 10px rgba(0, 0, 0, 0.2);
   li {
+    transition: 0.4s ease all;
     color: var(--light-color);
     padding: 5px;
-    //border: 1px var(--light-color) solid;
     border-radius: 5px;
+    a {
+      padding: 5px;
+    }
+    input {
+      display: none;
+    }
     :hover {
       background-color: var(--brand-color);
       color: var(--dark-color);
@@ -58,7 +144,7 @@ nav {
   position: absolute;
   display: none;
   min-width: 10vw;
-  background-color: var(--dark-color);
+  background-color: var(--light-color);
   font-size: 2.5vh;
   z-index: 3;
   li {
@@ -168,7 +254,7 @@ nav {
   border-radius: 0px 0px 8px 8px;
 }
 
-//FORM
+//LOGIN
 
 .login-container,
 .login-form,
@@ -176,28 +262,55 @@ nav {
   font-family: "Poppins", sans-serif;
   display: grid;
 }
-.login-container{
-  background-image: url(../assets/img/background-image3.png);
+.login-container {
+  background: url(../assets/img/puntitos-negros-soft.png);
+  &.dark {
+    background: url(../assets/img/puntitos-blancos-soft.png);
+  }
   position: relative;
   height: 100vh;
   align-items: center;
 }
+.login-form-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
 
 .login-form {
-  width: 45%;
+  min-width: 20%;
   position: relative;
-  background-color: rgba(232, 231, 238, 0.6);
-  border: 2px solid rgba(232, 231, 238, 0.75);
-  margin-inline: 1.5rem;
+  background-color: rgb(255, 255, 255, 0.5);
   row-gap: 1.25rem;
   backdrop-filter: blur(20px);
   padding: 2rem;
   border-radius: 1rem;
+  border: 2px solid var(--dark-color);
+  &:hover {
+    box-shadow: 5px 5px 0px rgba(0, 0, 0, 0.95);
+    transform: translateY(-5px) translateX(-5px);
+  }
+  &.dark {
+    background-color: var(--dark-color);
+    border: 1px solid var(--light-color);
+    &:hover {
+      box-shadow: 5px 5px 0px var(--light-color);
+    }
+  }
+}
+
+.login-form,
+.login-button,
+.login-button-ghost {
+  transition: all 0.4s ease;
 }
 
 .login-title {
   color: var(--dark-color);
   margin-bottom: 0.5rem;
+  &.dark {
+    color: var(--light-color);
+  }
 }
 .login-inputs {
   row-gap: 0.75rem;
@@ -210,31 +323,40 @@ nav {
   font-size: 15px;
   font-weight: bold;
   margin-bottom: 0.25rem;
+  &.dark {
+    color: var(--light-color);
+  }
 }
 
 .login-input {
-  width: 100%;
   padding: 14px 12px;
   border-radius: 6px;
-  border: 2px solid var(--dark-color);
   background-color: hsla(244, 16%, 92%, 0.6);
   color: var(--dark-color);
   font-size: 15px;
   font-weight: bold;
   transition: border 0.4s;
-}
-
-.login-input::placeholder {
-  color: var(--dark-color);
+  outline: none;
 }
 
 .login-inputs:focus,
 .login-input:valid {
-  border: 2px solid var(--dark-color);
+  border: 1px solid var(--dark-color);
+}
+.login-input:focus {
+  transition: all 0.4s ease;
+  box-shadow: 5px 5px 0px rgba(0, 0, 0, 0.95);
+  transform: translateY(-2px) translateX(-2px);
 }
 
-.password-box .login-input {
+.login-input {
   padding-right: 36px;
+  &.dark {
+    background-color: var(--light-color);
+    &:focus {
+      box-shadow: 5px 5px 0px var(--light-color);
+    }
+  }
 }
 
 .login-buttons {
@@ -246,24 +368,64 @@ nav {
 .login-button {
   width: 100%;
   padding: 14px 2rem;
-  border-radius: 6px;
-  background: linear-gradient(180deg, var(--first-color), var(--second-color));
-  color: #fff;
+  border-radius: 5px;
+  color: var(--dark-color);
   font-size: 15px;
   font-weight: bold;
-  box-shadow: 0 6px 24px hsla(244, 75%, 48%, 0.5);
   margin-bottom: 1rem;
   cursor: pointer;
+  &:hover {
+    box-shadow: 5px 5px 0px rgba(0, 0, 0, 0.95);
+    background: var(--dark-color);
+    color: var(--light-color);
+    transform: translateY(-5px) translateX(-5px);
+  }
+  &.dark {
+    &:hover {
+      box-shadow: 5px 5px 0px var(--light-color);
+    }
+  }
+  a {
+    &.dark {
+      color: var(--light-color);
+      &:visited {
+        color: var(--light-color);
+      }
+    }
+  }
+}
+
+.login-button > a {
+  text-decoration: none;
+  &:visited {
+    color: var(--dark-color);
+  }
+}
+
+.login-button:hover > a {
+  color: var(--light-color);
 }
 
 .login-button-ghost {
   display: flex;
   align-items: center;
-  background: #e8e7ee99;
-  border: 2px solid var(--first-color);
-  color: var(--first-color);
+  background: var(--dark-color);
+  color: var(--light-color);
   box-shadow: none;
+  &:hover {
+    box-shadow: 5px 5px 0px rgba(0, 0, 0, 0.95);
+    background: var(--brand-color);
+  }
 }
 
+.login-button-ghost > a {
+  &:visited {
+    color: var(--light-color);
+  }
+}
 
-
+.login-button-ghost:hover > a {
+  &:visited {
+    color: var(--dark-color);
+  }
+}

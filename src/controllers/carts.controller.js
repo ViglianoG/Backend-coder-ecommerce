@@ -1,11 +1,9 @@
-import { Router } from "express";
 import cartModel from "../dao/models/cart.model.js";
 import productModel from "../dao/models/product.model.js";
 
-const router = Router();
+/////////////////////////CREA UN NUEVO CARRITO
 
-//RUTA RAIZ POST CREA UN NUEVO CARRITO
-router.post("/", async (req, res) => {
+export const createCart = async (req, res) => {
   try {
     const result = await cartModel.create([]);
     res.json({ result: "Success", payload: result });
@@ -13,23 +11,26 @@ router.post("/", async (req, res) => {
     console.log(error);
     res.json({ result: "Error...", error });
   }
-});
+};
 
-//MUESTRA EL CARRITO
-router.get("/:cid", async (req, res) => {
+/////////////////////////MUESTRA EL CARRITO
+
+export const getProducts = async (req, res) => {
   try {
     const cid = req.params.cid;
-    const result = await cartModel.findOne({ _id: cid });
-
-    res.json({ result: "Success", payload: result });
+    const products = await cartModel
+      .findOne({ _id: cid })
+      .populate("products.product");
+    res.json({ result: "Success", payload: products });
   } catch (error) {
     console.log(error);
     res.json({ result: "Error...", error });
   }
-});
+};
 
-//AGREGA UN PROD AL CARRITO
-router.post("/:cid/products/:pid", async (req, res) => {
+/////////////////////////AGREGA UN PROD AL CARRITO
+
+export const addProduct = async (req, res) => {
   try {
     const cid = req.params.cid;
     const pid = req.params.pid;
@@ -64,10 +65,11 @@ router.post("/:cid/products/:pid", async (req, res) => {
     console.log(error);
     res.json({ result: "Error...", error });
   }
-});
+};
 
-//ELIMINAR PROD DE CARRO
-router.delete("/:cid/products/:pid", async (req, res) => {
+/////////////////////////ELIMINAR PROD DE CARRO
+
+export const deleteProduct = async (req, res) => {
   try {
     const cid = req.params.cid;
     const pid = req.params.pid;
@@ -97,10 +99,11 @@ router.delete("/:cid/products/:pid", async (req, res) => {
     console.log(error);
     res.json({ result: "Error...", error });
   }
-});
+};
 
-//AGREGAR VARIOS PROD AL CARRITO
-router.put("/:cid", async (req, res) => {
+/////////////////////////AGREGAR VARIOS PROD AL CARRITO
+
+export const updateCart = async (req, res) => {
   try {
     const cid = req.params.cid;
     const products = req.body;
@@ -114,10 +117,11 @@ router.put("/:cid", async (req, res) => {
     console.log(error);
     res.json({ result: "Error...", error });
   }
-});
+};
 
-//MODIFICAR LA CANTIDAD DE LOS PROD DEL CARRITO
-router.put("/:cid/products/:pid", async (req, res) => {
+/////////////////////////MODIFICAR LA CANTIDAD DE LOS PROD DEL CARRITO
+
+export const updateQuantity = async (req, res) => {
   try {
     const cid = req.params.cid;
     const pid = req.params.pid;
@@ -148,10 +152,11 @@ router.put("/:cid/products/:pid", async (req, res) => {
     console.log(error);
     res.json({ result: "Error...", error });
   }
-});
+};
 
-//VACIAR CARRO
-router.delete("/:cid", async (req, res) => {
+/////////////////////////VACIAR CARRO
+
+export const emptyCart = async (req, res) => {
   try {
     const cid = req.params.cid;
     const cart = await cartModel.findOne({ _id: cid });
@@ -163,6 +168,4 @@ router.delete("/:cid", async (req, res) => {
     console.log(error);
     res.json({ result: "Error...", error });
   }
-});
-
-export default router;
+};

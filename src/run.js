@@ -1,5 +1,5 @@
-import productsRouter from "./routes/productsRouter.js";
-import cartsRouter from "./routes/cartsRouter.js";
+import productsRouter from "./routes/products.router.js";
+import cartsRouter from "./routes/carts.router.js";
 import chatRouter from "./routes/chat.router.js";
 import messagesModel from "./dao/models/message.model.js";
 import viewsRouter from "./routes/views.router.js";
@@ -11,17 +11,6 @@ const run = (socketServer, app) => {
     req.io = socketServer;
     next();
   });
-
-  // //MIDDLEWARE AUTH
-  // function auth(req, res, next) {
-  //   if (req.session?.user) {
-  //     return next();
-  //   } else {
-  //     return res
-  //       .status(401)
-  //       .json({ status: "ERROR", payload: "Not authenticated!" });
-  //   }
-  // }
 
   app.use("/", viewsRouter);
   app.use(

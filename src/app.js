@@ -8,7 +8,9 @@ import session from "express-session";
 import passport from "passport";
 import initPassport from "./config/passport.config.js";
 import cookieParser from "cookie-parser";
-//import MongoStore from "connect-mongo";
+import config from "./config/config.js";
+
+const { SESSION_SECRET, COOKIE_SECRET, MONGO_URI, DB_NAME } = config;
 
 const port = 8080;
 const app = express();
@@ -21,10 +23,10 @@ app.use(express.static(__dirname + "/public"));
 app.set("views", __dirname + "/views");
 app.set("view engine", "handlebars");
 
-app.use(cookieParser("cookieSecret"));
+app.use(cookieParser(COOKIE_SECRET));
 app.use(
   session({
-    secret: "secret321secret321",
+    secret: SESSION_SECRET,
     resave: false,
     saveUninitialized: true,
   })
@@ -34,14 +36,11 @@ initPassport();
 app.use(passport.initialize());
 app.use(passport.session());
 
-const uri =
-  "mongodb+srv://GVigliano:ljJ5SrK15NEK9EuA@ecommerce.qtnsooy.mongodb.net/?retryWrites=true&w=majority";
-
 mongoose.set("strictQuery", false);
 mongoose.connect(
-  uri,
+  MONGO_URI,
   {
-    dbName: "ecommerce",
+    dbName: DB_NAME,
   },
   (error) => {
     if (!error) {
