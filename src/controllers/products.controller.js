@@ -1,31 +1,23 @@
-import productModel from "../dao/models/product.model.js";
+// import productModel from "../dao/models/product.model.js";
+import {
+  productsService
+} from "../repository/index.js";
 
 /////////////////////////GET CON QUERY LIMITS
 
 export const getProducts = async (req, res) => {
   try {
-    const category = req.query.category;
-    const stock = req.query.stock;
-
-    const query = {
-      ...(category ? { categories: category } : null),
-      ...(stock ? { stock: { $gt: 0 } } : null),
-    };
-
-    const limit = req.query.limit || 10;
-    const page = req.query.page || 1;
-    const sort = req.query.sort;
-
-    const products = await productModel.paginate(query, {
-      page: page,
-      limit: limit,
-      sort: { price: sort } || null,
+    const products = await productsService.getProducts()
+    res.json({
+      status: "Success",
+      payload: products
     });
-
-    res.json({ status: "Success", payload: products });
   } catch (error) {
     console.log(error);
-    res.json({ result: "Error...", error });
+    res.json({
+      result: "Error...",
+      error
+    });
   }
 };
 
@@ -33,12 +25,18 @@ export const getProducts = async (req, res) => {
 
 export const getProduct = async (req, res) => {
   try {
-    const pID = req.params.pid;
-    const product = await productModel.findOne({ _id: pID }).lean().exec();
-    res.json({ status: "Success", payload: product });
+    const pid = req.params.pid
+    const product = await productsService.getProduct(pid)
+    res.json({
+      status: "Success",
+      payload: product
+    });
   } catch (error) {
     console.log(error);
-    res.json({ result: "Error...", error });
+    res.json({
+      result: "Error...",
+      error
+    });
   }
 };
 
@@ -47,12 +45,17 @@ export const getProduct = async (req, res) => {
 export const addProduct = async (req, res) => {
   try {
     const product = req.body;
-    const addedProduct = new productModel(product);
-    await addedProduct.save();
-    res.json({ status: "Success", payload: addedProduct });
+    const addProd = await productsService.createProduct(product)
+    res.json({
+      status: "Success",
+      payload: addProd
+    });
   } catch (error) {
     console.log(error);
-    res.json({ result: "Error...", error });
+    res.json({
+      result: "Error...",
+      error
+    });
   }
 };
 
@@ -60,13 +63,19 @@ export const addProduct = async (req, res) => {
 
 export const deleteProduct = async (req, res) => {
   try {
-    const pID = req.params.pid;
-    const result = await productModel.deleteOne({ _id: pID });
+    const pid = req.params.pid;
+    const result = await productsService.deleteProduct(pid);
 
-    res.json({ status: "Success", payload: result });
+    res.json({
+      status: "Success",
+      payload: result
+    });
   } catch (error) {
     console.log(error);
-    res.json({ result: "Error...", error });
+    res.json({
+      result: "Error...",
+      error
+    });
   }
 };
 
@@ -74,13 +83,23 @@ export const deleteProduct = async (req, res) => {
 
 export const updateProduct = async (req, res) => {
   try {
-    const pID = req.params.pid;
-    const updateFields = req.body;
-    const result = await productModel.updateOne({ _id: pID }, updateFields);
+    const pid = req.params.pid;
+    const product = await productsService.getProduct(pid)
+    const updatedProd = {
+      ...product,
+      ...req.body
+    }
+    const result = await productsService.updateProduct(pid, updatedProd)
 
-    res.json({ status: "Success", payload: result });
+    res.json({
+      status: "Success",
+      payload: result
+    });
   } catch (error) {
     console.log(error);
-    res.json({ result: "Error...", error });
+    res.json({
+      result: "Error...",
+      error
+    });
   }
 };

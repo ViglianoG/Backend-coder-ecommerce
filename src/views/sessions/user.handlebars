@@ -11,21 +11,32 @@
       <a href="/products">HOME</a>
     </li>
     {{#if user}}
-      <li><a href="/sessions/user">MI PERFIL</a></li>
+    <li><a href="/sessions/user">MI PERFIL</a></li>
     {{else}}
-      <li><a href="/sessions/login">INICIAR SESIÓN</a></li>
-      <li><a href="/sessions/register">REGISTRARSE</a></li>
+    <li><a href="/sessions/login">INICIAR SESIÓN</a></li>
+    <li><a href="/sessions/register">REGISTRARSE</a></li>
     {{/if}}
   </ul>
 </nav>
-<h2>Usuario:</h2>
-
-<div>
-    <h2><b>Nombre:</b> {{user.first_name}}</h2>
-    <h2><b>Apellido:</b> {{user.last_name}}</h2>
-    <h5><b>Email:</b> {{user.email}}</h5>
-    <h5><b>Edad:</b> {{user.age}}</h5>
-    <h5><b>Rol</b>: {{user.role}}</h5>
-</div>
-
-<a href="/sessions/logout">Logout</a>
+<main>
+  <section class="user-card-continer">
+    <div>
+      <h2>Información del usuario</h2>
+      <div class="user-card">
+        <div class="user-details">
+          <div class="user-avatar"></div>
+          Nombre: <h3 class="user-name">{{user.first_name}}</h3>
+          {{#if user.last_name}}
+          Apellido: <h3 class="user-name">{{user.last_name}}</h3>
+          {{/if}}
+          <p class="user-email">Email: {{user.email}}</p>
+          {{#if user.age}}
+          <p class="user-age">Edad: {{user.age}}</p>
+          {{/if}}
+          <p class="user-role">Rol: {{user.role}}</p>
+        </div>
+        <button class="login-button"><a href="/sessions/logout">Logout</a></button>
+      </div>
+    </div>
+  </section>
+</main>

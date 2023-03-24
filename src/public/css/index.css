@@ -14,6 +14,7 @@
   --light-color: #f8f8f8;
   --first-color: #f59e0b;
   --second-color: #fabf5a;
+  --bg-light-color: #444444;
 }
 
 body {
@@ -169,6 +170,63 @@ nav a {
   background-color: var(--dark-color);
   border: 1px;
   border-radius: 0 0 5px 0;
+}
+
+.user-card-continer {
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.user-card-continer h2 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+}
+
+.user-card, .user-avatar {
+  background-color: var(--light-color);
+  border-radius: 4px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  margin-bottom: 2rem;
+  padding: 1rem;
+}
+
+.user-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  border: 1px solid #e2e2e2;
+  border-radius: 4px;
+  padding: 1rem;
+}
+
+.user-avatar {
+  background-color: #ccc;
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+}
+
+.user-details {
+  margin: 2rem;
+}
+
+.user-avatar, .user-name, .user-age, .user-email, .user-role {
+  padding-bottom: 0.5rem;
+}
+
+.user-name {
+  font-size: 1.3rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+}
+
+.user-age,
+.user-role,
+.user-email {
+  font-size: 1.1rem;
+  margin-bottom: 0.5rem;
 }
 
 .products {

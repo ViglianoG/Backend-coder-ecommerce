@@ -1,4 +1,6 @@
-import { Router } from "express";
+import {
+  Router
+} from "express";
 import {
   getProducts,
   getProduct,
@@ -6,22 +8,26 @@ import {
   updateProduct,
   deleteProduct,
 } from "../controllers/products.controller.js";
+import {
+  passportCall,
+  authorization
+} from "../middleware/auth.js"
 
 const router = Router();
 
 //GET CON QUERY LIMITS
-router.get("/", getProducts);
+router.get("/", passportCall("current"), getProducts);
 
 //GET PRODUCT POR EL ID
-router.get("/:pid", getProduct);
+router.get("/:pid", passportCall("current"), getProduct);
 
 //AGREGAR PRODUCTO
-router.post("/", addProduct);
+router.post("/", passportCall("current"), authorization("admin"), addProduct);
 
 //BORRAR PRODUCTO
-router.delete("/:pid", deleteProduct);
+router.delete("/:pid", passportCall("current"), authorization("admin"), deleteProduct);
 
 //MODIFICAR PRODUCTO
-router.put("/:pid", updateProduct);
+router.put("/:pid", passportCall("current"), authorization("admin"), updateProduct);
 
 export default router;

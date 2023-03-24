@@ -1,15 +1,25 @@
-import cartModel from "../dao/models/cart.model.js";
-import productModel from "../dao/models/product.model.js";
+import CartModel from "../dao/mongo/models/cart.model.js";
+import ProductModel from "../dao/mongo/models/product.model.js";
+import {
+  cartsService,
+  productsService
+} from "../repository/index.js"
 
 /////////////////////////CREA UN NUEVO CARRITO
 
 export const createCart = async (req, res) => {
   try {
-    const result = await cartModel.create([]);
-    res.json({ result: "Success", payload: result });
+    const result = await cartsService.createCart();
+    res.json({
+      result: "Success",
+      payload: result
+    });
   } catch (error) {
     console.log(error);
-    res.json({ result: "Error...", error });
+    res.json({
+      result: "Error...",
+      error
+    });
   }
 };
 
@@ -18,13 +28,18 @@ export const createCart = async (req, res) => {
 export const getProducts = async (req, res) => {
   try {
     const cid = req.params.cid;
-    const products = await cartModel
-      .findOne({ _id: cid })
-      .populate("products.product");
-    res.json({ result: "Success", payload: products });
+    const cart = await cartsService
+      .getCart(cid)
+    res.json({
+      result: "Success",
+      payload: cart
+    });
   } catch (error) {
     console.log(error);
-    res.json({ result: "Error...", error });
+    res.json({
+      result: "Error...",
+      error
+    });
   }
 };
 
@@ -35,35 +50,33 @@ export const addProduct = async (req, res) => {
     const cid = req.params.cid;
     const pid = req.params.pid;
 
-    const cart = await cartModel.findOne({ _id: cid });
+    const cart = await cartsService.getCart(cid);
     if (!cart)
       res.send({
         status: "ERROR",
         error: "No se ha encontrado el carrito especificado...",
       });
 
-    const product = await productModel.findOne({ _id: pid });
+    const product = await productsService.getProduct(pid);
     if (!product)
       res.send({
         status: "ERROR",
         error: "No se ha encontrado el producto especificado...",
       });
 
-    const productIndex = cart.products.findIndex((p) =>
-      p.product.equals(product._id)
-    );
-    if (productIndex === -1) {
-      cart.products.push({ product: product._id, quantity: 1 });
-      await cart.save();
-    } else {
-      cart.products[productIndex].quantity++;
-      await cartModel.updateOne({ _id: cid }, cart);
-    }
+    const updateCart = await cartsService.addProductToCart(cart, product)
 
-    res.json({ result: "success", payload: cart });
+    res.json({
+      result: "Success",
+      payload: updateCart
+    });
+
   } catch (error) {
     console.log(error);
-    res.json({ result: "Error...", error });
+    res.json({
+      result: "Error...",
+      error
+    });
   }
 };
 
@@ -74,14 +87,18 @@ export const deleteProduct = async (req, res) => {
     const cid = req.params.cid;
     const pid = req.params.pid;
 
-    const cart = await cartModel.findOne({ _id: cid });
+    const cart = await CartModel.findOne({
+      _id: cid
+    });
     if (!cart)
       return res.send({
         status: "ERROR",
         error: "No se ha encontrado el carrito especificado...",
       });
 
-    const product = await productModel.findOne({ _id: pid });
+    const product = await ProductModel.findOne({
+      _id: pid
+    });
     if (!product)
       return res.send({
         status: "ERROR",
@@ -91,13 +108,22 @@ export const deleteProduct = async (req, res) => {
     const productIndex = cart.products.findIndex((p) =>
       p.product.equals(product._id)
     );
-    cart.products.splice(productIndex, 1);
-    await cart.save();
+    const products = [...cart.products]
+    products.splice(productIndex, 1)
+    const updateCart = await cartsService.updateCart(cid, {
+      products
+    })
 
-    res.json({ result: "Success", payload: cart });
+    res.json({
+      result: "Success",
+      payload: updateCart
+    });
   } catch (error) {
     console.log(error);
-    res.json({ result: "Error...", error });
+    res.json({
+      result: "Error...",
+      error
+    });
   }
 };
 
@@ -107,15 +133,27 @@ export const updateCart = async (req, res) => {
   try {
     const cid = req.params.cid;
     const products = req.body;
-    const cart = await cartModel.findOne({ _id: cid });
+    const prod = await Promise.all(products.map(async p => await productsService.getProduct(p.product)))
+    if (prod.some(p => p === null)) return res.json({
+      result: "Error...",
+      error: "Alguno de los productos no existe..."
+    })
 
-    cart.products = products;
-    await cart.save();
 
-    res.json({ result: "Success", payload: cart });
+    const cart = await cartsService.updateCart(cid, {
+      products
+    });
+
+    res.json({
+      result: "Success",
+      payload: cart
+    });
   } catch (error) {
     console.log(error);
-    res.json({ result: "Error...", error });
+    res.json({
+      result: "Error...",
+      error
+    });
   }
 };
 
@@ -127,14 +165,14 @@ export const updateQuantity = async (req, res) => {
     const pid = req.params.pid;
     const quantity = req.body.quantity;
 
-    const cart = await cartModel.findOne({ _id: cid });
+    const cart = await cartsService.getCart(cid);
     if (!cart)
       return res.send({
         status: "ERROR",
         error: "No se ha encontrado el carrito especificado...",
       });
 
-    const product = await productModel.findOne({ _id: pid });
+    const product = await productsService.getProduct(pid);
     if (!product)
       return res.send({
         status: "ERROR",
@@ -145,12 +183,19 @@ export const updateQuantity = async (req, res) => {
       p.product.equals(product._id)
     );
     cart.products[productIndex].quantity = parseInt(quantity);
-    await cart.save();
 
-    res.json({ result: "Success", payload: cart });
+    const updateCart = await cartsService.updateCart(cid, cart)
+
+    res.json({
+      result: "Success",
+      payload: updateCart
+    });
   } catch (error) {
     console.log(error);
-    res.json({ result: "Error...", error });
+    res.json({
+      result: "Error...",
+      error
+    });
   }
 };
 
@@ -159,13 +204,51 @@ export const updateQuantity = async (req, res) => {
 export const emptyCart = async (req, res) => {
   try {
     const cid = req.params.cid;
-    const cart = await cartModel.findOne({ _id: cid });
-    cart.products = [];
-    await cart.save();
+    const cart = await cartsService.updateCart(cid, {
+      products: []
+    });
 
-    res.json({ result: "Success", payload: cart });
+    res.json({
+      result: "Success",
+      payload: cart
+    });
   } catch (error) {
     console.log(error);
-    res.json({ result: "Error...", error });
+    res.json({
+      result: "Error...",
+      error
+    });
   }
 };
+
+/////////////////////////COMPLETAR COMPRA
+
+export const purchase = async (req, res) => {
+  try {
+    const cid = req.params.cid
+    const purchaser = req.user.email
+    const {
+      outOfStock,
+      ticket
+    } = await cartsService.purchase(cid, purchaser)
+
+    if (outOfStock.length > 0) {
+      const ids = outOfStock.map(p => p._id)
+      return res.json({
+        result: "Success",
+        payload: ids
+      });
+    }
+
+    res.json({
+      result: "Success",
+      payload: ticket
+    });
+  } catch (error) {
+    console.log(error);
+    res.json({
+      result: "Error...",
+      error
+    });
+  }
+}

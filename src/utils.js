@@ -1,72 +1,58 @@
-import { fileURLToPath } from "url";
-import { dirname } from "path";
+import {
+  fileURLToPath
+} from "url";
+import {
+  dirname
+} from "path";
 import bcrypt from "bcrypt";
-import passport from "passport";
 import jwt from "jsonwebtoken";
 import config from "./config/config.js";
+import TicketModel from "./dao/mongo/models/ticket.model.js";
 
-const { PRIVATE_KEY } = config;
+const {
+  PRIVATE_KEY
+} = config;
 
-const __filename = fileURLToPath(import.meta.url);
+const __filename = fileURLToPath(
+  import.meta.url);
 const __dirname = dirname(__filename);
 export default __dirname;
 
 //GEN/AUTH TOKEN
 export const generateToken = (user) => {
-  const token = jwt.sign({ user }, PRIVATE_KEY, { expiresIn: "24h" });
+  const token = jwt.sign({
+    user
+  }, PRIVATE_KEY, {
+    expiresIn: "24h"
+  });
   return token;
 };
 
-// export const authToken = (req, res, next) => {
-//   const token = req.headers.auth;
-//   if (!token) return res.status(401).send({ error: "Not Auth" });
-//   jwt.verify(token, PRIVATE_KEY, (error, credentials) => {
-//     if (error) return res.status(403).send({ error: "Not Authorized" });
-//     req.user = credentials.user;
-//     next();
-//   });
-// };
+//CODE GEN
+export const codeGenerator = async () => {
+  let last = (await TicketModel.find().sort({
+    purchase_datetime: -1
+  }))[0].code
+  if (!last) last = "AA00"
 
-export const passportCall = (strategy) => {
-  return async (req, res, next) => {
-    passport.authenticate(strategy, function (error, user, info) {
-      if (error) return next(error);
-      if (!user) {
-        return res
-          .status(401)
-          .json({ error: info?.messages ? info.messages : info?.toString() });
-      }
+  let letters = last.slice(0, 2)
+  let nums = parseInt(last.slice(2))
 
-      req.user = user;
-      next();
-    })(req, res, next);
-  };
-};
+  if (nums === 99) {
+    if (letters.charCodeAt(1) === 90) {
+      letters = String.fromCharCode((letters.charCodeAt(0) + 1)).concat(String.fromCharCode(65))
+    } else {
+      letters = letters[0].concat(String.fromCharCode((letters.charCodeAt(1) + 1)))
+    }
+    nums = "00"
+  } else {
+    nums = (nums + 1).toLocaleString(undefined, {
+      minimumIntegerDigits: 2
+    })
+  }
 
-export const authorization = (role) => {
-  return async (req, res, next) => {
-    const user = req.user || null;
-
-    if (!user)
-      return res.status(401).json({ status: "error", error: "Not Auth" });
-    if (user.role !== role)
-      return res.status(403).json({ status: "error", error: "Not Authorized" });
-    next();
-  };
-};
-
-export const viewsAuthorization = (role) => {
-  return async (req, res, next) => {
-    const user = req.user || null;
-
-    if (!user) return res.status(401).redirect("/login");
-    if (user.role !== role)
-      return res
-        .status(403)
-        .render("errors/default", { error: "Not Authorized" });
-    next();
-  };
-};
+  return letters.concat(nums)
+}
 
 //HASH
 export const createHash = (password) => {
@@ -75,5 +61,3 @@ export const createHash = (password) => {
 export const isValidPassword = (user, password) => {
   return bcrypt.compareSync(password, user.password);
 };
-
-//solo funciona con el "type": "module" en el package.json

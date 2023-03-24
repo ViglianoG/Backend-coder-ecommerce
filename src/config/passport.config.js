@@ -1,11 +1,20 @@
 import passport from "passport";
 import local from "passport-local";
 import GithubStrategy from "passport-github2";
-import userModel from "../dao/models/users.model.js";
-import cartModel from "../dao/models/cart.model.js";
+// import UserModel from "../dao/mongo/models/user.model.js";
+// import CartModel from "../dao//mongo/models/cart.model.js";
 import jwt from "passport-jwt";
-import { createHash, isValidPassword, generateToken } from "../utils.js";
-import config from "./config.js"
+import {
+  createHash,
+  isValidPassword,
+  generateToken
+} from "../utils.js";
+import config from "./config.js";
+import {
+  cartsService,
+  usersService
+} from "../repository/index.js";
+import UserDTO from "../dao/DTO/user.dto.js";
 
 const {
   PRIVATE_KEY,
@@ -30,21 +39,26 @@ const localStrategy = local.Strategy;
 const initPassport = () => {
   passport.use(
     "register",
-    new localStrategy(
-      {
+    new localStrategy({
         passReqToCallback: true,
         usernameField: "email",
       },
       async (req, username, password, done) => {
         try {
-          const { first_name, last_name, email, age, role = "user" } = req.body;
+          const {
+            first_name,
+            last_name,
+            email,
+            age,
+            role = "user"
+          } = req.body;
           if (!first_name || !last_name || !email || !age || !password)
             return res.status(400).json({
               status: "error",
               error: "Todos los campos deben ser rellenados",
             });
 
-          const user = await userModel.findOne({ email: username });
+          const user = await usersService.getUserByEmail(username);
 
           if (user) {
             console.log("User already exists");
@@ -60,10 +74,10 @@ const initPassport = () => {
             role,
           };
 
-          const userCart = await cartModel.create({ products: [] });
+          const userCart = await cartsService.createCart();
           newUser.cart = userCart._id;
 
-          const result = await userModel.create(newUser);
+          const result = await usersService.createUser(newUser);
           return done(null, result);
         } catch (error) {
           return done("[LOCAL] Error al crear usuario " + error);
@@ -74,8 +88,7 @@ const initPassport = () => {
 
   passport.use(
     "login",
-    new localStrategy(
-      {
+    new localStrategy({
         usernameField: "email",
       },
       async (username, password, done) => {
@@ -95,17 +108,16 @@ const initPassport = () => {
 
             const token = generateToken(admin);
             admin.token = token;
-            return done(null, admin);
+            const adminDTO = new UserDTO(admin)
+            return done(null, adminDTO);
           }
 
-          const user = await userModel
-            .findOne({ email: username })
-            .lean()
-            .exec();
+          const user = await usersService
+            .getUserByEmail(username)
 
           if (!user) {
             console.log("Invalid User");
-            return done(null, user);
+            return done(null, false);
           }
 
           if (!isValidPassword(user, password)) return done(null, false);
@@ -113,7 +125,8 @@ const initPassport = () => {
           const token = generateToken(user);
           user.token = token;
 
-          return done(null, user);
+          const newUser = new UserDTO(user)
+          return done(null, newUser);
         } catch (error) {
           return done(error);
         }
@@ -123,15 +136,16 @@ const initPassport = () => {
 
   passport.use(
     "github",
-    new GithubStrategy(
-      {
+    new GithubStrategy({
         clientID: GITHUB_CLIENT_ID,
         clientSecret: GITHUB_CLIENT_SECRET,
         callbackURL: GITHUB_CALLBACK_URL,
       },
       async (accessToken, refreshToken, profile, done) => {
         try {
-          const user = await userModel.findOne({ email: profile._json.email });
+          const user = await usersService.getUserByEmail(
+            profile._json.email
+          );
 
           if (!user) {
             const newUser = {
@@ -142,10 +156,10 @@ const initPassport = () => {
               password: "",
             };
 
-            const userCart = await cartModel.create({ products: [] });
+            const userCart = await cartsService.createCart();
             newUser.cart = userCart._id;
 
-            const result = await userModel.create(newUser);
+            const result = await usersService.createUser(newUser);
 
             const token = generateToken(result);
             result.token = token;
@@ -169,20 +183,20 @@ passport.serializeUser((user, done) => {
   done(null, user._id);
 });
 passport.deserializeUser(async (id, done) => {
-  const user = await userModel.findById(id);
+  const user = await usersService.getUserById(id);
   done(null, user);
 });
 
 passport.use(
   "current",
-  new JWTStrategy(
-    {
+  new JWTStrategy({
       jwtFromRequest: ExtractJWT.fromExtractors([cookieExtractor]),
       secretOrKey: PRIVATE_KEY,
     },
     async (jwt_payload, done) => {
       try {
-        return done(null, jwt_payload.user);
+        const user = new UserDTO(jwt_payload.user)
+        return done(null, user);
       } catch (error) {
         return done(error);
       }

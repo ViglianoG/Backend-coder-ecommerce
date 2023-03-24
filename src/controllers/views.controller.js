@@ -1,5 +1,10 @@
-import cartModel from "../dao/models/cart.model.js";
-import productModel from "../dao/models/product.model.js";
+// import cartModel from "../dao/models/cart.model.js";
+// import productModel from "../dao/models/product.model.js";
+
+import {
+  cartsService,
+  productsService
+} from "../repository/index.js";
 
 ///////////////////////// REDIRECT PARA LOGIN
 
@@ -11,42 +16,38 @@ export const redirect = (req, res) => {
 
 export const getProducts = async (req, res) => {
   try {
-    const category = req.query.category;
-    const stock = req.query.stock;
+    const {
+      products,
+      options: {
+        limit,
+        category,
+        stock
+      }
+    } = await productsService.getPaginate(req)
 
-    const query = {
-      ...(category ? { categories: category } : null),
-      ...(stock ? { stock: { $gt: 0 } } : null),
-    };
-
-    const limit = req.query.limit || 10;
-    const page = req.query.page || 1;
-    const sort = req.query.sort;
-
-    const products = await productModel.paginate(query, {
-      page: page,
-      limit: limit,
-      sort: { price: sort } || null,
-      lean: true,
-    });
-
-    products.prevLink = products.hasPrevPage
-      ? `/products?page=${products.prevPage}&limit=${limit}${
+    products.prevLink = products.hasPrevPage ?
+      `/products?page=${products.prevPage}&limit=${limit}${
           category ? `&category=${category}` : ""
-        }${stock ? `&stock=${stock}` : ""}`
-      : "";
-    products.nextLink = products.hasNextPage
-      ? `/products?page=${products.nextPage}&limit=${limit}${
+        }${stock ? `&stock=${stock}` : ""}` :
+      "";
+    products.nextLink = products.hasNextPage ?
+      `/products?page=${products.nextPage}&limit=${limit}${
           category ? `&category=${category}` : ""
-        }${stock ? `&stock=${stock}` : ""}`
-      : "";
+        }${stock ? `&stock=${stock}` : ""}` :
+      "";
 
     const user = req.user;
 
-    res.render("products", { products, user });
+    res.render("products", {
+      products,
+      user
+    });
   } catch (error) {
     console.log(error);
-    res.json({ result: "Error...", error });
+    res.json({
+      result: "Error...",
+      error
+    });
   }
 };
 
@@ -54,7 +55,9 @@ export const getProducts = async (req, res) => {
 
 export const renderForm = async (req, res) => {
   const user = req.user;
-  res.render("create", { user });
+  res.render("create", {
+    user
+  });
 };
 
 /////////////////////////AGREGAR PROD
@@ -62,13 +65,15 @@ export const renderForm = async (req, res) => {
 export const addProduct = async (req, res) => {
   try {
     const product = req.body;
-    const newProduct = new productModel(product);
-    await newProduct.save();
+    const newProduct = await productsService.createProduct(product);
 
     res.redirect("/products/" + newProduct._id);
   } catch (error) {
     console.log(error);
-    res.json({ result: "Error...", error });
+    res.json({
+      result: "Error...",
+      error
+    });
   }
 };
 
@@ -76,14 +81,20 @@ export const addProduct = async (req, res) => {
 
 export const getProduct = async (req, res) => {
   try {
-    const pID = req.params.pid;
-    const product = await productModel.findOne({ _id: pID }).lean().exec();
+    const pid = req.params.pid;
+    const product = await productsService.getProduct(pid)
     const user = req.user;
 
-    res.render("oneProduct", { product, user });
+    res.render("oneProduct", {
+      product,
+      user
+    });
   } catch (error) {
     console.log(error);
-    res.json({ result: "Error...", error });
+    res.json({
+      result: "Error...",
+      error
+    });
   }
 };
 
@@ -91,13 +102,18 @@ export const getProduct = async (req, res) => {
 
 export const deleteProduct = async (req, res) => {
   try {
-    const pID = req.params.pid;
-    await productModel.deleteOne({ _id: pID });
+    const pid = req.params.pid;
+    await productsService.deleteProduct({
+      id
+    });
 
-    res.redirect("/");
+    res.redirect("/products");
   } catch (error) {
     console.log(error);
-    res.json({ result: "Error...", error });
+    res.json({
+      result: "Error...",
+      error
+    });
   }
 };
 
@@ -106,18 +122,22 @@ export const deleteProduct = async (req, res) => {
 export const getCartProducts = async (req, res) => {
   try {
     const cid = req.params.cid;
-
-    const products = await cartModel
-      .findOne({ _id: cid })
-      .populate("products.product")
-      .lean();
+    const cart = cartsService.getCart(cid)
+    const products = cart.toObject()
 
     const user = req.user;
 
-    res.render("cart", { products, user });
+    res.render("cart", {
+      cid,
+      products,
+      user
+    });
   } catch (error) {
     console.log(error);
-    res.json({ result: "error", error });
+    res.json({
+      result: "error",
+      error
+    });
   }
 };
 
@@ -128,37 +148,86 @@ export const addToCart = async (req, res) => {
     const cid = req.params.cid;
     const pid = req.params.pid;
 
-    const cart = await cartModel.findOne({ _id: cid });
+    const cart = await cartsService.getCart(cid);
     if (!cart)
       return res.send({
         status: "ERROR",
         error: "No se ha encontrado el carrito especificado...",
       });
 
-    const product = await productModel.findOne({ _id: pid });
+    const product = await productsService.getProduct(pid);
     if (!product)
       return res.send({
         status: "ERROR",
         error: "No se ha encontrado el producto especificado...",
       });
 
-    const productIndex = cart.products.findIndex((p) =>
-      p.product.equals(product._id)
-    );
-    if (productIndex === -1) {
-      cart.products.push({ product: product._id, quantity: 1 });
-      await cart.save();
-    } else {
-      cart.products[productIndex].quantity++;
-      await cartModel.updateOne({ _id: cid }, cart);
-    }
+    cartsService.addProductToCart(cart, product)
 
     res.redirect("/carts/" + cid);
   } catch (error) {
     console.log(error);
-    res.json({ result: "Error...", error });
+    res.json({
+      result: "Error...",
+      error
+    });
   }
 };
+
+/////////////////////////DELETE PRODUCT DEL CART
+
+export const deleteCartProducts = async (req, res) => {
+  try {
+    const cid = req.params.cid;
+    const cart = await cartsService.updateCart(cid, {
+      products: []
+    })
+    const user = req.user;
+    res.render("cart", {
+      cid,
+      products: cart,
+      user
+    })
+  } catch (error) {
+    console.log(error);
+    res.json({
+      result: "Error...",
+      error
+    });
+  }
+}
+
+/////////////////////////COMPRA
+
+export const purchase = async (req, res) => {
+  try {
+    const cid = req.params.cid
+    const purchaser = req.user.email
+    const {
+      outOfStock,
+      ticket
+    } = await cartsService.purchase(cid, purchaser)
+
+    if (outOfStock.length > 0) {
+      const ids = outOfStock.map(p => p.product)
+      return res.render("purchase", {
+        ids,
+        ticket,
+        cid
+      })
+    }
+
+    res.render("purchase", {
+      ticket
+    })
+  } catch (error) {
+    console.log(error);
+    res.json({
+      result: "Error...",
+      error
+    });
+  }
+}
 
 /////////////////////////FILTRO DE CATEGORIAS
 
@@ -168,7 +237,10 @@ export const filterByCategory = async (req, res) => {
     res.redirect(`/products?category=${category}`);
   } catch (error) {
     console.log(error);
-    res.json({ result: "Error...", error });
+    res.json({
+      result: "Error...",
+      error
+    });
   }
 };
 
@@ -189,7 +261,9 @@ export const register = async (req, res) => {
 /////////////////////////FAIL REGISTER
 
 export const failRegister = (req, res) => {
-  res.status(400).render("errors/default", { error: "Failed to register" });
+  res.status(400).render("errors/default", {
+    error: "Failed to register"
+  });
 };
 
 /////////////////////////VIEW DEL LOGIN
@@ -206,7 +280,10 @@ export const login = async (req, res) => {
   if (!user) {
     return res
       .status(400)
-      .json({ status: "error", error: "Invalid credentials" });
+      .json({
+        status: "error",
+        error: "Invalid credentials"
+      });
   }
 
   res.cookie("cookieToken", user.token).redirect("/products");
@@ -215,7 +292,9 @@ export const login = async (req, res) => {
 /////////////////////////FAIL LOGIN
 
 export const failLogin = (req, res) => {
-  res.status(400).render("errors/default", { error: "Failed login" });
+  res.status(400).render("errors/default", {
+    error: "Failed login"
+  });
 };
 
 /////////////////////////LOGOUT
@@ -235,7 +314,9 @@ export const getUser = (req, res) => {
     });
   }
 
-  res.render("sessions/user", { user });
+  res.render("sessions/user", {
+    user
+  });
 };
 
 ///////////////////////// GITHUB LOGIN

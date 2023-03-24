@@ -1,10 +1,15 @@
-import { Router } from "express";
-
+import {
+  Router
+} from "express";
+import {
+  renderChat
+} from "../controllers/chat.controller.js"
+import {
+  passportCall,
+  authorization
+} from "../middleware/auth.js"
 const router = Router();
 
-router.get("/", (req, res) => {
-  const user = req.session.user;
-  res.render("chat", { user });
-});
+router.get("/", passportCall("current"), authorization("user"), renderChat);
 
 export default router;

@@ -1,5 +1,6 @@
-import { Router } from "express";
-import { passportCall } from "../utils.js";
+import {
+  Router
+} from "express";
 import passport from "passport";
 import {
   register,
@@ -9,6 +10,9 @@ import {
   logout,
   getUser,
 } from "../controllers/sessions.controller.js";
+import {
+  passportCall
+} from "../middleware/auth.js"
 
 const router = Router();
 //CREAR USERS EN DB ✔
@@ -24,7 +28,7 @@ router.post("/login", passportCall("login"), login);
 router.get("/faillogin", failLogin);
 
 //CERRAR SESSION ✔
-router.get("/logout", logout);
+router.get("/logout", passportCall("current"), logout);
 
 //PERFIL DEL USER ✔
 router.get("/current", passportCall("current"), getUser);
@@ -32,7 +36,9 @@ router.get("/current", passportCall("current"), getUser);
 //GITHUB LOGIN ✔
 router.get(
   "/github",
-  passport.authenticate("github", { scope: ["user:email"] }),
+  passport.authenticate("github", {
+    scope: ["user:email"]
+  }),
   async (req, res) => {}
 );
 
