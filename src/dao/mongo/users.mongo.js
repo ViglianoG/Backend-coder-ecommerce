@@ -11,11 +11,11 @@ export default class User {
         return user
     }
 
-    getOneById = async (id) => {
+    getByID = async (id) => {
         return await UserModel.findById(id).lean().exec()
     }
 
-    getOneByEmail = async (email) => {
+    getByEmail = async (email) => {
         return await UserModel.findOne({
             email
         }).lean().exec()

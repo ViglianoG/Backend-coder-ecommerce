@@ -1,8 +1,6 @@
 import passport from "passport";
 import local from "passport-local";
 import GithubStrategy from "passport-github2";
-// import UserModel from "../dao/mongo/models/user.model.js";
-// import CartModel from "../dao//mongo/models/cart.model.js";
 import jwt from "passport-jwt";
 import {
   createHash,
@@ -78,6 +76,7 @@ const initPassport = () => {
           newUser.cart = userCart._id;
 
           const result = await usersService.createUser(newUser);
+
           return done(null, result);
         } catch (error) {
           return done("[LOCAL] Error al crear usuario " + error);
@@ -109,6 +108,7 @@ const initPassport = () => {
             const token = generateToken(admin);
             admin.token = token;
             const adminDTO = new UserDTO(admin)
+
             return done(null, adminDTO);
           }
 
@@ -127,6 +127,7 @@ const initPassport = () => {
 
           const newUser = new UserDTO(user)
           return done(null, newUser);
+
         } catch (error) {
           return done(error);
         }
@@ -171,6 +172,7 @@ const initPassport = () => {
           user.token = token;
 
           done(null, user);
+
         } catch (error) {
           return done(error);
         }
@@ -179,13 +181,6 @@ const initPassport = () => {
   );
 };
 
-passport.serializeUser((user, done) => {
-  done(null, user._id);
-});
-passport.deserializeUser(async (id, done) => {
-  const user = await usersService.getUserById(id);
-  done(null, user);
-});
 
 passport.use(
   "current",
@@ -197,11 +192,21 @@ passport.use(
       try {
         const user = new UserDTO(jwt_payload.user)
         return done(null, user);
+
       } catch (error) {
         return done(error);
       }
     }
   )
 );
+
+
+passport.serializeUser((user, done) => {
+  done(null, user._id);
+});
+passport.deserializeUser(async (id, done) => {
+  const user = await usersService.getUserByID(id);
+  done(null, user);
+});
 
 export default initPassport;
