@@ -14,7 +14,7 @@ export default class Product {
         return await ProductModel.create(data)
     }
 
-    getOneById = async (id) => {
+    getById = async (id) => {
         return await ProductModel.findById(id).lean().exec()
     }
 

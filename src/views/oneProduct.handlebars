@@ -11,27 +11,34 @@
       <a href="/products">HOME</a>
     </li>
     {{#if user}}
-      <li><a href="/sessions/user">MI PERFIL</a></li>
-      {{!-- <li><a href="/carts/{{user.cart}}"></a></li> --}}
+    <li><a href="/sessions/user">MI PERFIL</a></li>
+    {{!-- <li><a href="/carts/{{user.cart}}"></a></li> --}}
     {{else}}
-      <li><a href="/sessions/login">INICIAR SESIÓN</a></li>
-      <li><a href="/sessions/register">REGISTRARSE</a></li>
+    <li><a href="/sessions/login">INICIAR SESIÓN</a></li>
+    <li><a href="/sessions/register">REGISTRARSE</a></li>
     {{/if}}
   </ul>
 </nav>
 
+<main>
+  <section>
+    <div class="product-card">
+      <div class="product-image">
+        <img src="{{product.thumbnails}}" height="150" />
+      </div>
+      <div class="product-info">
+        <h2 class="product-title">{{product.title}}</h2>
+        <p class="product-description">{{product.description}}</p>
+        <p class="product-price">Precio: ${{product.price}}</p>
+        <p class="product-category">Categoria: #{{product.category}}</p>
+        <form action="/carts/{{user.cart}}/products/{{product._id}}" method="post">
+          <input class="add-to-cart-button" type="submit" value="Agregar al carrito" />
+        </form>
+        {{!-- <form action="/products/delete/{{product._id}}" method="get">
+          <input class="add-to-cart-button" type="submit" value="Borrar producto" />
+        </form> --}}
+      </div>
+    </div>
 
-<div>
-  <h1>{{product.title}}</h1>
-  <p>{{product.description}}</p>
-  <p>Precio: ${{product.price}}</p>
-  <p>Categoria: #{{product.category}}</p>
-  <img src="{{product.thumbnails}}" height="150" />
-  <form action="/carts/{{user.cart}}/products/{{product._id}}" method="post">
-    <input type="submit" value="Agregar al carrito" />
-  </form>
-</div>
-
-<form action="/products/delete/{{product._id}}" method="get">
-  <input type="submit" value="Borrar producto" />
-</form>
+  </section>
+</main>

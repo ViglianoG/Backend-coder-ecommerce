@@ -205,7 +205,8 @@ nav {
   }
 }
 
-.user-card, .user-avatar{
+.user-card,
+.user-avatar {
   background-color: var(--light-color);
   border-radius: 4px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
@@ -233,7 +234,11 @@ nav {
   margin: 2rem;
 }
 
-.user-avatar, .user-name, .user-age, .user-email, .user-role{
+.user-avatar,
+.user-name,
+.user-age,
+.user-email,
+.user-role {
   padding-bottom: 0.5rem;
 }
 
@@ -258,7 +263,7 @@ nav {
   display: flex;
   gap: 5%;
   justify-content: center;
-  padding-top: 5%;
+  padding-top: 2%;
 }
 
 .card {
@@ -526,4 +531,78 @@ nav {
   &:visited {
     color: var(--dark-color);
   }
+}
+
+
+
+///////////////// ONE PRODUCT //////////////
+section {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.product-card {
+  margin: 3% 0 3% 0;
+  display: flex;
+  width: 60%;
+  min-height: 50%;
+  flex-direction: column;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+  overflow: hidden;
+}
+
+.product-image {
+  height: 300px;
+  overflow: hidden;
+}
+
+.product-image img {
+  width: 100%;
+  height: auto;
+  object-fit: cover;
+}
+
+.product-info {
+  padding: 1rem;
+}
+
+.product-title {
+  font-size: 1.25rem;
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+}
+
+.product-description {
+  font-size: 1rem;
+  margin-bottom: 1rem;
+}
+
+.product-price {
+  font-size: 1.25rem;
+  font-weight: bold;
+  margin-bottom: 1rem;
+}
+
+.product-category {
+  font-size: 1rem;
+  margin-bottom: 1rem;
+}
+
+.add-to-cart-button {
+  background-color: var(--brand-color);
+  color: var(--dark-color);
+  border: none;
+  border-radius: 3px;
+  padding: 0.75rem 1.5rem;
+  font-size: 1rem;
+  margin-bottom: 1rem;
+  cursor: pointer;
+}
+
+.add-to-cart-button:hover {
+  background-color: var(--dark-color);
+  color: var(--light-color);
 }

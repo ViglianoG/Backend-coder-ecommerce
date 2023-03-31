@@ -8,6 +8,9 @@ import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import config from "./config/config.js";
 import TicketModel from "./dao/mongo/models/ticket.model.js";
+import {
+  faker
+} from "@faker-js/faker";
 
 const {
   PRIVATE_KEY
@@ -61,3 +64,19 @@ export const createHash = (password) => {
 export const isValidPassword = (user, password) => {
   return bcrypt.compareSync(password, user.password);
 };
+
+//GEN PROD
+
+export const generateProducts = () => {
+  return {
+    id: faker.database.mongodbObjectId(),
+    title: faker.commerce.product(),
+    description: faker.commerce.productDescription(),
+    code: faker.random.alphaNumeric(10),
+    price: faker.commerce.price(),
+    status: faker.datatype.boolean(),
+    stock: faker.random.numeric(),
+    category: [faker.commerce.productAdjective(), faker.commerce.productAdjective()],
+    thumbnails: [faker.image.image()]
+  }
+}

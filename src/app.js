@@ -23,6 +23,8 @@ import {
   createMessage
 } from "./controllers/chat.controller.js";
 import http from "http";
+import mockingProducts from "./mocking/products.mocking.js";
+import errorHandler from "./middleware/errors/index.js";
 
 const {
   SESSION_SECRET,
@@ -73,9 +75,11 @@ app.use("/chat",
   passportCall("current"),
   authorization("user"), chatRouter);
 app.use("/api/sessions", sessionRouter);
+app.use("/mockingproducts", mockingProducts)
+app.use(errorHandler)
 
 
-//
+// MONGO
 mongoose.set("strictQuery", false);
 mongoose.connect(
   MONGO_URI, {
