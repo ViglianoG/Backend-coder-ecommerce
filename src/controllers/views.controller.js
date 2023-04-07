@@ -1,10 +1,6 @@
-// import cartModel from "../dao/models/cart.model.js";
-// import productModel from "../dao/models/product.model.js";
-
-import {
-  cartsService,
-  productsService
-} from "../repository/index.js";
+import { cartsService, productsService } from "../repository/index.js";
+import CustomError from "../services/errors/CustomError.js";
+import EErrors from "../services/errors/enums.js";
 
 ///////////////////////// REDIRECT PARA LOGIN
 
@@ -18,36 +14,28 @@ export const getProducts = async (req, res) => {
   try {
     const {
       products,
-      options: {
-        limit,
-        category,
-        stock
-      }
-    } = await productsService.getPaginate(req)
+      options: { limit, category, stock },
+    } = await productsService.getPaginate(req);
 
-    products.prevLink = products.hasPrevPage ?
-      `/products?page=${products.prevPage}&limit=${limit}${
+    products.prevLink = products.hasPrevPage
+      ? `/products?page=${products.prevPage}&limit=${limit}${
           category ? `&category=${category}` : ""
-        }${stock ? `&stock=${stock}` : ""}` :
-      "";
-    products.nextLink = products.hasNextPage ?
-      `/products?page=${products.nextPage}&limit=${limit}${
+        }${stock ? `&stock=${stock}` : ""}`
+      : "";
+    products.nextLink = products.hasNextPage
+      ? `/products?page=${products.nextPage}&limit=${limit}${
           category ? `&category=${category}` : ""
-        }${stock ? `&stock=${stock}` : ""}` :
-      "";
+        }${stock ? `&stock=${stock}` : ""}`
+      : "";
 
     const user = req.user;
 
     res.render("products", {
       products,
-      user
+      user,
     });
   } catch (error) {
-    console.log(error);
-    res.json({
-      result: "Error...",
-      error
-    });
+    res.render("errors/default", { error });
   }
 };
 
@@ -56,7 +44,7 @@ export const getProducts = async (req, res) => {
 export const renderForm = async (req, res) => {
   const user = req.user;
   res.render("create", {
-    user
+    user,
   });
 };
 
@@ -69,11 +57,7 @@ export const addProduct = async (req, res) => {
 
     res.redirect("/products/" + newProduct._id);
   } catch (error) {
-    console.log(error);
-    res.json({
-      result: "Error...",
-      error
-    });
+    res.render("errors/default", { error });
   }
 };
 
@@ -82,19 +66,15 @@ export const addProduct = async (req, res) => {
 export const getProduct = async (req, res) => {
   try {
     const pid = req.params.pid;
-    const product = await productsService.getProduct(pid)
+    const product = await productsService.getProduct(pid);
     const user = req.user;
 
     res.render("oneProduct", {
       product,
-      user
+      user,
     });
   } catch (error) {
-    console.log(error);
-    res.json({
-      result: "Error...",
-      error
-    });
+    res.render("errors/default", { error });
   }
 };
 
@@ -104,16 +84,12 @@ export const deleteProduct = async (req, res) => {
   try {
     const pid = req.params.pid;
     await productsService.deleteProduct({
-      id
+      id,
     });
 
     res.redirect("/products");
   } catch (error) {
-    console.log(error);
-    res.json({
-      result: "Error...",
-      error
-    });
+    res.render("errors/default", { error });
   }
 };
 
@@ -122,22 +98,18 @@ export const deleteProduct = async (req, res) => {
 export const getCartProducts = async (req, res) => {
   try {
     const cid = req.params.cid;
-    const cart = cartsService.getCart(cid)
-    const products = cart.toObject()
+    const cart = cartsService.getCart(cid);
+    const products = cart.toObject();
 
     const user = req.user;
 
     res.render("cart", {
       cid,
       products,
-      user
+      user,
     });
   } catch (error) {
-    console.log(error);
-    res.json({
-      result: "error",
-      error
-    });
+    res.render("errors/default", { error });
   }
 };
 
@@ -150,27 +122,27 @@ export const addToCart = async (req, res) => {
 
     const cart = await cartsService.getCart(cid);
     if (!cart)
-      return res.send({
-        status: "ERROR",
-        error: "No se ha encontrado el carrito especificado...",
+      CustomError.createError({
+        name: "Cart error",
+        cause: generateNullError("Cart"),
+        message: "Error trying to find cart",
+        code: EErrors.NULL_ERROR,
       });
 
     const product = await productsService.getProduct(pid);
     if (!product)
-      return res.send({
-        status: "ERROR",
-        error: "No se ha encontrado el producto especificado...",
+      CustomError.createError({
+        name: "Product error",
+        cause: generateNullError("Product"),
+        message: "Error trying to find product",
+        code: EErrors.NULL_ERROR,
       });
 
-    cartsService.addProductToCart(cart, product)
+    cartsService.addProductToCart(cart, product);
 
     res.redirect("/carts/" + cid);
   } catch (error) {
-    console.log(error);
-    res.json({
-      result: "Error...",
-      error
-    });
+    res.render("errors/default", { error });
   }
 };
 
@@ -180,54 +152,43 @@ export const deleteCartProducts = async (req, res) => {
   try {
     const cid = req.params.cid;
     const cart = await cartsService.updateCart(cid, {
-      products: []
-    })
+      products: [],
+    });
     const user = req.user;
     res.render("cart", {
       cid,
       products: cart,
-      user
-    })
-  } catch (error) {
-    console.log(error);
-    res.json({
-      result: "Error...",
-      error
+      user,
     });
+  } catch (error) {
+    res.render("errors/default", { error });
   }
-}
+};
 
 /////////////////////////COMPRA
 
 export const purchase = async (req, res) => {
   try {
-    const cid = req.params.cid
-    const purchaser = req.user.email
-    const {
-      outOfStock,
-      ticket
-    } = await cartsService.purchase(cid, purchaser)
+    const cid = req.params.cid;
+    const purchaser = req.user.email;
+    const { outOfStock, ticket } = await cartsService.purchase(cid, purchaser);
 
     if (outOfStock.length > 0) {
-      const ids = outOfStock.map(p => p.product)
+      const ids = outOfStock.map((p) => p.product);
       return res.render("purchase", {
         ids,
         ticket,
-        cid
-      })
+        cid,
+      });
     }
 
     res.render("purchase", {
-      ticket
-    })
-  } catch (error) {
-    console.log(error);
-    res.json({
-      result: "Error...",
-      error
+      ticket,
     });
+  } catch (error) {
+    res.render("errors/default", { error });
   }
-}
+};
 
 /////////////////////////FILTRO DE CATEGORIAS
 
@@ -236,11 +197,7 @@ export const filterByCategory = async (req, res) => {
     const category = req.body.category;
     res.redirect(`/products?category=${category}`);
   } catch (error) {
-    console.log(error);
-    res.json({
-      result: "Error...",
-      error
-    });
+    res.render("errors/default", { error });
   }
 };
 
@@ -262,7 +219,7 @@ export const register = async (req, res) => {
 
 export const failRegister = (req, res) => {
   res.status(400).render("errors/default", {
-    error: "Failed to register"
+    error: "Failed to register",
   });
 };
 
@@ -277,14 +234,13 @@ export const renderLogin = (req, res) => {
 export const login = async (req, res) => {
   const user = req.user;
 
-  if (!user) {
-    return res
-      .status(400)
-      .json({
-        status: "error",
-        error: "Invalid credentials"
-      });
-  }
+  if (!user)
+    CustomError.createError({
+      name: "Authentication error",
+      cause: generateAuthenticationError(),
+      message: "Error trying to find user.",
+      code: EErrors.AUTHENTICATION_ERROR,
+    });
 
   res.cookie("cookieToken", user.token).redirect("/products");
 };
@@ -293,7 +249,7 @@ export const login = async (req, res) => {
 
 export const failLogin = (req, res) => {
   res.status(400).render("errors/default", {
-    error: "Failed login"
+    error: "Failed login",
   });
 };
 
@@ -315,7 +271,7 @@ export const getUser = (req, res) => {
   }
 
   res.render("sessions/user", {
-    user
+    user,
   });
 };
 

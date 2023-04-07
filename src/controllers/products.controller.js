@@ -1,22 +1,19 @@
-// import productModel from "../dao/models/product.model.js";
-import {
-  productsService
-} from "../repository/index.js";
+import { productsService } from "../repository/index.js";
 
 /////////////////////////GET CON QUERY LIMITS
 
 export const getProducts = async (req, res) => {
   try {
-    const products = await productsService.getProducts()
+    const products = await productsService.getProducts();
     res.json({
       status: "Success",
-      payload: products
+      payload: products,
     });
   } catch (error) {
-    console.log(error);
+    req.logger.error(error);
     res.json({
       result: "Error...",
-      error
+      error,
     });
   }
 };
@@ -25,17 +22,17 @@ export const getProducts = async (req, res) => {
 
 export const getProduct = async (req, res) => {
   try {
-    const pid = req.params.pid
-    const product = await productsService.getProduct(pid)
+    const pid = req.params.pid;
+    const product = await productsService.getProduct(pid);
     res.json({
       status: "Success",
-      payload: product
+      payload: product,
     });
   } catch (error) {
-    console.log(error);
+    req.logger.error(error);
     res.json({
       result: "Error...",
-      error
+      error,
     });
   }
 };
@@ -45,16 +42,16 @@ export const getProduct = async (req, res) => {
 export const addProduct = async (req, res) => {
   try {
     const product = req.body;
-    const addProd = await productsService.createProduct(product)
+    const addProd = await productsService.createProduct(product);
     res.json({
       status: "Success",
-      payload: addProd
+      payload: addProd,
     });
   } catch (error) {
-    console.log(error);
+    req.logger.error(error);
     res.json({
       result: "Error...",
-      error
+      error,
     });
   }
 };
@@ -68,13 +65,13 @@ export const deleteProduct = async (req, res) => {
 
     res.json({
       status: "Success",
-      payload: result
+      payload: result,
     });
   } catch (error) {
-    console.log(error);
+    req.logger.error(error);
     res.json({
       result: "Error...",
-      error
+      error,
     });
   }
 };
@@ -84,22 +81,22 @@ export const deleteProduct = async (req, res) => {
 export const updateProduct = async (req, res) => {
   try {
     const pid = req.params.pid;
-    const product = await productsService.getProduct(pid)
+    const product = await productsService.getProduct(pid);
     const updatedProd = {
       ...product,
-      ...req.body
-    }
-    const result = await productsService.updateProduct(pid, updatedProd)
+      ...req.body,
+    };
+    const result = await productsService.updateProduct(pid, updatedProd);
 
     res.json({
       status: "Success",
-      payload: result
+      payload: result,
     });
   } catch (error) {
-    console.log(error);
+    req.logger.error(error);
     res.json({
       result: "Error...",
-      error
+      error,
     });
   }
 };

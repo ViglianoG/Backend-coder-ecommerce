@@ -1,8 +1,8 @@
 import { Router } from "express";
-import { generateProducts } from "../utils.js";
-import CustomError from "../services/errors/CustomError.js";
-import EErrors from "../services/errors/enums.js";
-import { generatePropertyError, generateDuplicatedError, generateStockError } from "../services/errors/info.js";
+import { generateProducts } from "../../../utils.js";
+import CustomError from "../../../services/errors/CustomError.js";
+import EErrors from "../../../services/errors/enums.js";
+import { generatePropertyError, generateDuplicatedError, generateStockError } from "../../../services/errors/info.js";
 
 const router = Router()
 const products = []

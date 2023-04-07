@@ -1,3 +1,7 @@
+import CustomError from "../services/errors/CustomError.js";
+import EErrors from "../services/errors/enums.js";
+import { generateAuthenticationError } from "../services/errors/info.js";
+
 /////////////////////////CREAR USERS EN DB
 
 export const register = async (req, res) => {
@@ -42,13 +46,20 @@ export const logout = (req, res) => {
 /////////////////////////PERFIL DEL USER
 
 export const getUser = async (req, res) => {
-  const user = req.user;
+  try {
+    const user = req.user;
 
-  if (!user) {
-    return res.status(404).render("errors/default", {
-      error: "User not found",
-    });
+    if (!user)
+      CustomError.createError({
+        name: "Authentication error",
+        cause: generateAuthenticationError(),
+        message: "Error trying to find user.",
+        code: EErrors.AUTHENTICATION_ERROR,
+      });
+
+    res.json({ status: "success", payload: user });
+  } catch (error) {
+    req.logger.error(error);
+    res.json({ status: "Error...", error });
   }
-
-  res.json({ status: "success", payload: user });
 };

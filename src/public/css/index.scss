@@ -10,6 +10,7 @@
 
 :root {
   --brand-color: #f59e0b;
+  --brand-color-mid: #f59f0b8c;
   --dark-color: #18181b;
   --mid-color: #a1a1aa;
   --light-color: #f8f8f8;
@@ -131,13 +132,13 @@ nav {
   box-shadow: 0 10px 10px rgba(0, 0, 0, 0.2);
 
   li {
-    transition: 0.4s ease all;
     color: var(--light-color);
     padding: 5px;
-    border-radius: 5px;
 
     a {
-      padding: 5px;
+      border-radius: 5px;
+      padding: 0.5rem;
+      transition: all 0.3s ease-in-out;
     }
 
     input {
@@ -156,7 +157,7 @@ nav {
   padding-top: 5px;
   position: absolute;
   display: none;
-  min-width: 10vw;
+  min-width: 12vw;
   background-color: var(--light-color);
   font-size: 2.5vh;
   z-index: 3;
@@ -268,7 +269,8 @@ nav {
 
 .card {
   background-color: var(--light-color);
-  box-shadow: 2px 2px 1px 3px;
+  //box-shadow: 2px 2px 1px 3px;
+  border: 2px var(--dark-color) solid;
   width: 20%;
   border-radius: 8px;
   display: flex;
@@ -280,7 +282,7 @@ nav {
 
   img {
     background-color: var(--light-color);
-    border: 1px solid black;
+    border: 0.1rem solid black;
     border-radius: 5px;
     padding: 10%;
     width: 100%;
@@ -289,13 +291,18 @@ nav {
     border-top-left-radius: 8px;
     border-top-right-radius: 8px;
   }
+  &:hover {
+    box-shadow: 5px 5px 0px rgba(0, 0, 0, 0.95);
+    transform: translateY(-5px) translateX(-5px);
+}
 }
 
 .card::after {
   content: "";
   width: 100%;
   height: 100%;
-  background: #f59e0b80;
+  background: var(--brand-color);
+  opacity: 0.6;
   position: absolute;
   z-index: 1;
   left: -500px;
@@ -307,7 +314,7 @@ nav {
 }
 
 .card-info {
-  margin: 10px;
+  margin: 1rem;
   cursor: default;
   color: var(--dark-color);
 
@@ -325,6 +332,13 @@ nav {
   h4 {
     margin: 8px 0px;
   }
+  div{
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+    margin-top: 1rem;
+    width: 100%;
+  }
 }
 
 .card img,
@@ -336,6 +350,19 @@ nav {
   padding: 8px 12px;
   background-color: rgb(48, 47, 47);
   border-radius: 0px 0px 8px 8px;
+}
+
+.bx-cart-add {
+  background: var(--brand-color-mid);
+  padding: 1rem;
+  color: var(--dark-color);
+  border: 1px var(--dark-color) solid;
+  border-radius: 50%;
+  transition: all 0.3s ease-in-out;
+  &:hover {
+    background-color: var(--light-color);
+    color: var(--dark-color);
+  }
 }
 
 //LOGIN

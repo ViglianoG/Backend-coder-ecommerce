@@ -1,6 +1,11 @@
 import dotenv from "dotenv";
+import options from "./process.js";
 
-dotenv.config();
+const env = options.mode;
+
+dotenv.config({
+  path: env === "development" ? "./.env.development" : "./.env.production",
+});
 
 export default {
   PRIVATE_KEY: process.env.PRIVATE_KEY,
@@ -14,5 +19,5 @@ export default {
   GITHUB_CLIENT_ID: process.env.GITHUB_CLIENT_ID,
   GITHUB_CLIENT_SECRET: process.env.GITHUB_CLIENT_SECRET,
   GITHUB_CALLBACK_URL: process.env.GITHUB_CALLBACK_URL,
-  PERSISTENCE: process.env.PERSISTENCE
+  PERSISTENCE: process.env.PERSISTENCE,
 };

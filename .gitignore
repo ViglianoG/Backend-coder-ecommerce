@@ -1,2 +1,6 @@
 node_modules
 .env
+src/public/css/index.scss
+.env.development
+.env.production
+errors.log

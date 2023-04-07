@@ -2,17 +2,11 @@ import passport from "passport";
 import local from "passport-local";
 import GithubStrategy from "passport-github2";
 import jwt from "passport-jwt";
-import {
-  createHash,
-  isValidPassword,
-  generateToken
-} from "../utils.js";
+import { createHash, isValidPassword, generateToken } from "../utils.js";
 import config from "./config.js";
-import {
-  cartsService,
-  usersService
-} from "../repository/index.js";
+import { cartsService, usersService } from "../repository/index.js";
 import UserDTO from "../dao/DTO/user.dto.js";
+import CustomError from "../services/errors/CustomError.js";
 
 const {
   PRIVATE_KEY,
@@ -37,19 +31,14 @@ const localStrategy = local.Strategy;
 const initPassport = () => {
   passport.use(
     "register",
-    new localStrategy({
+    new localStrategy(
+      {
         passReqToCallback: true,
         usernameField: "email",
       },
       async (req, username, password, done) => {
         try {
-          const {
-            first_name,
-            last_name,
-            email,
-            age,
-            role = "user"
-          } = req.body;
+          const { first_name, last_name, email, age, role = "user" } = req.body;
           if (!first_name || !last_name || !email || !age || !password)
             return res.status(400).json({
               status: "error",
@@ -59,7 +48,7 @@ const initPassport = () => {
           const user = await usersService.getUserByEmail(username);
 
           if (user) {
-            console.log("User already exists");
+            req.logger.info("User already exists");
             return done(null, false);
           }
 
@@ -79,6 +68,7 @@ const initPassport = () => {
 
           return done(null, result);
         } catch (error) {
+          req.logger.error(error);
           return done("[LOCAL] Error al crear usuario " + error);
         }
       }
@@ -87,15 +77,13 @@ const initPassport = () => {
 
   passport.use(
     "login",
-    new localStrategy({
+    new localStrategy(
+      {
         usernameField: "email",
       },
       async (username, password, done) => {
         try {
-          if (
-            username === ADMIN_EMAIL &&
-            password === ADMIN_PASSWORD
-          ) {
+          if (username === ADMIN_EMAIL && password === ADMIN_PASSWORD) {
             const admin = {
               email: username,
               password,
@@ -107,16 +95,20 @@ const initPassport = () => {
 
             const token = generateToken(admin);
             admin.token = token;
-            const adminDTO = new UserDTO(admin)
+            const adminDTO = new UserDTO(admin);
 
             return done(null, adminDTO);
           }
 
-          const user = await usersService
-            .getUserByEmail(username)
+          const user = await usersService.getUserByEmail(username);
 
           if (!user) {
-            console.log("Invalid User");
+            CustomError.createError({
+              name: "Authentication error",
+              cause: generateAuthenticationError(),
+              message: "Error trying to find user.",
+              code: EErrors.AUTHENTICATION_ERROR,
+            });
             return done(null, false);
           }
 
@@ -125,9 +117,8 @@ const initPassport = () => {
           const token = generateToken(user);
           user.token = token;
 
-          const newUser = new UserDTO(user)
+          const newUser = new UserDTO(user);
           return done(null, newUser);
-
         } catch (error) {
           return done(error);
         }
@@ -137,16 +128,15 @@ const initPassport = () => {
 
   passport.use(
     "github",
-    new GithubStrategy({
+    new GithubStrategy(
+      {
         clientID: GITHUB_CLIENT_ID,
         clientSecret: GITHUB_CLIENT_SECRET,
         callbackURL: GITHUB_CALLBACK_URL,
       },
       async (accessToken, refreshToken, profile, done) => {
         try {
-          const user = await usersService.getUserByEmail(
-            profile._json.email
-          );
+          const user = await usersService.getUserByEmail(profile._json.email);
 
           if (!user) {
             const newUser = {
@@ -172,7 +162,6 @@ const initPassport = () => {
           user.token = token;
 
           done(null, user);
-
         } catch (error) {
           return done(error);
         }
@@ -181,25 +170,23 @@ const initPassport = () => {
   );
 };
 
-
 passport.use(
   "current",
-  new JWTStrategy({
+  new JWTStrategy(
+    {
       jwtFromRequest: ExtractJWT.fromExtractors([cookieExtractor]),
       secretOrKey: PRIVATE_KEY,
     },
     async (jwt_payload, done) => {
       try {
-        const user = new UserDTO(jwt_payload.user)
+        const user = new UserDTO(jwt_payload.user);
         return done(null, user);
-
       } catch (error) {
         return done(error);
       }
     }
   )
 );
-
 
 passport.serializeUser((user, done) => {
   done(null, user._id);
