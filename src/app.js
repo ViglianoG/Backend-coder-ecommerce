@@ -59,10 +59,15 @@ app.use("/api/products", productsRouter);
 app.use(
   "/api/carts",
   passportCall("current"),
-  authorization("user"),
+  authorization(["user", "premium"]),
   cartsRouter
 );
-app.use("/chat", passportCall("current"), authorization("user"), chatRouter);
+app.use(
+  "/chat",
+  passportCall("current"),
+  authorization(["user", "premium"]),
+  chatRouter
+);
 app.use("/api/sessions", sessionRouter);
 app.use("/mockingproducts", mockingProducts);
 app.use(errorHandler);

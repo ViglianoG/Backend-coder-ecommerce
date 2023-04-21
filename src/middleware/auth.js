@@ -2,15 +2,17 @@ import passport from "passport";
 import CustomError from "../services/errors/CustomError.js";
 import { generateAuthenticationError } from "../services/errors/info.js";
 import EErrors from "../services/errors/enums.js";
+import { logger } from "./logger.js";
 
 export const passportCall = (strategy) => {
   return async (req, res, next) => {
     passport.authenticate(strategy, function (err, user) {
       if (err) return next(err);
       if (!user) {
+        logger.error("Invalid credentials.");
         return res
           .status(401)
-          .json({ status: "error", error: "Invalid credentials" });
+          .json({ status: "error", error: "Invalid credentials." });
       }
 
       req.user = user;
@@ -26,7 +28,7 @@ export const viewsPassportCall = (strategy) => {
       if (!user) {
         return res
           .status(401)
-          .render("errors/default", { error: "Invalid credentials" });
+          .render("errors/default", { error: "Invalid credentials." });
       }
 
       req.user = user;
@@ -35,7 +37,7 @@ export const viewsPassportCall = (strategy) => {
   };
 };
 
-export const authorization = (role) => {
+export const authorization = (roles) => {
   return async (req, res, next) => {
     const user = req.user || null;
 
@@ -43,24 +45,24 @@ export const authorization = (role) => {
       CustomError({
         name: "Authentication error",
         cause: generateAuthenticationError(),
-        message: "Error trying to find user.",
+        message: "Invalid credentials.",
         code: EErrors.AUTHENTICATION_ERROR,
       });
-    if (user.role !== role)
-      return res.status(403).json({ status: "error", error: "Unauthorized" });
+    if (!roles.includes(user.role))
+      return res.status(403).json({ status: "error", error: "Unauthorized." });
     next();
   };
 };
 
-export const viewsAuthorization = (role) => {
+export const viewsAuthorization = (roles) => {
   return async (req, res, next) => {
     const user = req.user || null;
 
     if (!user) return res.status(401).redirect("/login");
-    if (user.role !== role)
+    if (!roles.includes(user.role))
       return res
         .status(403)
-        .render("errors/default", { error: "Not authorized", user });
+        .render("errors/default", { error: "Not authorized.", user });
     next();
   };
 };

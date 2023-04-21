@@ -25,21 +25,35 @@ export default class CartRepository {
     return new CartDTO(cart);
   };
 
-  addProductToCart = async (cart, product) => {
-    if (!cart)
+  addProductToCart = async (user, cart, product) => {
+    if (!cart) {
       CustomError.createError({
         name: "Find cart error",
         cause: generateNullError("Cart"),
         message: "Error trying to find a cart",
         code: EErrors.NULL_ERROR,
       });
-    if (!product)
+    }
+    if (!product) {
       CustomError.createError({
         name: "Find product error",
         cause: generateNullError("Product"),
         message: "Error trying to find a product",
         code: EErrors.NULL_ERROR,
       });
+    }
+
+    const userID = user.id.toString();
+    const owner = product.owner?.toString();
+
+    if (user.role === "premium" && owner === userID) {
+      CustomError.createError({
+        name: "Authorization error",
+        cause: generateAuthorizationError(),
+        message: "You can't add your own product to your cart.",
+        code: EErrors.AUTHORIZATION_ERROR,
+      });
+    }
 
     const productIndex = cart.products.findIndex((p) =>
       p.product?.equals(product._id)
@@ -59,13 +73,14 @@ export default class CartRepository {
 
   purchase = async (cid, purchaser) => {
     const cart = await this.getCart(cid);
-    if (cart.products.length === 0)
+    if (cart.products.length === 0) {
       CustomError.createError({
         name: "Purchase error",
         cause: generatePurchaseError(cid),
         message: "Error trying to purchase. Cart cannot be empty.",
         code: EErrors.PURCHASE_ERROR,
       });
+    }
 
     const cartProducts = await Promise.all(
       cart.products.map(async (product) => {

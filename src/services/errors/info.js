@@ -24,5 +24,9 @@ export const generatePurchaseError = (cid) => {
 };
 
 export const generateAuthenticationError = () => {
-  return "User not found.";
+  return `Invalid credentials.`;
+};
+
+export const generateAuthorizationError = () => {
+  return "Unauthorized.";
 };

@@ -1,6 +1,4 @@
-import {
-  Router
-} from "express";
+import { Router } from "express";
 import passport from "passport";
 import {
   redirect,
@@ -22,12 +20,13 @@ import {
   getUser,
   githubLogin,
   deleteCartProducts,
-  purchase
+  purchase,
+  renderForgotPassword,
+  sendRecoveryMail,
+  renderChangePassword,
+  changePassword,
 } from "../controllers/views.controller.js";
-import {
-  viewsPassportCall,
-  viewsAuthorization
-} from "../middleware/auth.js";
+import { viewsPassportCall, viewsAuthorization } from "../middleware/auth.js";
 
 const router = Router();
 
@@ -35,52 +34,73 @@ const router = Router();
 router.get("/", redirect);
 
 //VER PRODUCTOS AGREGADOS CON QUERY
-router.get(
-  "/products",
-  viewsPassportCall("current"),
-  getProducts
-);
+router.get("/products", viewsPassportCall("current"), getProducts);
 
 //FORMULARIO PARA CREAR PRODS
 router.get(
   "/products/create",
   viewsPassportCall("current"),
-  viewsAuthorization("admin"),
+  viewsAuthorization(["premium", "admin"]),
   renderForm
 );
 
 //AGREGAR PROD
-router.post("/products", viewsPassportCall("current"), viewsAuthorization("admin"), addProduct);
-
-//VER PROD POR ID
-router.get(
-  "/products/:pid",
+router.post(
+  "/products",
   viewsPassportCall("current"),
-  getProduct
+  viewsAuthorization(["premium", "admin"]),
+  addProduct
 );
 
+//VER PROD POR ID
+router.get("/products/:pid", viewsPassportCall("current"), getProduct);
+
 //ELIMINAR PROD
-router.get("/products/delete/:pid", viewsPassportCall("current"), viewsAuthorization("admin"), deleteProduct);
+router.get(
+  "/products/delete/:pid",
+  viewsPassportCall("current"),
+  viewsAuthorization(["premium", "admin"]),
+  deleteProduct
+);
 
 //MUESTRA EL CARRITO
 router.get(
   "/carts/:cid",
   viewsPassportCall("current"),
-  viewsAuthorization("user"),
+  viewsAuthorization(["user", "premium"]),
   getCartProducts
 );
 
 //AGREGAR PRODUCTO AL CARRITO
-router.post("/carts/:cid/products/:pid", viewsPassportCall("current"), viewsAuthorization("user"), addToCart);
+router.post(
+  "/carts/:cid/products/:pid",
+  viewsPassportCall("current"),
+  viewsAuthorization(["user", "premium"]),
+  addToCart
+);
 
 //ELIMINAR PRODUCTO DEL CARRITO
-router.post("/carts/:cid", viewsPassportCall("current"), viewsAuthorization("user"), deleteCartProducts);
+router.post(
+  "/carts/:cid",
+  viewsPassportCall("current"),
+  viewsAuthorization(["user", "premium"]),
+  deleteCartProducts
+);
 
 //FILTRO DE CATEGORIAS
-router.post("/products/category", viewsPassportCall("current"), filterByCategory);
+router.post(
+  "/products/category",
+  viewsPassportCall("current"),
+  filterByCategory
+);
 
 //COMPRA
-router.post("/carts/:cid/purchase", viewsPassportCall("current"), viewsAuthorization("user"), purchase);
+router.post(
+  "/carts/:cid/purchase",
+  viewsPassportCall("current"),
+  viewsAuthorization(["user", "premium"]),
+  purchase
+);
 
 // SESSIONS
 
@@ -106,18 +126,27 @@ router.get("/faillogin", failLogin);
 router.get("/sessions/logout", viewsPassportCall("current"), logout);
 
 //PERFIL DEL USER
-router.get(
-  "/sessions/user",
-  viewsPassportCall("current"),
-  getUser
-);
+router.get("/sessions/user", viewsPassportCall("current"), getUser);
 
 // GITHUB LOGIN
 router.get(
   "/api/sessions/githubcallback",
   passport.authenticate("github", {
-    failureRedirect: "/login"
+    failureRedirect: "/login",
   }),
   githubLogin
 );
+
+//RENDER FORGOT PASS
+router.get("/sessions/password_reset", renderForgotPassword);
+
+//RECOVERY EMAIL
+router.post("/sessions/password_reset", sendRecoveryMail);
+
+//RENDER CHANGE PASS
+router.get("/sessions/password_reset/:uid/:token", renderChangePassword);
+
+//CAMBIAR PASS
+router.post("/sessions/password_reset/:uid/:token", changePassword);
+
 export default router;

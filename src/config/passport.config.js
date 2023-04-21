@@ -68,7 +68,7 @@ const initPassport = () => {
 
           return done(null, result);
         } catch (error) {
-          req.logger.error(error);
+          req.logger.error(error.toString());
           return done("[LOCAL] Error al crear usuario " + error);
         }
       }
@@ -192,7 +192,7 @@ passport.serializeUser((user, done) => {
   done(null, user._id);
 });
 passport.deserializeUser(async (id, done) => {
-  const user = await usersService.getUserByID(id);
+  const user = await usersService.getUserDataByID(id);
   done(null, user);
 });
 

@@ -1,4 +1,5 @@
 import { productsService } from "../repository/index.js";
+import CustomError from "../services/errors/CustomError.js";
 
 /////////////////////////GET CON QUERY LIMITS
 
@@ -10,7 +11,7 @@ export const getProducts = async (req, res) => {
       payload: products,
     });
   } catch (error) {
-    req.logger.error(error);
+    req.logger.error(error.toString());
     res.json({
       result: "Error...",
       error,
@@ -29,7 +30,7 @@ export const getProduct = async (req, res) => {
       payload: product,
     });
   } catch (error) {
-    req.logger.error(error);
+    req.logger.error(error.toString());
     res.json({
       result: "Error...",
       error,
@@ -41,14 +42,17 @@ export const getProduct = async (req, res) => {
 
 export const addProduct = async (req, res) => {
   try {
+    const { role, id } = req.user;
     const product = req.body;
-    const addProd = await productsService.createProduct(product);
+    if (role === "premium") product.owner = id;
+
+    const result = await productsService.createProduct(product);
     res.json({
       status: "Success",
-      payload: addProd,
+      payload: result,
     });
   } catch (error) {
-    req.logger.error(error);
+    req.logger.error(error.toString());
     res.json({
       result: "Error...",
       error,
@@ -61,14 +65,23 @@ export const addProduct = async (req, res) => {
 export const deleteProduct = async (req, res) => {
   try {
     const pid = req.params.pid;
+    //const result = await productsService.deleteProduct(pid);
+    const product = await productsService.getProduct(pid);
+    const user = req.user;
+    const userID = user.id.toString();
+    const owner = product.owner?.toString();
+
+    if (user.role === "premium" && userID !== owner) {
+      const error = "You can't modify a product owned by another user";
+      req.logger.error(error);
+      return res.status(403).json({ status: "error", error });
+    }
+
     const result = await productsService.deleteProduct(pid);
 
-    res.json({
-      status: "Success",
-      payload: result,
-    });
+    res.json({ status: "success", payload: result });
   } catch (error) {
-    req.logger.error(error);
+    req.logger.error(error.toString());
     res.json({
       result: "Error...",
       error,
@@ -82,6 +95,16 @@ export const updateProduct = async (req, res) => {
   try {
     const pid = req.params.pid;
     const product = await productsService.getProduct(pid);
+    const user = req.user;
+    const userID = user.id.toString();
+    const owner = product.owner?.toString();
+
+    if (user.role === "premium" && userID !== owner) {
+      const error = "You can't modify a product owned by another user";
+      req.logger.error(error);
+      return res.status(403).json({ status: "error", error });
+    }
+
     const updatedProd = {
       ...product,
       ...req.body,
@@ -93,7 +116,7 @@ export const updateProduct = async (req, res) => {
       payload: result,
     });
   } catch (error) {
-    req.logger.error(error);
+    req.logger.error(error.toString());
     res.json({
       result: "Error...",
       error,
