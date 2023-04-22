@@ -256,7 +256,6 @@ nav {
   margin-bottom: 0.5rem;
 }
 
-
 //PRODUCTS
 .products {
   width: 100%;
@@ -294,7 +293,7 @@ nav {
   &:hover {
     box-shadow: 5px 5px 0px rgba(0, 0, 0, 0.95);
     transform: translateY(-5px) translateX(-5px);
-}
+  }
 }
 
 .card::after {
@@ -332,7 +331,7 @@ nav {
   h4 {
     margin: 8px 0px;
   }
-  div{
+  div {
     display: flex;
     align-items: center;
     justify-content: space-evenly;
@@ -523,7 +522,7 @@ nav {
   }
 }
 
-.login-button>a {
+.login-button > a {
   text-decoration: none;
 
   &:visited {
@@ -531,7 +530,7 @@ nav {
   }
 }
 
-.login-button:hover>a {
+.login-button:hover > a {
   color: var(--light-color);
 }
 
@@ -548,25 +547,24 @@ nav {
   }
 }
 
-.login-button-ghost>a {
+.login-button-ghost > a {
   &:visited {
     color: var(--light-color);
   }
 }
 
-.login-button-ghost:hover>a {
+.login-button-ghost:hover > a {
   &:visited {
     color: var(--dark-color);
   }
 }
-
-
 
 ///////////////// ONE PRODUCT //////////////
 section {
   display: flex;
   justify-content: center;
   align-items: center;
+  height: 100vh;
 }
 
 .product-card {
@@ -632,4 +630,26 @@ section {
 .add-to-cart-button:hover {
   background-color: var(--dark-color);
   color: var(--light-color);
+}
+
+.password-recovery {
+  @extend .login-container;
+  div {
+    @extend .login-form;
+    background-color: var(--light-color);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    form {
+      input {
+        @extend .login-input;
+        margin-bottom: 0.5rem;
+      }
+      button {
+        @extend .login-button;
+        margin-bottom: 0;
+      }
+    }
+  }
 }

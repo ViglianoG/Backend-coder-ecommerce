@@ -338,20 +338,21 @@ nav a {
   color: var(--dark-color);
 }
 
-.login-container,
+.login-container, .password-recovery,
 .login-form,
+.password-recovery div,
 .login-inputs {
   font-family: "Poppins", sans-serif;
   display: grid;
 }
 
-.login-container {
+.login-container, .password-recovery {
   background: url(../assets/img/puntitos-negros-soft.png);
   position: relative;
   height: 100vh;
   align-items: center;
 }
-.login-container.dark {
+.login-container.dark, .dark.password-recovery {
   background: url(../assets/img/puntitos-blancos-soft.png);
 }
 
@@ -361,7 +362,7 @@ nav a {
   align-items: center;
 }
 
-.login-form {
+.login-form, .password-recovery div {
   min-width: 20%;
   position: relative;
   background-color: rgba(255, 255, 255, 0.5);
@@ -372,20 +373,21 @@ nav a {
   border-radius: 1rem;
   border: 2px solid var(--dark-color);
 }
-.login-form:hover {
+.login-form:hover, .password-recovery div:hover {
   box-shadow: 5px 5px 0px rgba(0, 0, 0, 0.95);
   transform: translateY(-5px) translateX(-5px);
 }
-.login-form.dark {
+.login-form.dark, .password-recovery div.dark {
   background-color: var(--dark-color);
   border: 1px solid var(--light-color);
 }
-.login-form.dark:hover {
+.login-form.dark:hover, .password-recovery div.dark:hover {
   box-shadow: 5px 5px 0px var(--light-color);
 }
 
-.login-form,
+.login-form, .password-recovery div,
 .login-button,
+.password-recovery div form button,
 .login-button-ghost {
   transition: all 0.4s ease;
 }
@@ -414,7 +416,7 @@ nav a {
   color: var(--light-color);
 }
 
-.login-input {
+.login-input, .password-recovery div form input {
   padding: 14px 12px;
   border-radius: 6px;
   background-color: hsla(244, 16%, 92%, 0.6);
@@ -426,23 +428,24 @@ nav a {
 }
 
 .login-inputs:focus,
-.login-input:valid {
+.login-input:valid,
+.password-recovery div form input:valid {
   border: 1px solid var(--dark-color);
 }
 
-.login-input:focus {
+.login-input:focus, .password-recovery div form input:focus {
   transition: all 0.4s ease;
   box-shadow: 5px 5px 0px rgba(0, 0, 0, 0.95);
   transform: translateY(-2px) translateX(-2px);
 }
 
-.login-input {
+.login-input, .password-recovery div form input {
   padding-right: 36px;
 }
-.login-input.dark {
+.login-input.dark, .password-recovery div form input.dark {
   background-color: var(--light-color);
 }
-.login-input.dark:focus {
+.login-input.dark:focus, .password-recovery div form input.dark:focus {
   box-shadow: 5px 5px 0px var(--light-color);
 }
 
@@ -453,7 +456,7 @@ nav a {
        column-gap: 0.75rem;
 }
 
-.login-button {
+.login-button, .password-recovery div form button {
   width: 100%;
   padding: 14px 2rem;
   border-radius: 5px;
@@ -463,30 +466,30 @@ nav a {
   margin-bottom: 1rem;
   cursor: pointer;
 }
-.login-button:hover {
+.login-button:hover, .password-recovery div form button:hover {
   box-shadow: 5px 5px 0px rgba(0, 0, 0, 0.95);
   background: var(--dark-color);
   color: var(--light-color);
   transform: translateY(-5px) translateX(-5px);
 }
-.login-button.dark:hover {
+.login-button.dark:hover, .password-recovery div form button.dark:hover {
   box-shadow: 5px 5px 0px var(--light-color);
 }
-.login-button a.dark {
+.login-button a.dark, .password-recovery div form button a.dark {
   color: var(--light-color);
 }
-.login-button a.dark:visited {
+.login-button a.dark:visited, .password-recovery div form button a.dark:visited {
   color: var(--light-color);
 }
 
-.login-button > a {
+.login-button > a, .password-recovery div form button > a {
   text-decoration: none;
 }
-.login-button > a:visited {
+.login-button > a:visited, .password-recovery div form button > a:visited {
   color: var(--dark-color);
 }
 
-.login-button:hover > a {
+.login-button:hover > a, .password-recovery div form button:hover > a {
   color: var(--light-color);
 }
 
@@ -514,6 +517,7 @@ section {
   display: flex;
   justify-content: center;
   align-items: center;
+  height: 100vh;
 }
 
 .product-card {
@@ -580,4 +584,18 @@ section {
 .add-to-cart-button:hover {
   background-color: var(--dark-color);
   color: var(--light-color);
+}
+
+.password-recovery div {
+  background-color: var(--light-color);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+.password-recovery div form input {
+  margin-bottom: 0.5rem;
+}
+.password-recovery div form button {
+  margin-bottom: 0;
 }/*# sourceMappingURL=index.css.map */

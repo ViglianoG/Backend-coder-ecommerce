@@ -57,7 +57,7 @@ export default class UsersRepository {
     <p>Recibiste este mensaje porque se solicitó un restablecimiento de contraseña para la cuenta relacionada a este correo electrónico.</p>
     <br>
     <p>Podés hacerlo haciendo click en el siguiente link:</p>
-    <a href=${BASE_URL}/sessions/password_reset/${
+    <a href=${BASE_URL}sessions/password_reset/${
       user._id || user.id
     }/${token}>Restablecer contraseña</a>
     <br>
