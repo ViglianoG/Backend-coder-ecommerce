@@ -24,8 +24,8 @@ import {
   renderForgotPassword,
   sendRecoveryMail,
   renderChangePassword,
-  changePassword,
 } from "../controllers/views.controller.js";
+import { changePassword } from "../controllers/sessions.controller.js";
 import { viewsPassportCall, viewsAuthorization } from "../middleware/auth.js";
 
 const router = Router();
