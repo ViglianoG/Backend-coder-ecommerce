@@ -20,6 +20,8 @@ import mockingProducts from "./routes/testing/mocking/products.mocking.js";
 import errorHandler from "./middleware/errors/index.js";
 import { logger, addLogger } from "./middleware/logger.js";
 import loggerRouter from "./routes/logger.router.js";
+import { serve, setup } from "swagger-ui-express";
+import specs from "./config/swagger.config.js";
 
 const { SESSION_SECRET, COOKIE_SECRET, MONGO_URI, DB_NAME } = config;
 
@@ -72,6 +74,7 @@ app.use("/api/sessions", sessionRouter);
 app.use("/mockingproducts", mockingProducts);
 app.use(errorHandler);
 app.use("/loggertest", loggerRouter);
+app.use("/apidocs", serve, setup(specs));
 
 // MONGO
 mongoose.set("strictQuery", false);
