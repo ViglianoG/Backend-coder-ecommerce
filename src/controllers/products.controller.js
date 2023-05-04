@@ -5,7 +5,10 @@ import CustomError from "../services/errors/CustomError.js";
 
 export const getProducts = async (req, res) => {
   try {
-    const products = await productsService.getProducts();
+    const {
+      products,
+      options: { limit, category, stock },
+    } = await productsService.getPaginate(req);
     res.json({
       status: "Success",
       payload: products,
@@ -42,9 +45,9 @@ export const getProduct = async (req, res) => {
 
 export const addProduct = async (req, res) => {
   try {
-    const { role, id } = req.user;
+    const { role, email } = req.user;
     const product = req.body;
-    if (role === "premium") product.owner = id;
+    if (role === "premium") product.owner = email;
 
     const result = await productsService.createProduct(product);
     res.json({
@@ -65,13 +68,12 @@ export const addProduct = async (req, res) => {
 export const deleteProduct = async (req, res) => {
   try {
     const pid = req.params.pid;
-    //const result = await productsService.deleteProduct(pid);
     const product = await productsService.getProduct(pid);
     const user = req.user;
-    const userID = user.id.toString();
-    const owner = product.owner?.toString();
+    const userEmail = user.email;
+    const owner = product.owner;
 
-    if (user.role === "premium" && userID !== owner) {
+    if (user.role === "premium" && userEmail !== owner) {
       const error = "You can't modify a product owned by another user";
       req.logger.error(error);
       return res.status(403).json({ status: "error", error });
@@ -96,10 +98,10 @@ export const updateProduct = async (req, res) => {
     const pid = req.params.pid;
     const product = await productsService.getProduct(pid);
     const user = req.user;
-    const userID = user.id.toString();
-    const owner = product.owner?.toString();
+    const userEmail = user.email;
+    const owner = product.owner;
 
-    if (user.role === "premium" && userID !== owner) {
+    if (user.role === "premium" && userEmail !== owner) {
       const error = "You can't modify a product owned by another user";
       req.logger.error(error);
       return res.status(403).json({ status: "error", error });

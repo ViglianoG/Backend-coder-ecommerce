@@ -10,6 +10,8 @@ import {
   sendRecoveryMail,
   changePassword,
   updateRole,
+  deleteUserByEmail,
+  deleteUser,
 } from "../controllers/sessions.controller.js";
 import { passportCall, authorization } from "../middleware/auth.js";
 
@@ -51,5 +53,11 @@ router.put(
   authorization(["user", "premium"]),
   updateRole
 );
+
+//DELETE USER BY EMAIL ✔
+router.delete("/email/:email", deleteUserByEmail);
+
+//DELETE USER BY ID ✔
+router.delete("/:uid", deleteUser);
 
 export default router;

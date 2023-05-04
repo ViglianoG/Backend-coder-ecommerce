@@ -22,6 +22,7 @@ import { logger, addLogger } from "./middleware/logger.js";
 import loggerRouter from "./routes/logger.router.js";
 import { serve, setup } from "swagger-ui-express";
 import specs from "./config/swagger.config.js";
+import cors from "cors";
 
 const { SESSION_SECRET, COOKIE_SECRET, MONGO_URI, DB_NAME } = config;
 
@@ -54,6 +55,7 @@ initPassport();
 app.use(passport.initialize());
 app.use(passport.session());
 app.use(addLogger);
+app.use(cors());
 
 //RUTAS
 app.use("/", viewsRouter);

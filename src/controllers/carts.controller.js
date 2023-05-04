@@ -179,9 +179,11 @@ export const updateCart = async (req, res) => {
         message: "Solamente tienes acceso a tu propio carrito.",
         code: EErrors.AUTHORIZATION_ERROR,
       });
+
     const prod = await Promise.all(
       products.map(async (p) => await productsService.getProduct(p.product))
     );
+    
     if (prod.some((p) => p === null))
       CustomError.createError({
         name: "Product error",

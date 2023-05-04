@@ -5,11 +5,11 @@ import {
 } from "../repository/index.js";
 import CustomError from "../services/errors/CustomError.js";
 import EErrors from "../services/errors/enums.js";
-import {
-  createHash,
-  validateToken,
-  isValidPassword as comparePasswords,
-} from "../utils.js";
+// import {
+//   createHash,
+//   validateToken,
+//   isValidPassword as comparePasswords,
+// } from "../utils.js";
 
 ///////////////////////// REDIRECT PARA LOGIN
 
@@ -169,7 +169,7 @@ export const addToCart = async (req, res) => {
       return res.status(403).json({ status: "error", error });
     }
 
-    cartsService.addProductToCart(cart, product);
+    cartsService.addProductToCart(user, cart, product);
 
     res.redirect("/carts/" + cid);
   } catch (error) {
@@ -339,4 +339,3 @@ export const renderChangePassword = async (req, res) => {
   const { uid, token } = req.params;
   res.render("sessions/changePassword", { uid, token });
 };
-

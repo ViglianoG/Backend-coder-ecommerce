@@ -38,6 +38,10 @@ export default class UsersRepository {
     return await this.getUserDataByID(id);
   };
 
+  deleteUser = async (id) => {
+    return await this.dao.delete(id);
+  };
+
   sendMail = async (email) => {
     const user = await this.getUserByEmail(email);
     if (!user)
@@ -48,7 +52,7 @@ export default class UsersRepository {
         code: EErrors.AUTHENTICATION_ERROR,
       });
 
-    const token = generateToken({}, 1);
+    const token = generateToken({ valid: true }, 1);
 
     const html = `
     <h1>Restauración de contraseña</h1>
@@ -64,5 +68,16 @@ export default class UsersRepository {
     <p>¡Saludos!</p>`;
 
     return await this.mail.send(email, "Restauración de contraseña.", html);
+  };
+
+  sendRegistrationMail = async (email) => {
+    const html = `
+    <h1>¡Tu registro en "Coder-eCommerce" ha sido exitoso!</h1>
+    <br>
+    <p>Gracias por registrarte..</p>
+    <br>
+    <p>¡Saludos!👋</p>`;
+
+    return await this.mail.send(email, "Registro exitoso", html);
   };
 }

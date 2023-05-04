@@ -373,6 +373,10 @@ nav a {
   border-radius: 1rem;
   border: 2px solid var(--dark-color);
 }
+.login-form a, .password-recovery div a {
+  display: flex;
+  justify-content: center;
+}
 .login-form:hover, .password-recovery div:hover {
   box-shadow: 5px 5px 0px rgba(0, 0, 0, 0.95);
   transform: translateY(-5px) translateX(-5px);

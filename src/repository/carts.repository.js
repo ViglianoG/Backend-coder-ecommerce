@@ -21,7 +21,8 @@ export default class CartRepository {
   };
 
   updateCart = async (id, data) => {
-    const cart = await this.dao.update(id, data);
+    await this.dao.update(id, data);
+    const cart = { id, products: data.products };
     return new CartDTO(cart);
   };
 

@@ -23,4 +23,5 @@ export default {
   BASE_URL: process.env.BASE_URL,
   USER_MAIL: process.env.USER_MAIL,
   USER_PASS: process.env.USER_PASS,
+  TEST_MONGO_URI: process.env.TEST_MONGO_URI,
 };

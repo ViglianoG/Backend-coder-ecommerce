@@ -48,7 +48,7 @@ const initPassport = () => {
           const user = await usersService.getUserByEmail(username);
 
           if (user) {
-            req.logger.info("User already exists");
+            req.logger.error("User already exists");
             return done(null, false);
           }
 
@@ -65,6 +65,7 @@ const initPassport = () => {
           newUser.cart = userCart._id;
 
           const result = await usersService.createUser(newUser);
+          await usersService.sendRegistrationMail(username);
 
           return done(null, result);
         } catch (error) {
