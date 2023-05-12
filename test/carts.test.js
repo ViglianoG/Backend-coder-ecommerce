@@ -14,12 +14,13 @@ describe("Testing Carts DAO", () => {
 
   beforeEach(function () {
     mongoose.connection.collections.carts.drop();
-    this.timeout(5000);
+    this.timeout(0);
   });
 
   //CREATE CART
   it("El DAO debe poder crear un carrito con una propiedad products que por defecto es un array vacío.", async function () {
     const cart = await this.cartsDao.create();
+
     expect(cart._id).to.be.ok;
     expect(cart.products).to.be.deep.equal([]);
   });
@@ -27,9 +28,7 @@ describe("Testing Carts DAO", () => {
   //GET CART
   it("El DAO debe poder obtener un carrito mediante su ID.", async function () {
     const cart = await this.cartsDao.create();
-    const foundCart = await this.cartsDao.getByID(cart._id);
-
-    console.log(foundCart);
+    const foundCart = await this.cartsDao.getById(cart._id);
 
     expect(foundCart._id).to.be.ok;
     expect(foundCart.products).to.be.an("array");

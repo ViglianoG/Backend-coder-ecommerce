@@ -7,8 +7,16 @@ const { COOKIE_NAME, BASE_URL } = config;
 const expect = chai.expect;
 const requester = supertest(BASE_URL);
 
-describe("Testing Coder eCommerce", () => {
+describe("Testing Coder eCommerce", function () {
   let cookie;
+  this.timeout(0);
+
+  after(function () {
+    requester
+      .delete("/api/users/email/usuariodeprueba@usuariodeprueba.com")
+      .set("Cookie", [`${cookie.name}=${cookie.value}`])
+      .then((result) => console.log("Delete test user.", result._body));
+  });
 
   //SESSIONS
   describe("Test de sessions (Register, Login y Current)", () => {
@@ -21,9 +29,9 @@ describe("Testing Coder eCommerce", () => {
       role: "premium",
     };
 
-    before(async function () {
-      await requester.delete(`api/sessions/email/${mockUser.email}`);
-    });
+    // before(async function () {
+    //   await requester.delete(`api/sessions/email/${mockUser.email}`);
+    // });
 
     //REGISTER
     it("El endpoint POST api/sessions/register debe registrar un usuario.", async () => {

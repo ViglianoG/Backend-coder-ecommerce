@@ -183,7 +183,7 @@ export const updateCart = async (req, res) => {
     const prod = await Promise.all(
       products.map(async (p) => await productsService.getProduct(p.product))
     );
-    
+
     if (prod.some((p) => p === null))
       CustomError.createError({
         name: "Product error",
@@ -300,12 +300,13 @@ export const emptyCart = async (req, res) => {
 
 export const purchase = async (req, res) => {
   try {
-    const cid = req.params.cid;
+    const { cid } = req.params.cid;
     const purchaser = req.user.email;
     const { outOfStock, ticket } = await cartsService.purchase(cid, purchaser);
 
     if (outOfStock.length > 0) {
       const ids = outOfStock.map((p) => p._id);
+      req.logger.info("Uno o mas productos están fuera de stock.");
       return res.json({
         result: "Success",
         payload: ids,

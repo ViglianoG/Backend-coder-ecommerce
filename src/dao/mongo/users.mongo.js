@@ -11,7 +11,7 @@ export default class User {
     return user;
   };
 
-  getByID = async (id) => {
+  getById = async (id) => {
     return await UserModel.findById(id).lean().exec();
   };
 

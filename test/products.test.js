@@ -30,8 +30,8 @@ describe("Testing Products DAO", () => {
       { limit: 3, page: 1, sort: {}, lean: true }
     );
     expect(result.docs).to.be.an("array");
-    expect(result.limit).to.be.eql(5);
-    expect(result.page).to.be.eql(2);
+    expect(result.limit).to.be.eql(3);
+    expect(result.page).to.be.eql(1);
   });
 
   //ADD PROD
@@ -63,7 +63,7 @@ describe("Testing Products DAO", () => {
     };
 
     const product = await this.productsDao.create(data);
-    const result = await this.productsDao.getByID(product._id);
+    const result = await this.productsDao.getById(product._id);
 
     expect(result).to.be.ok.and.an("object");
     expect(result._id).to.be.ok;
@@ -88,7 +88,7 @@ describe("Testing Products DAO", () => {
 
     const product = await this.productsDao.create(data);
     const result = await this.productsDao.update(product._id, newData);
-    const updatedProduct = await this.productsDao.getByID(product._id);
+    const updatedProduct = await this.productsDao.getById(product._id);
 
     expect(result.modifiedCount).to.be.eql(1);
     expect(updatedProduct.title).to.be.eql(newData.title);
@@ -109,7 +109,7 @@ describe("Testing Products DAO", () => {
 
     const product = await this.productsDao.create(data);
     const result = await this.productsDao.delete(product._id);
-    const deleted = await this.productsDao.getByID(product._id);
+    const deleted = await this.productsDao.getById(product._id);
 
     expect(result.deletedCount).to.be.eql(1);
     expect(deleted).to.be.eql(null);

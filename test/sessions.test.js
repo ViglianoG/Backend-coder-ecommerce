@@ -52,7 +52,7 @@ describe("Testing Users DAO", () => {
 
     const user = await this.usersDao.create(mockUser);
 
-    const result = await this.usersDao.getByID(user._id);
+    const result = await this.usersDao.getById(user._id);
     const result2 = await this.usersDao.getByEmail(user.email);
 
     expect(result).to.be.ok.and.an("object");
@@ -78,7 +78,7 @@ describe("Testing Users DAO", () => {
     };
 
     await this.usersDao.update(user._id, data);
-    const updatedUser = await this.usersDao.getByID(user._id);
+    const updatedUser = await this.usersDao.getById(user._id);
 
     expect(updatedUser.first_name).to.be.eql(data.first_name);
     expect(updatedUser.password).to.be.eql(data.password);

@@ -17,14 +17,14 @@ const productSchema = new mongoose.Schema({
   category: [String],
   thumbnails: [String],
   owner: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "users",
+    type: String,
     default: "admin",
   },
 });
 
 productSchema.plugin(mongoosePaginate);
 
+mongoose.set("strictQuery", false);
 const ProductModel = mongoose.model("products", productSchema);
 
 export default ProductModel;
