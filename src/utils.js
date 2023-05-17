@@ -35,12 +35,9 @@ export const validateToken = (token) => {
 
 //CODE GEN
 export const codeGenerator = async () => {
-  let last = (
-    await TicketModel.find().sort({
-      purchase_datetime: -1,
-    })
-  )[0].code;
-  if (!last) last = "AA00";
+  let last =
+    (await TicketModel.find().sort({ purchase_datetime: -1 }))[0]?.code ||
+    "AAAA";
 
   let letters = last.slice(0, 2);
   let nums = parseInt(last.slice(2));

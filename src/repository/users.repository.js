@@ -5,6 +5,7 @@ import { generateAuthenticationError } from "../services/errors/info.js";
 import Mail from "../services/mail.js";
 import config from "../config/config.js";
 import { generateToken } from "../utils.js";
+import __dirname from "../utils.js";
 
 const { BASE_URL } = config;
 
@@ -79,5 +80,22 @@ export default class UsersRepository {
     <p>¡Saludos!👋</p>`;
 
     return await this.mail.send(email, "Registro exitoso", html);
+  };
+
+  saveDocuments = async (user, files) => {
+    const newDocuments = files.map((file) => ({
+      name: file.document_type,
+      reference: `${file.destination.replace(`${__dirname}/public`, "")}/${
+        file.filename
+      }`,
+    }));
+
+    const updatedUser = {
+      ...user,
+      documents: user.documents.concat(newDocuments),
+    };
+
+    await this.updateUser(user.id, updatedUser);
+    return newDocuments;
   };
 }

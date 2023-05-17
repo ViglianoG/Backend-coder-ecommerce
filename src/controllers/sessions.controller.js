@@ -1,9 +1,7 @@
 import CustomError from "../services/errors/CustomError.js";
 import EErrors from "../services/errors/enums.js";
 import { generateAuthenticationError } from "../services/errors/info.js";
-import UsersRepository from "../repository/users.repository.js";
 import {
-  generateToken,
   validateToken,
   isValidPassword as comparePasswords,
   createHash,
@@ -48,7 +46,10 @@ export const failLogin = (req, res) => {
 
 /////////////////////////CERRAR SESSION
 
-export const logout = (req, res) => {
+export const logout = async (req, res) => {
+  const user = req.user;
+  user.last_connection = new Date().toLocaleString();
+  await usersService.updateUser(user.id, user);
   res
     .clearCookie(COOKIE_NAME)
     .send({ status: "success", payload: "Logged out..." });
@@ -129,58 +130,6 @@ export const changePassword = async (req, res) => {
 
     const newUser = await usersService.updateUser(uid, userData);
     res.json({ status: "success", payload: newUser });
-  } catch (error) {
-    req.logger.error(error.toString());
-    res.json({ status: "error", error });
-  }
-};
-
-/////////////////////////CAMBIR ROL
-export const updateRole = async (req, res) => {
-  try {
-    const { uid } = req.params;
-    const user = await usersService.getUserByID(uid);
-
-    const newRole = user.role === "user" ? "premium" : "user";
-
-    const data = {
-      ...user,
-      role: newRole,
-    };
-
-    const result = await usersService.updateUser(uid, data);
-
-    res.clearCookie(COOKIE_NAME).json({
-      status: "success",
-      message: `Role updated to ${newRole}. Log in again.`,
-    });
-  } catch (error) {
-    req.logger.error(error.toString());
-    res.json({ status: "error", error });
-  }
-};
-
-/////////////////////////DELETE USER ID
-export const deleteUser = async (req, res) => {
-  try {
-    const { uid } = req.params;
-    const result = await usersService.deleteUser(uid);
-    res.json({ status: "success", result });
-  } catch (error) {
-    req.logger.error(error.toString());
-    res.json({ status: "error", error });
-  }
-};
-
-/////////////////////////DELETE USER BY EMAIL
-export const deleteUserByEmail = async (req, res) => {
-  try {
-    const { email } = req.params;
-    const exists = await usersService.getUserByEmail(email);
-    if (!exists)
-      return res.status(404).json({ status: "error", error: "User not found" });
-    const result = await usersService.deleteUser(exists._id);
-    res.json({ status: "success", result });
   } catch (error) {
     req.logger.error(error.toString());
     res.json({ status: "error", error });

@@ -5,11 +5,6 @@ import {
 } from "../repository/index.js";
 import CustomError from "../services/errors/CustomError.js";
 import EErrors from "../services/errors/enums.js";
-// import {
-//   createHash,
-//   validateToken,
-//   isValidPassword as comparePasswords,
-// } from "../utils.js";
 
 ///////////////////////// REDIRECT PARA LOGIN
 
@@ -62,10 +57,14 @@ export const renderForm = async (req, res) => {
 
 export const addProduct = async (req, res) => {
   try {
-    const { role, id } = req.user;
+    const { role, email } = req.user;
     const data = req.body;
 
-    if (role === "premium") data.owner = id;
+    const documents = await usersService.saveDocuments(req.user, req.files);
+    data.thumbnails = documents.map((file) => file.reference);
+    const category = data.category.split(",").map((c) => c.trim());
+    data.category = Array.isArray(category) ? category : [category];
+    if (role === "premium") data.owner = email;
 
     const product = await productsService.createProduct(data);
 
@@ -102,7 +101,7 @@ export const deleteProduct = async (req, res) => {
     const user = req.user;
     const product = await productsService.getProduct(pid);
 
-    if (user.role === "premium" && user.id !== product.owner) {
+    if (user.role === "premium" && user.email !== product.owner) {
       const error = "You can't modify a product owned by another user";
       req.logger.error(error);
       return res.status(403).json({ status: "error", error });
@@ -268,14 +267,10 @@ export const renderLogin = (req, res) => {
 
 export const login = async (req, res) => {
   const user = req.user;
-
   if (!user)
-    CustomError.createError({
-      name: "Authentication error",
-      cause: generateAuthenticationError(),
-      message: "Error trying to find user.",
-      code: EErrors.AUTHENTICATION_ERROR,
-    });
+    return res
+      .status(400)
+      .render("errors/default", { error: "Invalid credentials", user });
 
   res.cookie("cookieToken", user.token).redirect("/products");
 };
@@ -290,7 +285,10 @@ export const failLogin = (req, res) => {
 
 /////////////////////////LOGOUT
 
-export const logout = (req, res) => {
+export const logout = async (req, res) => {
+  const user = req.user;
+  user.last_connection = new Date().toLocaleString();
+  await usersService.updateUser(user.id, user);
   res.clearCookie("cookieToken").redirect("/sessions/login");
 };
 

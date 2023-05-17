@@ -27,6 +27,7 @@ import {
 } from "../controllers/views.controller.js";
 import { changePassword } from "../controllers/sessions.controller.js";
 import { viewsPassportCall, viewsAuthorization } from "../middleware/auth.js";
+import { uploader } from "../services/multer.js";
 
 const router = Router();
 
@@ -49,6 +50,7 @@ router.post(
   "/products",
   viewsPassportCall("current"),
   viewsAuthorization(["premium", "admin"]),
+  uploader.array("file", 1),
   addProduct
 );
 

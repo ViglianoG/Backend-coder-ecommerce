@@ -1,6 +1,7 @@
 <div>
-  <form action="/products" method="post">
+  <form action="/products" method="post" enctype="multipart/form-data">
     <h2>Agregar un nuevo producto</h2>
+    <input type="text" name="event" value="product" hidden />
     <input id="title" type="text" placeholder="Titulo del producto" />
     <input
       id="description"
@@ -11,6 +12,7 @@
     <input id="code" type="text" placeholder="Código del producto" />
     <input id="stock" type="number" placeholder="Stock" />
     <input id="category" type="text" placeholder="Categoria" />
+    <input id="images" type="file" name="file" />
     <button type="submit" value="Send"> Agregar producto </button>
   </form>
 </div>

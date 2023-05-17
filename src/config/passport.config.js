@@ -7,6 +7,7 @@ import config from "./config.js";
 import { cartsService, usersService } from "../repository/index.js";
 import UserDTO from "../dao/DTO/user.dto.js";
 import CustomError from "../services/errors/CustomError.js";
+import options from "./process.js";
 
 const {
   PRIVATE_KEY,
@@ -17,6 +18,8 @@ const {
   GITHUB_CLIENT_SECRET,
   GITHUB_CALLBACK_URL,
 } = config;
+
+const environment = options.mode;
 
 const JWTStrategy = jwt.Strategy;
 const ExtractJWT = jwt.ExtractJwt;
@@ -65,7 +68,9 @@ const initPassport = () => {
           newUser.cart = userCart._id;
 
           const result = await usersService.createUser(newUser);
-          await usersService.sendRegistrationMail(username);
+          if (environment === "production") {
+            await usersService.sendRegistrationMail(username);
+          }
 
           return done(null, result);
         } catch (error) {
@@ -117,9 +122,10 @@ const initPassport = () => {
 
           const token = generateToken(user);
           user.token = token;
+          user.last_connection = new Date().toLocaleString();
+          await usersService.updateUser(user._id, user);
 
-          const newUser = new UserDTO(user);
-          return done(null, newUser);
+          return done(null, new UserDTO(user));
         } catch (error) {
           return done(error);
         }
@@ -155,12 +161,16 @@ const initPassport = () => {
 
             const token = generateToken(result);
             result.token = token;
+            user.last_connection = new Date().toLocaleString();
+            await usersService.updateUser(user._id, user);
 
             return done(null, result);
           }
 
           const token = generateToken(user);
           user.token = token;
+          user.last_connection = new Date().toLocaleString();
+          await usersService.updateUser(user._id, user);
 
           done(null, user);
         } catch (error) {

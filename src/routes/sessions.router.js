@@ -9,11 +9,8 @@ import {
   getUser,
   sendRecoveryMail,
   changePassword,
-  updateRole,
-  deleteUserByEmail,
-  deleteUser,
 } from "../controllers/sessions.controller.js";
-import { passportCall, authorization } from "../middleware/auth.js";
+import { passportCall } from "../middleware/auth.js";
 
 const router = Router();
 //CREAR USERS EN DB ✔
@@ -45,19 +42,5 @@ router.get(
 //PASSWORD RESET ✔
 router.post("/password_reset", sendRecoveryMail);
 router.put("/password_reset/:uid/:token", changePassword);
-
-//UPGRADE ROLE ✔
-router.put(
-  "/premium/:uid",
-  passportCall("current"),
-  authorization(["user", "premium"]),
-  updateRole
-);
-
-//DELETE USER BY EMAIL ✔
-router.delete("/email/:email", deleteUserByEmail);
-
-//DELETE USER BY ID ✔
-router.delete("/:uid", deleteUser);
 
 export default router;

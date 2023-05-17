@@ -1,4 +1,4 @@
-import { productsService } from "../repository/index.js";
+import { productsService, usersService } from "../repository/index.js";
 import CustomError from "../services/errors/CustomError.js";
 
 /////////////////////////GET CON QUERY LIMITS
@@ -47,6 +47,11 @@ export const addProduct = async (req, res) => {
   try {
     const { role, email } = req.user;
     const product = req.body;
+    
+    const documents = await usersService.saveDocuments(req.user, req.files);
+    product.thumbnails = documents.map((file) => file.reference);
+    product.category = product.category.split(",").map((c) => c.trim());
+
     if (role === "premium") product.owner = email;
 
     const result = await productsService.createProduct(product);

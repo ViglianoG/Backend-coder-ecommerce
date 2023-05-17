@@ -14,7 +14,7 @@ const loggerOptions = {
   },
   colors: {
     fatal: "red",
-    error: "orange",
+    error: "cyan",
     warning: "yellow",
     info: "blue",
     http: "gray",

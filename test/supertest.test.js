@@ -13,7 +13,7 @@ describe("Testing Coder eCommerce", function () {
 
   after(function () {
     requester
-      .delete("/api/users/email/usuariodeprueba@usuariodeprueba.com")
+      .delete("api/users/email/usuariodeprueba@usuariodeprueba.com")
       .set("Cookie", [`${cookie.name}=${cookie.value}`])
       .then((result) => console.log("Delete test user.", result._body));
   });

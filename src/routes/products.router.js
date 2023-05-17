@@ -7,6 +7,7 @@ import {
   deleteProduct,
 } from "../controllers/products.controller.js";
 import { passportCall, authorization } from "../middleware/auth.js";
+import { uploader } from "../services/multer.js";
 
 const router = Router();
 
@@ -20,7 +21,8 @@ router.get("/:pid", passportCall("current"), getProduct);
 router.post(
   "/",
   passportCall("current"),
-  authorization(["admin", "premium"]),
+  authorization(["premium", "admin"]),
+  uploader.array("file", 1),
   addProduct
 );
 

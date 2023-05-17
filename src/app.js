@@ -23,6 +23,7 @@ import loggerRouter from "./routes/logger.router.js";
 import { serve, setup } from "swagger-ui-express";
 import specs from "./config/swagger.config.js";
 import cors from "cors";
+import usersRouter from "./routes/users.router.js";
 
 const { SESSION_SECRET, COOKIE_SECRET, MONGO_URI, DB_NAME } = config;
 
@@ -73,6 +74,7 @@ app.use(
   chatRouter
 );
 app.use("/api/sessions", sessionRouter);
+app.use("/api/users", passportCall("current"), usersRouter);
 app.use("/mockingproducts", mockingProducts);
 app.use(errorHandler);
 app.use("/loggertest", loggerRouter);
