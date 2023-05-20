@@ -18,11 +18,11 @@ export default class UsersRepository {
   getUsers = async () => await this.dao.get();
 
   getUserByID = async (id) => {
-    return await this.dao.getByID(id);
+    return await this.dao.getById(id);
   };
 
   getUserDataByID = async (id) => {
-    const user = await this.dao.getByID(id);
+    const user = await this.dao.getById(id);
     return new UserDTO(user);
   };
 

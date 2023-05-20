@@ -26,7 +26,7 @@ import {
   renderChangePassword,
 } from "../controllers/views.controller.js";
 import { changePassword } from "../controllers/sessions.controller.js";
-import { viewsPassportCall, viewsAuthorization } from "../middleware/auth.js";
+import { viewsAuthorization, viewsPassportCall } from "../middleware/auth.js";
 import { uploader } from "../services/multer.js";
 
 const router = Router();

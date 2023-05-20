@@ -48,8 +48,12 @@ export const authorization = (roles) => {
         message: "Invalid credentials.",
         code: EErrors.AUTHENTICATION_ERROR,
       });
-    if (!roles.includes(user.role))
-      return res.status(403).json({ status: "error", error: "Unauthorized." });
+    if (!roles.includes(user.role)) {
+      logger.error("Not uthorized.");
+      return res
+        .status(403)
+        .json({ status: "error", error: "Not authorized." });
+    }
     next();
   };
 };

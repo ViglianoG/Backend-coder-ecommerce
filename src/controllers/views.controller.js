@@ -267,6 +267,7 @@ export const renderLogin = (req, res) => {
 
 export const login = async (req, res) => {
   const user = req.user;
+
   if (!user)
     return res
       .status(400)

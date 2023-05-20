@@ -15,7 +15,7 @@ describe("Testing Coder eCommerce", function () {
     requester
       .delete("api/users/email/usuariodeprueba@usuariodeprueba.com")
       .set("Cookie", [`${cookie.name}=${cookie.value}`])
-      .then((result) => console.log("Delete test user.", result._body));
+      .then((result) => console.log("Delete test user.", result.body));
   });
 
   //SESSIONS
