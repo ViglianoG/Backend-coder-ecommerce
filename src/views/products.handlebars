@@ -1,65 +1,329 @@
-<nav>
-  <ul class="horizontal-menu">
-    <li>
-      <input type="checkbox" id="toggle" />
-      <label class="toggle" for="toggle">
-        <i class="bx bxs-sun"></i>
-        <i class="bx bx-moon"></i>
-        <span class="ball"></span>
-      </label>
-    </li>
-    <li><a href="#">MENU</a>
-      <ul class="vertical-menu">
-        <li><a class="nav-link" href="/products">Todos los productos</a></li>
-        <li><a class="nav-link" href="/products/create">Agregar producto</a></li>
-        <li><a class="nav-link" href="/chat">Chat en tiempo real</a></li>
-      </ul>
-    </li>
-    <li>
-      <a href="/products">HOME</a>
-    </li>
-    {{#if user}}
-    <li><a href="/sessions/user">MI PERFIL</a></li>
-    {{!-- <li><a href="/carts/{{user.cart}}">Carrito</a></li> --}}
-    {{else}}
-    <li><a href="/sessions/login">INICIAR SESIÓN</a></li>
-    <li><a href="/sessions/register">REGISTRARSE</a></li>
-    {{/if}}
-  </ul>
-</nav>
+<header>
+  <div class="top-nav">
+    <p>Free shipping on orders over $99</p>
+    <div>
+      <a href="#">
+        <i class="bx bxl-facebook"></i>
+      </a>
+      <a href="#">
+        <i class="bx bxl-twitter"></i>
+      </a>
+      <a href="#">
+        <i class="bx bxl-instagram"></i>
+      </a>
+      <a class="profile-top-nav" href="/sessions/user">
+        <i class="bx bxs-user"></i>
+      </a>
+    </div>
+  </div>
+
+  <nav>
+    <ul class="horizontal-menu">
+      <li>
+        <input type="checkbox" id="toggle" />
+        <label class="toggle" for="toggle">
+          <i class="bx bxs-sun"></i>
+          <i class="bx bx-moon"></i>
+          <span class="ball"></span>
+        </label>
+      </li>
+      <div>
+        <li><a href="#">MENU</a>
+          <ul class="vertical-menu">
+            <li><a class="nav-link" href="/products">Todos los productos</a></li>
+            <li><a class="nav-link" href="/products/create">Agregar producto</a></li>
+            <li><a class="nav-link" href="/chat">Chat en tiempo real</a></li>
+          </ul>
+        </li>
+        <li>
+          <a href="/products">HOME</a>
+        </li>
+        {{#if user}}
+          <li><a href="/sessions/user">PERFIL</a></li>
+          <li><a href="/carts/{{user.cart}}"><i
+                class="bx bxs-cart-alt"
+              ></i></a></li>
+        {{else}}
+          <li><a href="/sessions/login">LOG IN</a></li>
+          <li><a href="/sessions/register">REGISTER</a></li>
+        {{/if}}
+      </div>
+    </ul>
+  </nav>
+
+  <div class="mini-slider">
+    <div class="slide-track">
+      <div class="slide">
+        <img
+          src="https://res.cloudinary.com/gvigliano/image/upload/v1685397252/slider/backend_szpho2.png"
+          alt=""
+        />
+      </div>
+      <div class="slide">
+        <img
+          src="https://res.cloudinary.com/gvigliano/image/upload/v1685397252/slider/coder_nghheg.png"
+          alt=""
+        />
+      </div>
+      <div class="slide">
+        <img
+          src="https://res.cloudinary.com/gvigliano/image/upload/v1685397252/slider/eccomerce_lo9eaa.png"
+          alt=""
+        />
+      </div>
+      <div class="slide">
+        <img
+          src="https://res.cloudinary.com/gvigliano/image/upload/v1685397252/slider/backend_szpho2.png"
+          alt=""
+        />
+      </div>
+      <div class="slide">
+        <img
+          src="https://res.cloudinary.com/gvigliano/image/upload/v1685397252/slider/coder_nghheg.png"
+          alt=""
+        />
+      </div>
+      <div class="slide">
+        <img
+          src="https://res.cloudinary.com/gvigliano/image/upload/v1685397252/slider/eccomerce_lo9eaa.png"
+          alt=""
+        />
+      </div>
+
+      <div class="slide">
+        <img
+          src="https://res.cloudinary.com/gvigliano/image/upload/v1685397252/slider/backend_szpho2.png"
+          alt=""
+        />
+      </div>
+      <div class="slide">
+        <img
+          src="https://res.cloudinary.com/gvigliano/image/upload/v1685397252/slider/coder_nghheg.png"
+          alt=""
+        />
+      </div>
+      <div class="slide">
+        <img
+          src="https://res.cloudinary.com/gvigliano/image/upload/v1685397252/slider/eccomerce_lo9eaa.png"
+          alt=""
+        />
+      </div>
+      <div class="slide">
+        <img
+          src="https://res.cloudinary.com/gvigliano/image/upload/v1685397252/slider/backend_szpho2.png"
+          alt=""
+        />
+      </div>
+      <div class="slide">
+        <img
+          src="https://res.cloudinary.com/gvigliano/image/upload/v1685397252/slider/coder_nghheg.png"
+          alt=""
+        />
+      </div>
+      <div class="slide">
+        <img
+          src="https://res.cloudinary.com/gvigliano/image/upload/v1685397252/slider/eccomerce_lo9eaa.png"
+          alt=""
+        />
+      </div>
+    </div>
+  </div>
+
+  <div class="slider-frame">
+    <div class="slider-text">
+      <div>
+        <p>Lorem ipsum dolor sit amet.</p>
+        <p>Lorem, ipsum dolor.</p>
+        <a href="#products">PRESS</a>
+      </div>
+    </div>
+    <ul>
+      <li><img
+          src="https://res.cloudinary.com/gvigliano/image/upload/v1685393830/slider/sneakers_2_dt1jwu.jpg"
+          alt=""
+        /></li>
+      <li><img
+          src="https://res.cloudinary.com/gvigliano/image/upload/v1685393830/slider/sneakers_5_wk2r2o.jpg"
+          alt=""
+        /></li>
+      <li><img
+          src="https://res.cloudinary.com/gvigliano/image/upload/v1685393830/slider/sneakers_6_xu8vqn.jpg"
+          alt=""
+        /></li>
+      <li><img
+          src="https://res.cloudinary.com/gvigliano/image/upload/v1685393830/slider/sneakers_3_v6qayh.jpg"
+          alt=""
+        /></li>
+    </ul>
+  </div>
+
+  <div class="mini-slider">
+    <div class="slide-track">
+      <div class="slide">
+        <img
+          src="https://res.cloudinary.com/gvigliano/image/upload/v1685397252/slider/backend_szpho2.png"
+          alt=""
+        />
+      </div>
+      <div class="slide">
+        <img
+          src="https://res.cloudinary.com/gvigliano/image/upload/v1685397252/slider/coder_nghheg.png"
+          alt=""
+        />
+      </div>
+      <div class="slide">
+        <img
+          src="https://res.cloudinary.com/gvigliano/image/upload/v1685397252/slider/eccomerce_lo9eaa.png"
+          alt=""
+        />
+      </div>
+      <div class="slide">
+        <img
+          src="https://res.cloudinary.com/gvigliano/image/upload/v1685397252/slider/backend_szpho2.png"
+          alt=""
+        />
+      </div>
+      <div class="slide">
+        <img
+          src="https://res.cloudinary.com/gvigliano/image/upload/v1685397252/slider/coder_nghheg.png"
+          alt=""
+        />
+      </div>
+      <div class="slide">
+        <img
+          src="https://res.cloudinary.com/gvigliano/image/upload/v1685397252/slider/eccomerce_lo9eaa.png"
+          alt=""
+        />
+      </div>
+
+      <div class="slide">
+        <img
+          src="https://res.cloudinary.com/gvigliano/image/upload/v1685397252/slider/backend_szpho2.png"
+          alt=""
+        />
+      </div>
+      <div class="slide">
+        <img
+          src="https://res.cloudinary.com/gvigliano/image/upload/v1685397252/slider/coder_nghheg.png"
+          alt=""
+        />
+      </div>
+      <div class="slide">
+        <img
+          src="https://res.cloudinary.com/gvigliano/image/upload/v1685397252/slider/eccomerce_lo9eaa.png"
+          alt=""
+        />
+      </div>
+      <div class="slide">
+        <img
+          src="https://res.cloudinary.com/gvigliano/image/upload/v1685397252/slider/backend_szpho2.png"
+          alt=""
+        />
+      </div>
+      <div class="slide">
+        <img
+          src="https://res.cloudinary.com/gvigliano/image/upload/v1685397252/slider/coder_nghheg.png"
+          alt=""
+        />
+      </div>
+      <div class="slide">
+        <img
+          src="https://res.cloudinary.com/gvigliano/image/upload/v1685397252/slider/eccomerce_lo9eaa.png"
+          alt=""
+        />
+      </div>
+    </div>
+  </div>
+</header>
 {{#if user}}
-<div class="benvenuti">
-  <h4>Bienvenido, {{user.first_name}}</h4>
-</div>
+  <div class="benvenuti">
+    <h4>Welcome, {{user.first_name}}</h4>
+  </div>
 {{/if}}
 <div class="saludo">
   <h2>Lista de todos los productos agregados hasta el momento:</h2>
   {{#if products}}
-  <div class="products">
-    {{#each products.docs}}
-    <div class="card">
-      <img src="{{this.thumbnails}}" alt="{{this.title}}" />
-      <div class="card-info">
-        <h3>{{this.title}}</h3>
-        <p>{{this.description}}</p>
-        <div>
-        <h4>${{this.price}}</h4>
-          <a href="/products/{{this._id}}" class="btn"><i class='bx bx-cart-add'></i></a>
+    <div id="products" class="products">
+      {{#each products.docs}}
+        <div class="card">
+          <img src="{{this.thumbnails}}" alt="{{this.title}}" />
+          <div class="card-info">
+            <h3>{{this.title}}</h3>
+            <p>{{this.description}}</p>
+            <div>
+              <h4>${{this.price}}</h4>
+              <a href="/products/{{this._id}}" class="btn"><i
+                  class="bx bx-cart-add"
+                ></i></a>
+            </div>
+          </div>
         </div>
-      </div>
+      {{/each}}
     </div>
-    {{/each}}
-  </div>
   {{else}}
-  <h3>No existen productos...</h3>
+    <h3>No existen productos...</h3>
   {{/if}}
 </div>
 <div>
   {{#if products.hasPrevPage}}
-  <a href="{{products.prevLink}}" class="btn">Anterior</a>
+    <a href="{{products.prevLink}}" class="btn">Anterior</a>
   {{/if}}
   {{#if products.hasNextPage}}
-  <a href="{{products.nextLink}}" class="btn">Siguiente</a>
+    <a href="{{products.nextLink}}" class="btn">Siguiente</a>
   {{/if}}
+</div>
+
+<div class="go-top-container">
+  <div class="go-top-button">
+    <i class="bx bx-chevron-up"></i>
+  </div>
+</div>
+
+<footer>
+  <div class="footer-container">
+    <div class="footer-links">
+      <a href="#">HOME</a>
+      <a href="#">PRODUCTS</a>
+      <a href="#">CONTACT</a>
+      <a href="#">ABOUT US</a>
+    </div>
+    <div class="text-divider"></div>
+    <div>
+      <div class="footer-ubi-mail">
+        <div>
+          <i class="bx bxs-location-plus"></i>
+          <p>Lorem ipsum dolor sit amet consectetur adipisicing elit.</p>
+        </div>
+        <div>
+          <a href="mailto:gastonvigliano@gmail.com"><i
+              class="bx bxs-envelope"
+            ></i></a>
+          <p>gastonvigliano@gmail.com</p>
+        </div>
+      </div>
+      <div class="text-divider"></div>
+      <p class="footer-text">Lorem ipsum dolor sit amet consectetur adipisicing
+        elit. Dicta molestias unde sint rerum. Dolores praesentium totam itaque!
+        Ut praesentium exercitationem laboriosam, vitae repudiandae qui alias
+        doloribus eos unde voluptatem repellat.</p>
+    </div>
+  </div>
+</footer>
+<div class="footer-bottom">
+  <p>© 2023 Backend coder ecommerce | Website by Gastón Vigliano</p>
+  <div>
+    <a href="mailto:gastonvigliano@gmail.com">
+      <i class="bx bxs-envelope"></i>
+    </a>
+    <a href="#">
+      <i class="bx bxl-facebook"></i>
+    </a>
+    <a href="#">
+      <i class="bx bxl-twitter"></i>
+    </a>
+    <a href="#">
+      <i class="bx bxl-instagram"></i>
+    </a>
+  </div>
 </div>
 <script src="/socket.io/socket.io.js"></script>

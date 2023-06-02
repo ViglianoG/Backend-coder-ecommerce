@@ -22,3 +22,20 @@ if (localStorage.getItem("dark-mode") === "true") {
 } else {
   body.classList.remove("dark");
 }
+
+const toTop = document.querySelector(".go-top-container");
+const toTopButton = document.querySelector(".go-top-button");
+window.addEventListener("scroll", () => {
+  if (window.scrollY > 150) {
+    toTop.classList.add("show");
+  } else {
+    toTop.classList.remove("show");
+  }
+});
+
+toTopButton.addEventListener("click", () => {
+  window.scrollTo({
+    top: 0,
+    behavior: "smooth",
+  });
+});
