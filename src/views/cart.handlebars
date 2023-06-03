@@ -1,46 +1,87 @@
-<nav>
-  <ul class="horizontal-menu">
-    <li><a href="#">MENU</a>
-      <ul class="vertical-menu">
-        <li><a class="nav-link" href="/products">Todos los productos</a></li>
-        <li><a class="nav-link" href="/products/create">Agregar producto</a></li>
-        <li><a class="nav-link" href="/chat">Chat en tiempo real</a></li>
-      </ul>
-    </li>
-    <li>
-      <a href="/products">HOME</a>
-    </li>
-    {{#if user}}
-    <li><a href="/sessions/user">MI PERFIL</a></li>
-    {{else}}
-    <li><a href="/sessions/login">INICIAR SESIÓN</a></li>
-    <li><a href="/sessions/register">REGISTRARSE</a></li>
-    {{/if}}
-  </ul>
-</nav>
-<section>
-  <h2>Carrito</h2>
-  <div>
-    {{#each products.products}}
-    {{#if this.product}}
+<header>
+  <div class="top-nav">
+    <p>Free shipping on orders over $99</p>
     <div>
-      <div>
-        <img src={{this.product.thumbnails}} alt={{this.product.title}} />
-      </div>
-      <div>
-        <h2>{{this.product.title}}</h2>
-        <h4>${{this.product.price}}</h4>
-      </div>
+      <a href="#">
+        <i class="bx bxl-facebook"></i>
+      </a>
+      <a href="#">
+        <i class="bx bxl-twitter"></i>
+      </a>
+      <a href="#">
+        <i class="bx bxl-instagram"></i>
+      </a>
+      <a class="profile-top-nav" href="/sessions/user">
+        <i class="bx bxs-user"></i>
+      </a>
     </div>
-    {{/if}}
-    {{/each}}
   </div>
-  <form action="/carts/{{cid}}/purchase" method="post">
-    <button type="submit">Finalizar compra</button>
-  </form>
-  <form action="/carts/{{cid}}" method="post">
-    <button type="submit">Vaciar carrito</button>
-  </form>
+
+  <nav>
+    <ul class="horizontal-menu">
+      <li>
+        <input type="checkbox" id="toggle" />
+        <label class="toggle" for="toggle">
+          <i class="bx bxs-sun"></i>
+          <i class="bx bx-moon"></i>
+          <span class="ball"></span>
+        </label>
+      </li>
+      <div>
+        <li><a href="#">MENU</a>
+          <ul class="vertical-menu">
+            <li><a class="nav-link" href="/products">Todos los productos</a></li>
+            <li><a class="nav-link" href="/products/create">Agregar producto</a></li>
+            <li><a class="nav-link" href="/chat">Chat en tiempo real</a></li>
+          </ul>
+        </li>
+        <li>
+          <a href="/products">HOME</a>
+        </li>
+        {{#if user}}
+          <li><a href="/sessions/user">PERFIL</a></li>
+          <li><a href="/carts/{{user.cart}}"><i
+                class="bx bxs-cart-alt"
+              ></i></a></li>
+        {{else}}
+          <li><a href="/sessions/login">LOG IN</a></li>
+          <li><a href="/sessions/register">REGISTER</a></li>
+        {{/if}}
+      </div>
+    </ul>
+  </nav>
+</header>
+<section class="cart-section">
+  <h2>CART</h2>
+  <div class="cart-container">
+    {{#each products.products}}
+      {{#if this.product}}
+        <div class="cart-item">
+          <div class="product">
+            <img src={{this.product.thumbnails}} alt={{this.product.title}} />
+            <div class="product-details">
+              <span class="product-name">{{this.product.title}}</span>
+              <span
+                class="product-description"
+              >{{this.product.description}}</span>
+              <span>${{this.product.price}}</span>
+            </div>
+            <span class="quantity">x 2</span>
+          </div>
+        </div>
+      {{/if}}
+    {{/each}}
+    <div class="cart-total">Total: $250.00</div>
+  </div>
+
+  <div class="cart-buttons">
+    <form action="/carts/{{cid}}/purchase" method="post">
+      <button type="submit">Finalizar compra</button>
+    </form>
+    <form action="/carts/{{cid}}" method="post">
+      <button type="submit">Vaciar carrito</button>
+    </form>
+  </div>
 
   {{!-- <div>
     {{#if hasPrevPage}}
@@ -51,3 +92,57 @@
     {{/if}}
   </div> --}}
 </section>
+
+<div class="go-top-container">
+  <div class="go-top-button">
+    <i class="bx bx-chevron-up"></i>
+  </div>
+</div>
+
+<footer>
+  <div class="footer-container">
+    <div class="footer-links">
+      <a href="#">HOME</a>
+      <a href="#">PRODUCTS</a>
+      <a href="#">CONTACT</a>
+      <a href="#">ABOUT US</a>
+    </div>
+    <div class="text-divider"></div>
+    <div>
+      <div class="footer-ubi-mail">
+        <div>
+          <i class="bx bxs-location-plus"></i>
+          <p>Lorem ipsum dolor sit amet consectetur adipisicing elit.</p>
+        </div>
+        <div>
+          <a href="mailto:gastonvigliano@gmail.com"><i
+              class="bx bxs-envelope"
+            ></i></a>
+          <p>gastonvigliano@gmail.com</p>
+        </div>
+      </div>
+      <div class="text-divider"></div>
+      <p class="footer-text">Lorem ipsum dolor sit amet consectetur adipisicing
+        elit. Dicta molestias unde sint rerum. Dolores praesentium totam itaque!
+        Ut praesentium exercitationem laboriosam, vitae repudiandae qui alias
+        doloribus eos unde voluptatem repellat.</p>
+    </div>
+  </div>
+</footer>
+<div class="footer-bottom">
+  <p>© 2023 Backend coder ecommerce | Website by Gastón Vigliano</p>
+  <div>
+    <a href="mailto:gastonvigliano@gmail.com">
+      <i class="bx bxs-envelope"></i>
+    </a>
+    <a href="#">
+      <i class="bx bxl-facebook"></i>
+    </a>
+    <a href="#">
+      <i class="bx bxl-twitter"></i>
+    </a>
+    <a href="#">
+      <i class="bx bxl-instagram"></i>
+    </a>
+  </div>
+</div>

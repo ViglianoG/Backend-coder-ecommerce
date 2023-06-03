@@ -1,3 +1,4 @@
+@charset "UTF-8";
 @import url("https://fonts.googleapis.com/css2?family=Josefin+Slab:wght@300&display=swap");
 @import url("https://fonts.googleapis.com/css2?family=Poiret+One&display=swap");
 @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap");
@@ -913,4 +914,93 @@ footer .footer-ubi-mail div i {
 
 .text-divider::after {
   margin-left: var(--text-divider-gap);
+}
+
+.cart-section {
+  height: 0;
+  min-height: 80vh;
+  flex-direction: column;
+}
+.cart-section h2 {
+  font-family: var(--principal-font);
+  font-size: 4rem;
+  margin: 10% 0 10% 0;
+  font-weight: 1000;
+}
+.cart-section .cart-buttons {
+  margin: 3% 0 3% 0;
+  display: flex;
+  flex-direction: row;
+}
+.cart-section .cart-buttons form {
+  margin: 0 10px;
+}
+.cart-section .cart-buttons form button {
+  font-family: var(--principal-font);
+  font-weight: bold;
+  border: none;
+  border-radius: 0 1rem 0 1rem;
+  background-color: var(--brand-color);
+  color: var(--dark-color);
+  cursor: pointer;
+  padding: 0.7rem;
+}
+.cart-section .cart-buttons form button:hover {
+  transition: 0.3s;
+  color: var(--light-color);
+  background-color: var(--dark-color);
+}
+
+.cart-container {
+  width: 80%;
+  border: 1px solid var(--mid-color);
+  border-radius: 1rem;
+  padding: 2rem;
+}
+.cart-container h2 {
+  font-size: 20px;
+  margin-bottom: 10px;
+}
+
+.cart-item {
+  margin-bottom: 1.5rem;
+}
+
+.product {
+  display: flex;
+  align-items: center;
+}
+.product img {
+  width: 50px;
+  height: 50px;
+  margin-right: 10px;
+}
+
+.product-details {
+  flex-grow: 1;
+}
+
+.product-name {
+  font-weight: bold;
+}
+
+.product-description {
+  color: #888;
+  font-size: 12px;
+}
+
+.quantity {
+  margin-left: 10px;
+  color: #888;
+}
+
+/* Estilos de la animación de hover */
+.product:hover {
+  background-color: #f5f5f5;
+  cursor: pointer;
+}
+
+.product:hover .product-name,
+.product:hover .product-description {
+  color: #333;
 }/*# sourceMappingURL=index.css.map */

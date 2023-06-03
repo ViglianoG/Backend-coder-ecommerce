@@ -120,7 +120,7 @@ export const deleteProduct = async (req, res) => {
 export const getCartProducts = async (req, res) => {
   try {
     const cid = req.params.cid;
-    const cart = cartsService.getCart(cid);
+    const cart = await cartsService.getCart(cid);
     const products = cart.toObject();
 
     const user = req.user;
