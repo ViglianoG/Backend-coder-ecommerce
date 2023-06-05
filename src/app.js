@@ -24,6 +24,9 @@ import { serve, setup } from "swagger-ui-express";
 import specs from "./config/swagger.config.js";
 import cors from "cors";
 import usersRouter from "./routes/users.router.js";
+import createMemoryStore from "memorystore";
+
+const MemoryStore = createMemoryStore(session);
 
 const { SESSION_SECRET, COOKIE_SECRET, MONGO_URI, DB_NAME } = config;
 
@@ -47,9 +50,11 @@ app.set("view engine", "handlebars");
 app.use(cookieParser(COOKIE_SECRET));
 app.use(
   session({
+    store: new MemoryStore({ checkPeriod: 86400000 }),
     secret: SESSION_SECRET,
     resave: false,
     saveUninitialized: true,
+    cookie: { secure: true },
   })
 );
 initPassport();
