@@ -333,12 +333,13 @@ nav a {
 .benvenuti {
   display: flex;
   width: 20vw;
-  position: relative;
+  position: absolute;
   padding: 1vh;
   color: var(--light-color);
   background-color: var(--dark-color);
   border: 1px;
   border-radius: 0 0 5px 0;
+  top: 17.3vh;
 }
 
 .user-card-continer {
@@ -714,11 +715,26 @@ nav a {
   color: var(--dark-color);
 }
 
+.register-form {
+  padding: 2rem;
+  border: 1px solid var(--dark-color);
+  border-radius: 1rem 0 1rem 0;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+}
+.register-form h2 {
+  margin-bottom: 1rem;
+}
+.register-form input {
+  margin: 0.3rem 0;
+}
+
 section {
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 100vh;
+  min-height: 100vh;
 }
 
 .product-card {
@@ -775,7 +791,8 @@ section {
   margin-bottom: 1rem;
 }
 
-.product-category {
+.product-category a {
+  text-decoration: none;
   color: var(--mid-color);
   padding: 0.5rem;
   font-size: 1rem;
@@ -783,7 +800,10 @@ section {
   border-radius: 1rem 1rem 1rem 1rem;
   transition: 0.3s;
 }
-.product-category:hover {
+.product-category a:visited {
+  color: var(--mid-color);
+}
+.product-category a:hover {
   color: var(--bg-light-color);
 }
 
@@ -798,10 +818,38 @@ section {
   cursor: pointer;
   margin: 1rem 0 1rem;
 }
-
 .add-to-cart-button:hover {
   background-color: var(--dark-color);
   color: var(--light-color);
+}
+
+.r-add-to-cart-button, .categories a {
+  transition: 0.3s;
+  background-color: var(--dark-color);
+  color: var(--light-color);
+  border: none;
+  border-radius: 1rem 0 1rem 0;
+  padding: 0.75rem 1.5rem;
+  font-size: 1rem;
+  cursor: pointer;
+  margin: 1rem 0 1rem;
+}
+.r-add-to-cart-button:hover, .categories a:hover {
+  background-color: var(--brand-color);
+  color: var(--dark-color);
+}
+
+.categories {
+  margin: 0 1rem;
+  min-width: 50%;
+  display: flex;
+  justify-content: flex-start;
+}
+.categories a {
+  border-radius: 0 0 1rem 1rem;
+  text-decoration: none;
+  margin: 0 1vh 0;
+  font-family: var(--principal-font);
 }
 
 .password-recovery div {
@@ -964,14 +1012,13 @@ footer .footer-ubi-mail div i {
 }
 
 .cart-section {
-  height: 0;
   min-height: 80vh;
   flex-direction: column;
 }
 .cart-section h2 {
   font-family: var(--principal-font);
   font-size: 4rem;
-  margin: 10% 0 10% 0;
+  margin: 5% 0 5% 0;
   font-weight: 1000;
 }
 .cart-section .cart-buttons {
@@ -1003,6 +1050,7 @@ footer .footer-ubi-mail div i {
   border: 1px solid var(--mid-color);
   border-radius: 1rem;
   padding: 2rem;
+  background-color: white;
 }
 .cart-container h2 {
   font-size: 20px;

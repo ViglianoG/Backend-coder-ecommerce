@@ -3,8 +3,62 @@ import config from "../config/config.js";
 import CustomError from "../services/errors/CustomError.js";
 import { generateAuthenticationError } from "../services/errors/info.js";
 import EErrors from "../services/errors/enums.js";
+import UserInfoDTO from "../dao/DTO/userInfo.dto.js";
 
 const { COOKIE_NAME } = config;
+
+/////////////////////////GET USERS
+export const getUsers = async (req, res) => {
+  try {
+    const users = await usersService.getUsers();
+    const usersData = users.map((user) => new UserInfoDTO(user));
+    res.json({ status: "success", payload: usersData });
+  } catch (error) {
+    req.logger.error(error.toString());
+    res.json({ status: "error", error });
+  }
+};
+
+/////////////////////////DELETE INACTIVE USERS
+export const deleteInactiveUsers = async (req, res) => {
+  try {
+    const users = await usersService.getUsers();
+
+    const getDiff = (date) => {
+      const today = new Date();
+      const diff = today.getTime() - date.getTime(); //Milisegundos
+      return diff / (1000 * 60 * 60 * 24); // Milisegundos a dias
+    };
+
+    const inactiveUsers = users.filter(
+      ({ last_connection }) => !last_connection || getDiff(last_connection) > 2
+    );
+    const ids = inactiveUsers.map((user) => user._id);
+    const result = await usersService.deleteManyUsers(ids);
+
+    res.json({ status: "success", result });
+  } catch (error) {
+    req.logger.error(error.toString());
+    res.json({ status: "error", error });
+  }
+};
+
+////////////////////////UPDATE USER
+export const updateUser = async (req, res) => {
+  try {
+    const email = req.params.email;
+    const user = await usersService.getUserByEmail(email);
+    const data = {
+      ...user,
+      ...req.body,
+    };
+    const result = await usersService.updateUser(user._id, data);
+    res.json({ status: "success", result });
+  } catch (error) {
+    req.logger.error(error.toString());
+    res.json({ status: "error", error });
+  }
+};
 
 /////////////////////////CAMBIR ROL
 export const updateRole = async (req, res) => {

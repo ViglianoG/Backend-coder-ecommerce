@@ -81,7 +81,7 @@ router.post(
   addToCart
 );
 
-//ELIMINAR PRODUCTO DEL CARRITO
+//VACIAR CARRITO
 router.post(
   "/carts/:cid",
   viewsPassportCall("current"),

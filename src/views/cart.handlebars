@@ -58,12 +58,6 @@
         {{#if this.product}}
           <div class="cart-item">
             <div class="product">
-              {{!-- <form
-              action="/carts/{{../cid}}/products/{{this.product._id}}"
-              method="delete"
-            >
-              <button type="submit">X</button>
-            </form> --}}
               <img src={{this.product.thumbnails}} alt={{this.product.title}} />
               <div class="product-details">
                 <span class="product-name">{{this.product.title}}</span>
@@ -73,19 +67,12 @@
                 <span>${{this.product.price}}</span>
               </div>
               <div class="quantity-box">
-                {{!-- <form
-              action="/carts/{{../cid}}/products/{{this.product._id}}"
-              method="delete"
-            >
-              <button type="submit">-</button>
-            </form>
-            <span class="quantity">{{quantity}}</span>
-              <form
-              action="/carts/{{../cid}}/products/{{this.product._id}}"
-              method="post"
-            >
-              <button type="submit">+</button>
-            </form> --}}
+                <span class="quantity">{{quantity}}</span>
+                <form
+                  action="/carts/{{../cid}}/products/{{this.product._id}}"
+                  method="post">
+                    <button type="submit">+</button>
+                </form>
               </div>
             </div>
           </div>

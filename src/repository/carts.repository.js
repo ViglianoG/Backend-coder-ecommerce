@@ -71,7 +71,7 @@ export default class CartRepository {
       });
       await this.updateCart(cart.id, cart);
     } else {
-      cart.products[productIndex].quantity += quantity;
+      cart.products[productIndex].quantity++;
       await this.updateCart(cart.id, cart);
     }
     return new CartDTO(cart);

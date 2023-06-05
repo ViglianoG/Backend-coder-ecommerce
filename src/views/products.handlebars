@@ -240,9 +240,12 @@
   </div>
 </header>
 
+<div class="categories">
+  <a href="/products?category=clothes">#clothes</a>
+  <a href="/products?category=sneakers">#sneakers</a>
+  <a href="/products?category=men%27s%20clothing">#men's clothing</a>
+</div>
 
-
-<h2>Lista de todos los productos agregados hasta el momento:</h2>
 <div id="products" class="products-container">
   {{#if products}}
     {{#each products.docs}}
@@ -251,7 +254,7 @@
         <div class="card-info">
           <h3>{{this.title}}</h3>
           <p>{{this.description}}</p>
-          <span class="product-category">#{{this.category}}</span>
+          <span class="product-category"><a href="/products?category={{this.category}}">#{{this.category}}</a></span>
           <div>
             <h4>${{this.price}}</h4>
             <a href="/products/{{this._id}}" class="btn">
@@ -302,7 +305,7 @@
       <div class="footer-ubi-mail">
         <div>
           <i class="bx bxs-location-plus"></i>
-          <p>Lorem ipsum dolor sit amet consectetur adipisicing elit.</p>
+          <p>Av. 9 de Julio, Buenos Aires</p>
         </div>
         <div>
           <a href="mailto:gastonvigliano@gmail.com"><i
