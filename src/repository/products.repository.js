@@ -18,7 +18,7 @@ export default class ProductsRepository {
     const query = {
       ...(category
         ? {
-            categories: category,
+            category: category,
           }
         : null),
       ...(stock

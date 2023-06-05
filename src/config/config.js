@@ -24,4 +24,9 @@ export default {
   USER_MAIL: process.env.USER_MAIL,
   USER_PASS: process.env.USER_PASS,
   TEST_MONGO_URI: process.env.TEST_MONGO_URI,
+  FRONTEND_BASE_URL: process.env.FRONTEND_BASE_URL,
+  // MP_PUBLIC_KEY: process.env.MP_PUBLIC_KEY,
+  // MP_ACCESS_TOKEN: process.env.MP_ACCESS_TOKEN,
+  // MP_CLIENT_ID: process.env.MP_CLIENT_ID,
+  // MP_CLIENT_SECRET: process.env.MP_CLIENT_SECRET,
 };

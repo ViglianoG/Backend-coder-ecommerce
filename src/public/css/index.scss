@@ -1,7 +1,7 @@
 @import url("https://fonts.googleapis.com/css2?family=Josefin+Slab:wght@300&display=swap");
 @import url("https://fonts.googleapis.com/css2?family=Poiret+One&display=swap");
 @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap");
-@import url("https://fonts.googleapis.com/css2?family=Lato:wght@100&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,400;0,700;1,300&display=swap");
 
 * {
   box-sizing: border-box;
@@ -109,7 +109,6 @@ body {
 
 .top-nav {
   font-family: "Lato", sans-serif;
-  font-weight: bold;
   display: flex;
   justify-content: space-around;
   padding: 0.6rem 0.6rem;
@@ -159,6 +158,7 @@ nav {
   font-weight: bold;
   font-size: 3vh;
   text-decoration: none;
+  margin-bottom: 5vh;
 
   &.dark {
     background-color: var(--dark-color);
@@ -239,6 +239,7 @@ nav {
 
 ///////////////////////////// MINI SLIDER //////////////////////////////////
 .mini-slider {
+  background-color: var(--light-color);
   width: 100%;
   height: auto;
   margin: auto;
@@ -285,7 +286,6 @@ nav {
   .slider-text {
     position: absolute;
     z-index: 1;
-    font-weight: bold;
     font-size: 20px;
     display: grid;
     place-content: center;
@@ -298,28 +298,33 @@ nav {
       background-color: rgba(0, 0, 0, 0.514);
       padding: 2rem 2rem;
     }
-    p {
-      font-family: "Lato", sans-serif;
-      font-weight: bold;
-      text-align: center;
-      font-size: 5rem;
-      color: var(--light-color);
-    }
+
     a {
-      :visited {
-        color: var(--light-color);
-      }
+      transition: 0.3s;
       text-decoration: none;
       font-family: "Lato", sans-serif;
-      font-weight: 1000;
       width: 20%;
       margin-top: 2rem;
-      color: var(--light-color);
+      color: var(--dark-color);
       border-radius: 0 1rem 0 1rem;
       cursor: pointer;
       background: var(--second-color);
       padding: 0.5rem;
       text-align: center;
+      &:hover {
+        color: var(--light-color);
+        background-color: var(--dark-color);
+      }
+      :visited {
+        color: var(--light-color);
+      }
+    }
+
+    p {
+      font-family: "Lato", sans-serif;
+      text-align: center;
+      font-size: 5rem;
+      color: var(--light-color);
     }
   }
 
@@ -454,33 +459,34 @@ nav {
   margin-bottom: 0.5rem;
 }
 
-//PRODUCTS
-.products {
-  width: 100%;
-  text-align: center;
+////////////////////////////////////////////////////////////////////////////
+////////////////////////////    PRODUCTS    ////////////////////////////////
+////////////////////////////////////////////////////////////////////////////
+
+.products-container {
   display: flex;
-  gap: 5%;
+  text-align: center;
   justify-content: center;
-  padding-top: 2%;
+  flex-wrap: wrap;
+  width: 100%;
 }
 
 .card {
   background-color: var(--light-color);
-  //box-shadow: 2px 2px 1px 3px;
-  border: 2px var(--dark-color) solid;
+  border: 1px var(--dark-color) solid;
   width: 20%;
-  border-radius: 8px;
+  height: auto;
+  border-radius: 0 1rem 0 1rem;
   display: flex;
   position: relative;
   flex-direction: column;
   transition: all 0.3s ease-in-out;
-  margin: 10px;
+  margin: 1.5rem 1.5rem;
   overflow: hidden;
 
   img {
-    background-color: var(--light-color);
-    border: 0.1rem solid black;
-    border-radius: 5px;
+    background-color: white;
+    border-radius: 0 0 0 1rem;
     padding: 10%;
     width: 100%;
     height: 100%;
@@ -514,7 +520,6 @@ nav {
   margin: 1rem;
   cursor: default;
   color: var(--dark-color);
-
   h3 {
     font-size: 16px;
   }
@@ -523,7 +528,7 @@ nav {
     display: inline-block;
     padding: 8px;
     border-radius: 8px;
-    font-size: 12px;
+    font-size: .9rem;
   }
 
   h4 {
@@ -532,7 +537,7 @@ nav {
   div {
     display: flex;
     align-items: center;
-    justify-content: space-evenly;
+    justify-content: space-around;
     margin-top: 1rem;
     width: 100%;
   }
@@ -549,16 +554,43 @@ nav {
   border-radius: 0px 0px 8px 8px;
 }
 
-.bx-cart-add {
-  background: var(--brand-color-mid);
+.bxs-info-circle {
+  background: var(--brand-color);
   padding: 1rem;
   color: var(--dark-color);
   border: 1px var(--dark-color) solid;
   border-radius: 50%;
   transition: all 0.3s ease-in-out;
   &:hover {
-    background-color: var(--light-color);
+    background-color: var(--dark-color);
+    color: var(--light-color);
+  }
+}
+
+.prevpage-container {
+  width: 100%;
+  padding: 1rem;
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 2rem;
+  a {
+    transition: 0.3s;
+    :visited {
+      color: var(--light-color);
+    }
+    &:hover {
+      color: var(--light-color);
+      background-color: var(--dark-color);
+    }
+    text-decoration: none;
+    font-family: "Lato", sans-serif;
+    width: 10%;
     color: var(--dark-color);
+    border-radius: 0 1rem 0 1rem;
+    cursor: pointer;
+    background: var(--second-color);
+    padding: 0.5rem;
+    text-align: center;
   }
 }
 
@@ -775,11 +807,12 @@ section {
 }
 
 .product-card {
+  background-color: white;
   margin: 3% 0 3% 0;
   display: flex;
-  width: 60%;
+  width: 90%;
   min-height: 50%;
-  flex-direction: column;
+  height: auto;
   border: 1px solid #ccc;
   border-radius: 5px;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
@@ -787,29 +820,38 @@ section {
 }
 
 .product-image {
-  height: 300px;
+  padding: 0.5rem;
+  width: 50%;
+  height: 80vh;
   overflow: hidden;
-}
-
-.product-image img {
-  width: 100%;
-  height: auto;
-  object-fit: cover;
+  margin: auto;
+  img {
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+  }
 }
 
 .product-info {
-  padding: 1rem;
+  font-family: var(--principal-font);
+  padding: 2rem;
+  width: 50%;
 }
 
 .product-title {
-  font-size: 1.25rem;
   font-weight: bold;
   margin-bottom: 0.5rem;
 }
 
-.product-description {
+.one-product-description {
+  color: var(--mid-color);
   font-size: 1rem;
   margin-bottom: 1rem;
+  transition: 0.3s;
+
+  &:hover {
+    color: var(--bg-light-color);
+  }
 }
 
 .product-price {
@@ -819,19 +861,27 @@ section {
 }
 
 .product-category {
+  color: var(--mid-color);
+  padding: 0.5rem;
   font-size: 1rem;
   margin-bottom: 1rem;
+  border-radius: 1rem 1rem 1rem 1rem;
+  transition: 0.3s;
+  &:hover {
+    color: var(--bg-light-color);
+  }
 }
 
 .add-to-cart-button {
+  transition: 0.3s;
   background-color: var(--brand-color);
   color: var(--dark-color);
   border: none;
-  border-radius: 3px;
+  border-radius: 1rem 0 1rem 0;
   padding: 0.75rem 1.5rem;
   font-size: 1rem;
-  margin-bottom: 1rem;
   cursor: pointer;
+  margin: 1rem 0 1rem;
 }
 
 .add-to-cart-button:hover {
@@ -930,7 +980,6 @@ section {
 
 footer {
   font-family: var(--principal-font);
-  font-weight: bold;
   width: 100%;
   height: 60%;
   background-color: black;
@@ -989,18 +1038,6 @@ footer {
   display: flex;
   justify-content: center;
 }
-
-// .social-icon {
-//   color: #fff;
-//   margin: 0 10px;
-//   text-decoration: none;
-//   font-size: 20px;
-//   transition: color 0.3s;
-// }
-
-// .social-icon:hover {
-//   color: var(--brand-color);
-// }
 
 .footer-bottom {
   @extend .top-nav;
@@ -1088,15 +1125,31 @@ footer {
 
 .cart-item {
   margin-bottom: 1.5rem;
-}
-
-.product {
-  display: flex;
-  align-items: center;
-  img {
-    width: 50px;
-    height: 50px;
-    margin-right: 10px;
+  .product {
+    display: flex;
+    align-items: center;
+    img {
+      width: 50px;
+      height: 50px;
+      margin-right: 10px;
+    }
+    .quantity-box {
+      border: 1px solid var(--mid-color);
+      border-radius: 1px 1px 1px 1px;
+      display: flex;
+      align-items: center;
+      padding: 5px;
+      cursor: pointer;
+      button {
+        cursor: pointer;
+        width: 1rem;
+        padding: 0.1rem;
+      }
+      .quantity {
+        padding: 5px;
+        color: #888;
+      }
+    }
   }
 }
 
@@ -1112,19 +1165,23 @@ footer {
   color: #888;
   font-size: 12px;
 }
-
-.quantity {
-  margin-left: 10px;
-  color: #888;
-}
-
-/* Estilos de la animación de hover */
 .product:hover {
   background-color: #f5f5f5;
-  cursor: pointer;
 }
 
 .product:hover .product-name,
 .product:hover .product-description {
   color: #333;
+}
+
+.create-form {
+  @extend .login-form;
+  input {
+    @extend .login-input;
+    padding: 0.5rem 0.5rem;
+  }
+  .button {
+    @extend .login-button;
+    margin-bottom: 0;
+  }
 }

@@ -54,24 +54,46 @@
 <section class="cart-section">
   <h2>CART</h2>
   <div class="cart-container">
-    {{#each products.products}}
-      {{#if this.product}}
-        <div class="cart-item">
-          <div class="product">
-            <img src={{this.product.thumbnails}} alt={{this.product.title}} />
-            <div class="product-details">
-              <span class="product-name">{{this.product.title}}</span>
-              <span
-                class="product-description"
-              >{{this.product.description}}</span>
-              <span>${{this.product.price}}</span>
+      {{#each products.products}}
+        {{#if this.product}}
+          <div class="cart-item">
+            <div class="product">
+              {{!-- <form
+              action="/carts/{{../cid}}/products/{{this.product._id}}"
+              method="delete"
+            >
+              <button type="submit">X</button>
+            </form> --}}
+              <img src={{this.product.thumbnails}} alt={{this.product.title}} />
+              <div class="product-details">
+                <span class="product-name">{{this.product.title}}</span>
+                <span
+                  class="product-description"
+                >{{this.product.description}}</span>
+                <span>${{this.product.price}}</span>
+              </div>
+              <div class="quantity-box">
+                {{!-- <form
+              action="/carts/{{../cid}}/products/{{this.product._id}}"
+              method="delete"
+            >
+              <button type="submit">-</button>
+            </form>
+            <span class="quantity">{{quantity}}</span>
+              <form
+              action="/carts/{{../cid}}/products/{{this.product._id}}"
+              method="post"
+            >
+              <button type="submit">+</button>
+            </form> --}}
+              </div>
             </div>
-            <span class="quantity">x 2</span>
           </div>
-        </div>
-      {{/if}}
-    {{/each}}
-    <div class="cart-total">Total: $250.00</div>
+        {{/if}}
+        {{else}}
+        <span>Your cart is currently empty.</span>
+      {{/each}}
+    <div class="cart-total"></div>
   </div>
 
   <div class="cart-buttons">
@@ -82,15 +104,6 @@
       <button type="submit">Vaciar carrito</button>
     </form>
   </div>
-
-  {{!-- <div>
-    {{#if hasPrevPage}}
-      <a href="{{prevLink}}">Anterior</a>
-    {{/if}}
-    {{#if hasNextPage}}
-      <a href="{{nextLink}}">Siguiente</a>
-    {{/if}}
-  </div> --}}
 </section>
 
 <div class="go-top-container">

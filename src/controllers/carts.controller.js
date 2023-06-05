@@ -7,20 +7,21 @@ import {
   generateNullError,
   generateAuthorizationError,
 } from "../services/errors/info.js";
+import mercadopago from "mercadopago";
 
 /////////////////////////CREA UN NUEVO CARRITO
 
 export const createCart = async (req, res) => {
   try {
-    const result = await cartsService.createCart();
+    const cart = await cartsService.createCart();
     res.json({
-      result: "Success",
-      payload: result,
+      result: "success",
+      payload: cart,
     });
   } catch (error) {
     req.logger.error(error.toString());
     res.json({
-      result: "Error...",
+      result: "error",
       error,
     });
   }
@@ -42,13 +43,13 @@ export const getProducts = async (req, res) => {
       });
     const cart = await cartsService.getCart(cid);
     res.json({
-      result: "Success",
+      result: "success",
       payload: cart,
     });
   } catch (error) {
     req.logger.error(error.toString());
     res.json({
-      result: "Error...",
+      result: "error",
       error,
     });
   }
@@ -58,10 +59,10 @@ export const getProducts = async (req, res) => {
 
 export const addProduct = async (req, res) => {
   try {
-    const cid = req.params.cid;
-    const pid = req.params.pid;
+    const { cid, pid } = req.params;
     const user = req.user;
     const userCart = user.cart.toString();
+    const quantity = req.body.quantity || 1;
 
     if (cid !== userCart)
       CustomError.createError({
@@ -72,33 +73,23 @@ export const addProduct = async (req, res) => {
       });
 
     const cart = await cartsService.getCart(cid);
-    if (!cart)
-      res.send({
-        status: "ERROR",
-        error: "No se ha encontrado el carrito especificado.",
-      });
-
     const product = await productsService.getProduct(pid);
-    if (!product)
-      res.send({
-        status: "ERROR",
-        error: "No se ha encontrado el producto especificado.",
-      });
 
     const updatedCart = await cartsService.addProductToCart(
       user,
       cart,
-      product
+      product,
+      quantity
     );
 
     res.json({
-      result: "Success",
+      result: "success",
       payload: updatedCart,
     });
   } catch (error) {
     req.logger.error(error.toString());
     res.json({
-      result: "Error...",
+      result: "error",
       error,
     });
   }
@@ -108,8 +99,7 @@ export const addProduct = async (req, res) => {
 
 export const deleteProduct = async (req, res) => {
   try {
-    const cid = req.params.cid;
-    const pid = req.params.pid;
+    const { cid, pid } = req.params;
     const userCart = req.user.cart.toString();
 
     if (cid !== userCart)
@@ -123,6 +113,10 @@ export const deleteProduct = async (req, res) => {
     const cart = await CartModel.findOne({
       _id: cid,
     });
+    const product = await ProductModel.findOne({
+      _id: pid,
+    });
+
     if (!cart)
       CustomError.createError({
         name: "Cart error",
@@ -131,9 +125,6 @@ export const deleteProduct = async (req, res) => {
         code: EErrors.NULL_ERROR,
       });
 
-    const product = await ProductModel.findOne({
-      _id: pid,
-    });
     if (!product)
       CustomError.createError({
         name: "Product error",
@@ -145,20 +136,22 @@ export const deleteProduct = async (req, res) => {
     const productIndex = cart.products.findIndex((p) =>
       p.product.equals(product._id)
     );
+
     const products = [...cart.products];
     products.splice(productIndex, 1);
-    const updateCart = await cartsService.updateCart(cid, {
+
+    const updatedCart = await cartsService.updateCart(cid, {
       products,
     });
 
     res.json({
-      result: "Success",
-      payload: updateCart,
+      result: "success",
+      payload: updatedCart,
     });
   } catch (error) {
     req.logger.error(error.toString());
     res.json({
-      result: "Error...",
+      result: "error",
       error,
     });
   }
@@ -197,13 +190,13 @@ export const updateCart = async (req, res) => {
     });
 
     res.json({
-      result: "Success",
+      result: "success",
       payload: cart,
     });
   } catch (error) {
     req.logger.error(error.toString());
     res.json({
-      result: "Error...",
+      result: "error",
       error,
     });
   }
@@ -213,9 +206,8 @@ export const updateCart = async (req, res) => {
 
 export const updateQuantity = async (req, res) => {
   try {
-    const cid = req.params.cid;
-    const pid = req.params.pid;
-    const quantity = req.body.quantity;
+    const { cid, pid } = req.params;
+    const quantity = req.body;
     const userCart = req.user.cart.toString();
 
     if (cid !== userCart)
@@ -227,6 +219,7 @@ export const updateQuantity = async (req, res) => {
       });
 
     const cart = await cartsService.getCart(cid);
+    const product = await productsService.getProduct(pid);
 
     if (!cart)
       CustomError.createError({
@@ -236,7 +229,6 @@ export const updateQuantity = async (req, res) => {
         code: EErrors.NULL_ERROR,
       });
 
-    const product = await productsService.getProduct(pid);
     if (!product)
       CustomError.createError({
         name: "Find product error",
@@ -250,16 +242,16 @@ export const updateQuantity = async (req, res) => {
     );
     cart.products[productIndex].quantity = parseInt(quantity);
 
-    const updateCart = await cartsService.updateCart(cid, cart);
+    const updatedCart = await cartsService.updateCart(cid, cart);
 
     res.json({
-      result: "Success",
-      payload: updateCart,
+      result: "success",
+      payload: updatedCart,
     });
   } catch (error) {
     req.logger.error(error.toString());
     res.json({
-      result: "Error...",
+      result: "error",
       error,
     });
   }
@@ -279,18 +271,19 @@ export const emptyCart = async (req, res) => {
         message: "Solamente tienes acceso a tu propio carrito.",
         code: EErrors.AUTHORIZATION_ERROR,
       });
+
     const cart = await cartsService.updateCart(cid, {
       products: [],
     });
 
     res.json({
-      result: "Success",
+      result: "success",
       payload: cart,
     });
   } catch (error) {
     req.logger.error(error.toString());
     res.json({
-      result: "Error...",
+      result: "error",
       error,
     });
   }
@@ -300,28 +293,69 @@ export const emptyCart = async (req, res) => {
 
 export const purchase = async (req, res) => {
   try {
-    const { cid } = req.params.cid;
+    const { cid } = req.params;
     const purchaser = req.user.email;
-    const { outOfStock, ticket } = await cartsService.purchase(cid, purchaser);
+    const { ticket, outOfStock } = await cartsService.purchase(cid, purchaser);
 
     if (outOfStock.length > 0) {
       const ids = outOfStock.map((p) => p._id);
       req.logger.info("Uno o mas productos están fuera de stock.");
-      return res.json({
-        result: "Success",
-        payload: ids,
-      });
+      return res.json({ status: "error", payload: { outOfStock: ids } });
     }
 
     res.json({
-      result: "Success",
+      result: "success",
       payload: ticket,
     });
   } catch (error) {
     req.logger.error(error.toString());
     res.json({
-      result: "Error...",
+      result: "error",
       error,
     });
+  }
+};
+
+////////////////////////PREPARE CHECKOUT
+
+export const prepareCheckout = async (req, res) => {
+  try {
+    const { cid } = req.params;
+    const purchaser = req.user.email;
+    const { outOfStock, available, preferenceId } =
+      await cartsService.prepareCheckout(cid, purchaser);
+
+    if (outOfStock.length > 0) {
+      req.logger.info("Uno o mas productos están fuera de stock.");
+      return res.json({ status: "error", payload: { outOfStock } });
+    }
+
+    res.json({
+      status: "success",
+      payload: { items: available, preferenceId },
+    });
+  } catch (error) {
+    req.logger.error(error.toString());
+    res.json({ status: "error", error });
+  }
+};
+
+/////////////////FINISH CHECKOUT
+
+export const finishCheckout = async (req, res) => {
+  try {
+    const { cid } = req.params;
+    const { purchaser, ...payment } = req.query;
+
+    if (payment.type !== "payment") return;
+    const data = await mercadopago.payment.findById(payment["data.id"]);
+    const ticket = await cartsService.finishCheckout(cid, data.body, purchaser);
+
+    if (!ticket)
+      return res.json({ status: "error", error: "Error durante el pago." });
+    res.json({ status: "success", payload: ticket });
+  } catch (error) {
+    req.logger.error(error.toString());
+    res.json({ status: "error", error });
   }
 };

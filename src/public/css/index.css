@@ -1,8 +1,7 @@
-@charset "UTF-8";
 @import url("https://fonts.googleapis.com/css2?family=Josefin+Slab:wght@300&display=swap");
 @import url("https://fonts.googleapis.com/css2?family=Poiret+One&display=swap");
 @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap");
-@import url("https://fonts.googleapis.com/css2?family=Lato:wght@100&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,400;0,700;1,300&display=swap");
 * {
   box-sizing: border-box;
   margin: 0;
@@ -100,7 +99,6 @@ body.dark {
 
 .top-nav, .footer-bottom {
   font-family: "Lato", sans-serif;
-  font-weight: bold;
   display: flex;
   justify-content: space-around;
   padding: 0.6rem 0.6rem;
@@ -144,6 +142,7 @@ nav {
   font-weight: bold;
   font-size: 3vh;
   text-decoration: none;
+  margin-bottom: 5vh;
 }
 nav.dark {
   background-color: var(--dark-color);
@@ -210,6 +209,7 @@ nav a {
 }
 
 .mini-slider {
+  background-color: var(--light-color);
   width: 100%;
   height: auto;
   margin: auto;
@@ -250,7 +250,6 @@ nav a {
 .slider-frame .slider-text {
   position: absolute;
   z-index: 1;
-  font-weight: bold;
   font-size: 20px;
   display: grid;
   place-content: center;
@@ -264,27 +263,30 @@ nav a {
   background-color: rgba(0, 0, 0, 0.514);
   padding: 2rem 2rem;
 }
-.slider-frame .slider-text p {
-  font-family: "Lato", sans-serif;
-  font-weight: bold;
-  text-align: center;
-  font-size: 5rem;
-  color: var(--light-color);
-}
 .slider-frame .slider-text a {
+  transition: 0.3s;
   text-decoration: none;
   font-family: "Lato", sans-serif;
-  font-weight: 1000;
   width: 20%;
   margin-top: 2rem;
-  color: var(--light-color);
+  color: var(--dark-color);
   border-radius: 0 1rem 0 1rem;
   cursor: pointer;
   background: var(--second-color);
   padding: 0.5rem;
   text-align: center;
 }
+.slider-frame .slider-text a:hover {
+  color: var(--light-color);
+  background-color: var(--dark-color);
+}
 .slider-frame .slider-text a :visited {
+  color: var(--light-color);
+}
+.slider-frame .slider-text p {
+  font-family: "Lato", sans-serif;
+  text-align: center;
+  font-size: 5rem;
   color: var(--light-color);
 }
 .slider-frame ul {
@@ -401,31 +403,30 @@ nav a {
   margin-bottom: 0.5rem;
 }
 
-.products {
-  width: 100%;
-  text-align: center;
+.products-container {
   display: flex;
-  gap: 5%;
+  text-align: center;
   justify-content: center;
-  padding-top: 2%;
+  flex-wrap: wrap;
+  width: 100%;
 }
 
 .card {
   background-color: var(--light-color);
-  border: 2px var(--dark-color) solid;
+  border: 1px var(--dark-color) solid;
   width: 20%;
-  border-radius: 8px;
+  height: auto;
+  border-radius: 0 1rem 0 1rem;
   display: flex;
   position: relative;
   flex-direction: column;
   transition: all 0.3s ease-in-out;
-  margin: 10px;
+  margin: 1.5rem 1.5rem;
   overflow: hidden;
 }
 .card img {
-  background-color: var(--light-color);
-  border: 0.1rem solid black;
-  border-radius: 5px;
+  background-color: white;
+  border-radius: 0 0 0 1rem;
   padding: 10%;
   width: 100%;
   height: 100%;
@@ -467,7 +468,7 @@ nav a {
   display: inline-block;
   padding: 8px;
   border-radius: 8px;
-  font-size: 12px;
+  font-size: 0.9rem;
 }
 .card-info h4 {
   margin: 8px 0px;
@@ -475,7 +476,7 @@ nav a {
 .card-info div {
   display: flex;
   align-items: center;
-  justify-content: space-evenly;
+  justify-content: space-around;
   margin-top: 1rem;
   width: 100%;
 }
@@ -491,21 +492,49 @@ nav a {
   border-radius: 0px 0px 8px 8px;
 }
 
-.bx-cart-add {
-  background: var(--brand-color-mid);
+.bxs-info-circle {
+  background: var(--brand-color);
   padding: 1rem;
   color: var(--dark-color);
   border: 1px var(--dark-color) solid;
   border-radius: 50%;
   transition: all 0.3s ease-in-out;
 }
-.bx-cart-add:hover {
-  background-color: var(--light-color);
+.bxs-info-circle:hover {
+  background-color: var(--dark-color);
+  color: var(--light-color);
+}
+
+.prevpage-container {
+  width: 100%;
+  padding: 1rem;
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 2rem;
+}
+.prevpage-container a {
+  transition: 0.3s;
+  text-decoration: none;
+  font-family: "Lato", sans-serif;
+  width: 10%;
   color: var(--dark-color);
+  border-radius: 0 1rem 0 1rem;
+  cursor: pointer;
+  background: var(--second-color);
+  padding: 0.5rem;
+  text-align: center;
+}
+.prevpage-container a :visited {
+  color: var(--light-color);
+}
+.prevpage-container a:hover {
+  color: var(--light-color);
+  background-color: var(--dark-color);
 }
 
 .login-container, .password-recovery,
 .login-form,
+.create-form,
 .password-recovery div,
 .login-inputs {
   font-family: "Poppins", sans-serif;
@@ -528,7 +557,7 @@ nav a {
   align-items: center;
 }
 
-.login-form, .password-recovery div {
+.login-form, .create-form, .password-recovery div {
   min-width: 20%;
   position: relative;
   background-color: rgba(255, 255, 255, 0.5);
@@ -539,24 +568,25 @@ nav a {
   border-radius: 1rem;
   border: 2px solid var(--dark-color);
 }
-.login-form a, .password-recovery div a {
+.login-form a, .create-form a, .password-recovery div a {
   display: flex;
   justify-content: center;
 }
-.login-form:hover, .password-recovery div:hover {
+.login-form:hover, .create-form:hover, .password-recovery div:hover {
   box-shadow: 5px 5px 0px rgba(0, 0, 0, 0.95);
   transform: translateY(-5px) translateX(-5px);
 }
-.login-form.dark, .password-recovery div.dark {
+.login-form.dark, .dark.create-form, .password-recovery div.dark {
   background-color: var(--dark-color);
   border: 1px solid var(--light-color);
 }
-.login-form.dark:hover, .password-recovery div.dark:hover {
+.login-form.dark:hover, .dark.create-form:hover, .password-recovery div.dark:hover {
   box-shadow: 5px 5px 0px var(--light-color);
 }
 
-.login-form, .password-recovery div,
+.login-form, .create-form, .password-recovery div,
 .login-button,
+.create-form .button,
 .password-recovery div form button,
 .login-button-ghost {
   transition: all 0.4s ease;
@@ -586,7 +616,7 @@ nav a {
   color: var(--light-color);
 }
 
-.login-input, .password-recovery div form input {
+.login-input, .create-form input, .password-recovery div form input {
   padding: 14px 12px;
   border-radius: 6px;
   background-color: hsla(244, 16%, 92%, 0.6);
@@ -599,23 +629,24 @@ nav a {
 
 .login-inputs:focus,
 .login-input:valid,
+.create-form input:valid,
 .password-recovery div form input:valid {
   border: 1px solid var(--dark-color);
 }
 
-.login-input:focus, .password-recovery div form input:focus {
+.login-input:focus, .create-form input:focus, .password-recovery div form input:focus {
   transition: all 0.4s ease;
   box-shadow: 5px 5px 0px rgba(0, 0, 0, 0.95);
   transform: translateY(-2px) translateX(-2px);
 }
 
-.login-input, .password-recovery div form input {
+.login-input, .create-form input, .password-recovery div form input {
   padding-right: 36px;
 }
-.login-input.dark, .password-recovery div form input.dark {
+.login-input.dark, .create-form input.dark, .password-recovery div form input.dark {
   background-color: var(--light-color);
 }
-.login-input.dark:focus, .password-recovery div form input.dark:focus {
+.login-input.dark:focus, .create-form input.dark:focus, .password-recovery div form input.dark:focus {
   box-shadow: 5px 5px 0px var(--light-color);
 }
 
@@ -626,7 +657,7 @@ nav a {
        column-gap: 0.75rem;
 }
 
-.login-button, .password-recovery div form button {
+.login-button, .create-form .button, .password-recovery div form button {
   width: 100%;
   padding: 14px 2rem;
   border-radius: 5px;
@@ -636,30 +667,30 @@ nav a {
   margin-bottom: 1rem;
   cursor: pointer;
 }
-.login-button:hover, .password-recovery div form button:hover {
+.login-button:hover, .create-form .button:hover, .password-recovery div form button:hover {
   box-shadow: 5px 5px 0px rgba(0, 0, 0, 0.95);
   background: var(--dark-color);
   color: var(--light-color);
   transform: translateY(-5px) translateX(-5px);
 }
-.login-button.dark:hover, .password-recovery div form button.dark:hover {
+.login-button.dark:hover, .create-form .dark.button:hover, .password-recovery div form button.dark:hover {
   box-shadow: 5px 5px 0px var(--light-color);
 }
-.login-button a.dark, .password-recovery div form button a.dark {
+.login-button a.dark, .create-form .button a.dark, .password-recovery div form button a.dark {
   color: var(--light-color);
 }
-.login-button a.dark:visited, .password-recovery div form button a.dark:visited {
+.login-button a.dark:visited, .create-form .button a.dark:visited, .password-recovery div form button a.dark:visited {
   color: var(--light-color);
 }
 
-.login-button > a, .password-recovery div form button > a {
+.login-button > a, .create-form .button > a, .password-recovery div form button > a {
   text-decoration: none;
 }
-.login-button > a:visited, .password-recovery div form button > a:visited {
+.login-button > a:visited, .create-form .button > a:visited, .password-recovery div form button > a:visited {
   color: var(--dark-color);
 }
 
-.login-button:hover > a, .password-recovery div form button:hover > a {
+.login-button:hover > a, .create-form .button:hover > a, .password-recovery div form button:hover > a {
   color: var(--light-color);
 }
 
@@ -691,11 +722,12 @@ section {
 }
 
 .product-card {
+  background-color: white;
   margin: 3% 0 3% 0;
   display: flex;
-  width: 60%;
+  width: 90%;
   min-height: 50%;
-  flex-direction: column;
+  height: auto;
   border: 1px solid #ccc;
   border-radius: 5px;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
@@ -703,10 +735,12 @@ section {
 }
 
 .product-image {
-  height: 300px;
+  padding: 0.5rem;
+  width: 50%;
+  height: 80vh;
   overflow: hidden;
+  margin: auto;
 }
-
 .product-image img {
   width: 100%;
   height: auto;
@@ -715,18 +749,24 @@ section {
 }
 
 .product-info {
-  padding: 1rem;
+  font-family: var(--principal-font);
+  padding: 2rem;
+  width: 50%;
 }
 
 .product-title {
-  font-size: 1.25rem;
   font-weight: bold;
   margin-bottom: 0.5rem;
 }
 
-.product-description {
+.one-product-description {
+  color: var(--mid-color);
   font-size: 1rem;
   margin-bottom: 1rem;
+  transition: 0.3s;
+}
+.one-product-description:hover {
+  color: var(--bg-light-color);
 }
 
 .product-price {
@@ -736,19 +776,27 @@ section {
 }
 
 .product-category {
+  color: var(--mid-color);
+  padding: 0.5rem;
   font-size: 1rem;
   margin-bottom: 1rem;
+  border-radius: 1rem 1rem 1rem 1rem;
+  transition: 0.3s;
+}
+.product-category:hover {
+  color: var(--bg-light-color);
 }
 
 .add-to-cart-button {
+  transition: 0.3s;
   background-color: var(--brand-color);
   color: var(--dark-color);
   border: none;
-  border-radius: 3px;
+  border-radius: 1rem 0 1rem 0;
   padding: 0.75rem 1.5rem;
   font-size: 1rem;
-  margin-bottom: 1rem;
   cursor: pointer;
+  margin: 1rem 0 1rem;
 }
 
 .add-to-cart-button:hover {
@@ -830,7 +878,6 @@ section {
 }
 footer {
   font-family: var(--principal-font);
-  font-weight: bold;
   width: 100%;
   height: 60%;
   background-color: black;
@@ -965,15 +1012,31 @@ footer .footer-ubi-mail div i {
 .cart-item {
   margin-bottom: 1.5rem;
 }
-
-.product {
+.cart-item .product {
   display: flex;
   align-items: center;
 }
-.product img {
+.cart-item .product img {
   width: 50px;
   height: 50px;
   margin-right: 10px;
+}
+.cart-item .product .quantity-box {
+  border: 1px solid var(--mid-color);
+  border-radius: 1px 1px 1px 1px;
+  display: flex;
+  align-items: center;
+  padding: 5px;
+  cursor: pointer;
+}
+.cart-item .product .quantity-box button {
+  cursor: pointer;
+  width: 1rem;
+  padding: 0.1rem;
+}
+.cart-item .product .quantity-box .quantity {
+  padding: 5px;
+  color: #888;
 }
 
 .product-details {
@@ -989,18 +1052,18 @@ footer .footer-ubi-mail div i {
   font-size: 12px;
 }
 
-.quantity {
-  margin-left: 10px;
-  color: #888;
-}
-
-/* Estilos de la animación de hover */
 .product:hover {
   background-color: #f5f5f5;
-  cursor: pointer;
 }
 
 .product:hover .product-name,
 .product:hover .product-description {
   color: #333;
+}
+
+.create-form input {
+  padding: 0.5rem 0.5rem;
+}
+.create-form .button {
+  margin-bottom: 0;
 }/*# sourceMappingURL=index.css.map */

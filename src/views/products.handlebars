@@ -50,6 +50,11 @@
       </div>
     </ul>
   </nav>
+  {{#if user}}
+  <div class="benvenuti">
+    <h4>Welcome, {{user.first_name}}</h4>
+  </div>
+  {{/if}}
 
   <div class="mini-slider">
     <div class="slide-track">
@@ -132,27 +137,26 @@
   <div class="slider-frame">
     <div class="slider-text">
       <div>
-        <p>Lorem ipsum dolor sit amet.</p>
-        <p>Lorem, ipsum dolor.</p>
-        <a href="#products">PRESS</a>
+        <p>Fashion is a concept and you represent it.</p>
+        <a href="#products">GO TO</a>
       </div>
     </div>
     <ul>
       <li><img
           src="https://res.cloudinary.com/gvigliano/image/upload/v1685393830/slider/sneakers_2_dt1jwu.jpg"
-          alt=""
+          alt="Sneakers"
         /></li>
       <li><img
           src="https://res.cloudinary.com/gvigliano/image/upload/v1685393830/slider/sneakers_5_wk2r2o.jpg"
-          alt=""
+          alt="Sneakers"
         /></li>
       <li><img
-          src="https://res.cloudinary.com/gvigliano/image/upload/v1685393830/slider/sneakers_6_xu8vqn.jpg"
-          alt=""
+          src="https://res.cloudinary.com/gvigliano/image/upload/v1685908194/sneakers_n8v4yq.jpg"
+          alt="Sneakers"
         /></li>
       <li><img
           src="https://res.cloudinary.com/gvigliano/image/upload/v1685393830/slider/sneakers_3_v6qayh.jpg"
-          alt=""
+          alt="Sneakers"
         /></li>
     </ul>
   </div>
@@ -235,41 +239,47 @@
     </div>
   </div>
 </header>
-{{#if user}}
-  <div class="benvenuti">
-    <h4>Welcome, {{user.first_name}}</h4>
-  </div>
-{{/if}}
-<div class="saludo">
-  <h2>Lista de todos los productos agregados hasta el momento:</h2>
+
+
+
+<h2>Lista de todos los productos agregados hasta el momento:</h2>
+<div id="products" class="products-container">
   {{#if products}}
-    <div id="products" class="products">
-      {{#each products.docs}}
-        <div class="card">
-          <img src="{{this.thumbnails}}" alt="{{this.title}}" />
-          <div class="card-info">
-            <h3>{{this.title}}</h3>
-            <p>{{this.description}}</p>
-            <div>
-              <h4>${{this.price}}</h4>
-              <a href="/products/{{this._id}}" class="btn"><i
-                  class="bx bx-cart-add"
-                ></i></a>
-            </div>
+    {{#each products.docs}}
+      <div class="card">
+        <img src="{{this.thumbnails}}" alt="{{this.title}}" />
+        <div class="card-info">
+          <h3>{{this.title}}</h3>
+          <p>{{this.description}}</p>
+          <span class="product-category">#{{this.category}}</span>
+          <div>
+            <h4>${{this.price}}</h4>
+            <a href="/products/{{this._id}}" class="btn">
+              <i class='bx bxs-info-circle'></i></a>
           </div>
+          <form
+            action="/carts/{{../user.cart}}/products/{{this._id}}"
+            method="post"
+          >
+            <input
+              class="add-to-cart-button"
+              type="submit"
+              value="Agregar al carrito"
+            />
+          </form>
         </div>
-      {{/each}}
-    </div>
+      </div>
+    {{/each}}
   {{else}}
     <h3>No existen productos...</h3>
   {{/if}}
 </div>
-<div>
+<div class="prevpage-container">
   {{#if products.hasPrevPage}}
-    <a href="{{products.prevLink}}" class="btn">Anterior</a>
+    <a href="{{products.prevLink}}">Anterior</a>
   {{/if}}
   {{#if products.hasNextPage}}
-    <a href="{{products.nextLink}}" class="btn">Siguiente</a>
+    <a href="{{products.nextLink}}">Siguiente</a>
   {{/if}}
 </div>
 

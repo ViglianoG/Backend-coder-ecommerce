@@ -8,6 +8,8 @@ import {
   updateQuantity,
   emptyCart,
   purchase,
+  prepareCheckout,
+  finishCheckout,
 } from "../controllers/carts.controller.js";
 
 const router = Router();
@@ -35,5 +37,9 @@ router.delete("/:cid/products/:pid", deleteProduct);
 
 //COMPRAR
 router.post("/:cid/purchase", purchase);
+
+//CHECKOUT
+router.post("/:cid/checkout", prepareCheckout);
+router.post("/:cid/finish_checkout", finishCheckout);
 
 export default router;

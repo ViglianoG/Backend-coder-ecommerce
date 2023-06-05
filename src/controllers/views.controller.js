@@ -122,7 +122,6 @@ export const getCartProducts = async (req, res) => {
     const cid = req.params.cid;
     const cart = await cartsService.getCart(cid);
     const products = cart.toObject();
-
     const user = req.user;
 
     res.render("cart", {
@@ -201,17 +200,12 @@ export const deleteCartProducts = async (req, res) => {
 
 export const purchase = async (req, res) => {
   try {
-    const cid = req.params.cid;
+    const { cid } = req.params;
     const purchaser = req.user.email;
     const { outOfStock, ticket } = await cartsService.purchase(cid, purchaser);
 
     if (outOfStock.length > 0) {
-      const ids = outOfStock.map((p) => p.product);
-      return res.render("purchase", {
-        ids,
-        ticket,
-        cid,
-      });
+      return res.render("purchase", { ids: outOfStock, ticket, cid });
     }
 
     res.render("purchase", {

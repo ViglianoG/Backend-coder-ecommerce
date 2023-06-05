@@ -1,44 +1,135 @@
-<nav>
-  <ul class="horizontal-menu">
-    <li><a href="#">MENU</a>
-      <ul class="vertical-menu">
-        <li><a class="nav-link" href="/products">Todos los productos</a></li>
-        <li><a class="nav-link" href="/products/create">Agregar producto</a></li>
-        <li><a class="nav-link" href="/chat">Chat en tiempo real</a></li>
-      </ul>
-    </li>
-    <li>
-      <a href="/products">HOME</a>
-    </li>
-    {{#if user}}
-    <li><a href="/sessions/user">MI PERFIL</a></li>
-    {{!-- <li><a href="/carts/{{user.cart}}"></a></li> --}}
-    {{else}}
-    <li><a href="/sessions/login">INICIAR SESIÓN</a></li>
-    <li><a href="/sessions/register">REGISTRARSE</a></li>
-    {{/if}}
-  </ul>
-</nav>
+<header>
+  <div class="top-nav">
+    <p>Free shipping on orders over $99</p>
+    <div>
+      <a href="#">
+        <i class="bx bxl-facebook"></i>
+      </a>
+      <a href="#">
+        <i class="bx bxl-twitter"></i>
+      </a>
+      <a href="#">
+        <i class="bx bxl-instagram"></i>
+      </a>
+      <a class="profile-top-nav" href="/sessions/user">
+        <i class="bx bxs-user"></i>
+      </a>
+    </div>
+  </div>
 
-<main>
-  <section>
-    <div class="product-card">
-      <div class="product-image">
-        <img src="{{product.thumbnails}}" height="150" />
+  <nav>
+    <ul class="horizontal-menu">
+      <li>
+        <input type="checkbox" id="toggle" />
+        <label class="toggle" for="toggle">
+          <i class="bx bxs-sun"></i>
+          <i class="bx bx-moon"></i>
+          <span class="ball"></span>
+        </label>
+      </li>
+      <div>
+        <li><a href="#">MENU</a>
+          <ul class="vertical-menu">
+            <li><a class="nav-link" href="/products">Todos los productos</a></li>
+            <li><a class="nav-link" href="/products/create">Agregar producto</a></li>
+            <li><a class="nav-link" href="/chat">Chat en tiempo real</a></li>
+          </ul>
+        </li>
+        <li>
+          <a href="/products">HOME</a>
+        </li>
+        {{#if user}}
+          <li><a href="/sessions/user">PERFIL</a></li>
+          <li><a href="/carts/{{user.cart}}"><i
+                class="bx bxs-cart-alt"
+              ></i></a></li>
+        {{else}}
+          <li><a href="/sessions/login">LOG IN</a></li>
+          <li><a href="/sessions/register">REGISTER</a></li>
+        {{/if}}
       </div>
-      <div class="product-info">
-        <h2 class="product-title">{{product.title}}</h2>
-        <p class="product-description">{{product.description}}</p>
-        <p class="product-price">Precio: ${{product.price}}</p>
-        <p class="product-category">Categoria: #{{product.category}}</p>
-        <form action="/carts/{{user.cart}}/products/{{product._id}}" method="post">
-          <input class="add-to-cart-button" type="submit" value="Agregar al carrito" />
-        </form>
-        {{!-- <form action="/products/delete/{{product._id}}" method="get">
+    </ul>
+  </nav>
+
+</header>
+
+<section>
+  <div class="product-card">
+    <div class="product-image">
+      <img src="{{product.thumbnails}}" height="150" />
+    </div>
+    <div class="product-info">
+      <h2 class="product-title">{{product.title}}</h2>
+      <p class="one-product-description">{{product.description}}</p>
+      <p class="product-price">$ {{product.price}}</p>
+      <span class="product-category">#{{product.category}}</span>
+      <form
+        action="/carts/{{user.cart}}/products/{{product._id}}"
+        method="post"
+      >
+        <input
+          class="add-to-cart-button"
+          type="submit"
+          value="Agregar al carrito"
+        />
+      </form>
+      {{!-- <form action="/products/delete/{{product._id}}" method="get">
           <input class="add-to-cart-button" type="submit" value="Borrar producto" />
         </form> --}}
-      </div>
     </div>
+  </div>
+</section>
 
-  </section>
-</main>
+<div class="go-top-container">
+  <div class="go-top-button">
+    <i class="bx bx-chevron-up"></i>
+  </div>
+</div>
+
+<footer>
+  <div class="footer-container">
+    <div class="footer-links">
+      <a href="#">HOME</a>
+      <a href="#">PRODUCTS</a>
+      <a href="#">CONTACT</a>
+      <a href="#">ABOUT US</a>
+    </div>
+    <div class="text-divider"></div>
+    <div>
+      <div class="footer-ubi-mail">
+        <div>
+          <i class="bx bxs-location-plus"></i>
+          <p>Lorem ipsum dolor sit amet consectetur adipisicing elit.</p>
+        </div>
+        <div>
+          <a href="mailto:gastonvigliano@gmail.com"><i
+              class="bx bxs-envelope"
+            ></i></a>
+          <p>gastonvigliano@gmail.com</p>
+        </div>
+      </div>
+      <div class="text-divider"></div>
+      <p class="footer-text">Lorem ipsum dolor sit amet consectetur adipisicing
+        elit. Dicta molestias unde sint rerum. Dolores praesentium totam itaque!
+        Ut praesentium exercitationem laboriosam, vitae repudiandae qui alias
+        doloribus eos unde voluptatem repellat.</p>
+    </div>
+  </div>
+</footer>
+<div class="footer-bottom">
+  <p>© 2023 Backend coder ecommerce | Website by Gastón Vigliano</p>
+  <div>
+    <a href="mailto:gastonvigliano@gmail.com">
+      <i class="bx bxs-envelope"></i>
+    </a>
+    <a href="#">
+      <i class="bx bxl-facebook"></i>
+    </a>
+    <a href="#">
+      <i class="bx bxl-twitter"></i>
+    </a>
+    <a href="#">
+      <i class="bx bxl-instagram"></i>
+    </a>
+  </div>
+</div>

@@ -5,6 +5,7 @@ import {
   addProduct,
   updateProduct,
   deleteProduct,
+  addProductWithoutFile,
 } from "../controllers/products.controller.js";
 import { passportCall, authorization } from "../middleware/auth.js";
 import { uploader } from "../services/multer.js";
@@ -24,6 +25,15 @@ router.post(
   authorization(["premium", "admin"]),
   uploader.array("file", 1),
   addProduct
+);
+
+//AGREGAR PROD SIN FILE
+router.post(
+  "/no_file",
+  passportCall("current"),
+  authorization(["premium", "admin"]),
+  uploader.array("file", 1),
+  addProductWithoutFile
 );
 
 //BORRAR PRODUCTO
