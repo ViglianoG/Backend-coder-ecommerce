@@ -25,6 +25,7 @@ import specs from "./config/swagger.config.js";
 import cors from "cors";
 import usersRouter from "./routes/users.router.js";
 import createMemoryStore from "memorystore";
+import ticketsRouter from "./routes/tickets.router.js";
 
 const MemoryStore = createMemoryStore(session);
 
@@ -80,6 +81,7 @@ app.use(
 );
 app.use("/api/sessions", sessionRouter);
 app.use("/api/users", passportCall("current"), usersRouter);
+app.use("/api/purchases", ticketsRouter);
 app.use("/mockingproducts", mockingProducts);
 app.use(errorHandler);
 app.use("/loggertest", loggerRouter);

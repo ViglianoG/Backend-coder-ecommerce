@@ -48,8 +48,12 @@ export const failLogin = (req, res) => {
 
 export const logout = async (req, res) => {
   const user = req.user;
-  user.last_connection = new Date();
-  await usersService.updateUser(user.id, user);
+
+  if (user.role !== "admin") {
+    user.last_connection = new Date();
+    await usersService.updateUser(user.id, user);
+  }
+
   res
     .clearCookie(COOKIE_NAME)
     .send({ status: "success", payload: "Logged out..." });

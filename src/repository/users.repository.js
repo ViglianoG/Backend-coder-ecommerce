@@ -102,4 +102,12 @@ export default class UsersRepository {
     await this.updateUser(user.id, updatedUser);
     return newDocuments;
   };
+
+  sendDeletedAccountMail = async (email) => {
+    const html = `<h1>Cuenta eliminada</h1>
+    <p>Su cuenta ha sido eliminada por inactividad</p>
+    <p>Muchas gracias por utilizar Backend coder ecommerce</p>`;
+
+    return await this.mail.send(email, "Registro exitoso", html);
+  };
 }

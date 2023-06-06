@@ -9,6 +9,7 @@ const ticketSchema = new mongoose.Schema(
     },
     amount: Number,
     purchaser: String,
+    payment_id: Number,
   },
   {
     timestamps: {

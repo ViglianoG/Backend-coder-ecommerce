@@ -77,8 +77,7 @@ describe("Testing Users DAO", () => {
       password: "123456",
     };
 
-    await this.usersDao.update(user._id, data);
-    const updatedUser = await this.usersDao.getById(user._id);
+    const updatedUser = await this.usersDao.update(user._id, data);
 
     expect(updatedUser.first_name).to.be.eql(data.first_name);
     expect(updatedUser.password).to.be.eql(data.password);
