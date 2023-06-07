@@ -8,6 +8,7 @@ dotenv.config({
 });
 
 export default {
+  PORT: process.env.PORT,
   PRIVATE_KEY: process.env.PRIVATE_KEY,
   COOKIE_NAME: process.env.COOKIE_NAME,
   COOKIE_SECRET: process.env.COOKIE_SECRET,

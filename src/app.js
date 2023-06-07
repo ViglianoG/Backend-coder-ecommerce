@@ -29,12 +29,11 @@ import ticketsRouter from "./routes/tickets.router.js";
 
 const MemoryStore = createMemoryStore(session);
 
-const { SESSION_SECRET, COOKIE_SECRET, MONGO_URI, DB_NAME } = config;
+const { SESSION_SECRET, COOKIE_SECRET, MONGO_URI, DB_NAME, PORT } = config;
 
 const app = express();
 const server = http.createServer(app);
 const io = new Server(server);
-const port = 8080;
 
 app.use(express.json());
 app.use(
@@ -48,11 +47,11 @@ app.use(express.static(__dirname + "/public"));
 app.set("views", __dirname + "/views");
 app.set("view engine", "handlebars");
 
-app.use(cookieParser(process.env.COOKIE_SECRET));
+app.use(cookieParser(COOKIE_SECRET));
 app.use(
   session({
     store: new MemoryStore({ checkPeriod: 86400000 }),
-    secret: process.env.SESSION_SECRET,
+    secret: SESSION_SECRET,
     resave: false,
     saveUninitialized: true,
     cookie: { httpOnly: true, sameSite: "none", secure: true },
@@ -90,9 +89,9 @@ app.use("/apidocs", serve, setup(specs));
 // MONGO
 mongoose.set("strictQuery", false);
 mongoose.connect(
-  process.env.MONGO_URI,
+  MONGO_URI,
   {
-    dbName: process.env.DB_NAME,
+    dbName: DB_NAME,
   },
   (error) => {
     if (error) {
@@ -101,7 +100,7 @@ mongoose.connect(
     }
 
     logger.info("DB connected");
-    server.listen(port, () => logger.info(`Listening on port ${port}`));
+    server.listen(PORT, () => logger.info(`Listening on port ${PORT}`));
     server.on("error", (e) => logger.error(e));
   }
 );
