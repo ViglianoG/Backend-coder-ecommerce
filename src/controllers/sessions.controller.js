@@ -34,7 +34,11 @@ export const login = async (req, res) => {
       .json({ status: "error", error: "Invalid credentials" });
 
   res
-    .cookie(COOKIE_NAME, req.user.token)
+    .cookie(COOKIE_NAME, req.user.token, {
+      httpOnly: true,
+      sameSite: "none",
+      secure: true,
+    })
     .json({ status: "success", payload: user });
 };
 

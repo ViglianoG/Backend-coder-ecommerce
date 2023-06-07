@@ -79,6 +79,7 @@ export default class CartRepository {
 
   purchase = async (cid, purchaser) => {
     const cart = await this.getCart(cid);
+
     if (cart.products.length === 0) {
       CustomError.createError({
         name: "Purchase error",
@@ -100,9 +101,7 @@ export default class CartRepository {
 
     const outOfStock = cartProducts
       .filter((p) => p.stock < p.quantity)
-      .map((p) => ({
-        product: p._id,
-      }));
+      .map((p) => p._id);
 
     const available = cartProducts.filter((p) => p.stock >= p.quantity);
     const amount = available.reduce(

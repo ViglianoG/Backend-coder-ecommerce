@@ -2,7 +2,7 @@
   "name": "backend-coder-ecommerce",
   "version": "1.0.0",
   "description": "",
-  "main": "ProductManager.js",
+  "main": "src/app.js",
   "type": "module",
   "scripts": {
     "test": "mocha test/**/*.test.js --mode development",

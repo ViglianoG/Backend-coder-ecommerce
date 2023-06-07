@@ -205,9 +205,9 @@ describe("Testing Coder eCommerce", function () {
     it("El endpoint PUT api/carts/:cid/products/:pid debe actualizar la cantidad de un producto.", async () => {
       const { _body } = await requester
         .put(`api/carts/${mockCart._id}/products/${pid}`)
-        .send({ quantity: 5 })
+        .send({ quantity: 3 })
         .set("Cookie", [`${cookie.name}=${cookie.value}`]);
-      expect(_body.payload.products[0].quantity).to.be.ok.and.deep.equal(5);
+      expect(_body.payload.products[0].quantity).to.be.ok.and.deep.equal(3);
     });
 
     //DELL PROD FROM CART

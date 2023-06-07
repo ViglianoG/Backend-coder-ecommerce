@@ -14,7 +14,7 @@ export default class Cart {
   getById = async (id) => {
     return await CartModel.findById(id).populate({
       path: "products.product",
-      model: ProductModel,
+      model: "products",
     });
   };
 

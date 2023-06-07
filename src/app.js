@@ -55,7 +55,7 @@ app.use(
     secret: SESSION_SECRET,
     resave: false,
     saveUninitialized: true,
-    cookie: { secure: true },
+    cookie: { httpOnly: true, sameSite: "none", secure: true },
   })
 );
 initPassport();
