@@ -48,11 +48,11 @@ app.use(express.static(__dirname + "/public"));
 app.set("views", __dirname + "/views");
 app.set("view engine", "handlebars");
 
-app.use(cookieParser(COOKIE_SECRET));
+app.use(cookieParser(process.env.COOKIE_SECRET));
 app.use(
   session({
     store: new MemoryStore({ checkPeriod: 86400000 }),
-    secret: SESSION_SECRET,
+    secret: process.env.SESSION_SECRET,
     resave: false,
     saveUninitialized: true,
     cookie: { httpOnly: true, sameSite: "none", secure: true },
@@ -90,9 +90,9 @@ app.use("/apidocs", serve, setup(specs));
 // MONGO
 mongoose.set("strictQuery", false);
 mongoose.connect(
-  MONGO_URI,
+  process.env.MONGO_URI,
   {
-    dbName: DB_NAME,
+    dbName: process.env.DB_NAME,
   },
   (error) => {
     if (error) {
