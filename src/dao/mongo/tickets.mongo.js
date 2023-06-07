@@ -1,7 +1,7 @@
-import TicketModel from "./models/user.model.js"
+import TicketModel from "./models/ticket.model.js";
 
 export default class Tickets {
-    constructor() {}
+  constructor() {}
 
-    create = async (data) => await TicketModel.create(data)
+  create = async (data) => await TicketModel.create(data);
 }

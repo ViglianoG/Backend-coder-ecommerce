@@ -37,7 +37,7 @@ export const validateToken = (token) => {
 export const codeGenerator = async () => {
   let last =
     (await TicketModel.find().sort({ purchase_datetime: -1 }))[0]?.code ||
-    "AAAA";
+    "AA00";
 
   let letters = last.slice(0, 2);
   let nums = parseInt(last.slice(2));
@@ -54,9 +54,7 @@ export const codeGenerator = async () => {
     }
     nums = "00";
   } else {
-    nums = (nums + 1).toLocaleString(undefined, {
-      minimumIntegerDigits: 2,
-    });
+    nums = (nums + 1).toLocaleString(undefined, { minimumIntegerDigits: 2 });
   }
 
   return letters.concat(nums);

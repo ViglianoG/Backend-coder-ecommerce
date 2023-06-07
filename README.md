@@ -55,6 +55,4 @@ React: Coming soon
 
 ## Deploy
 
-https://backend-coder-ecommerce.vercel.app/
-
 https://backend-coder-ecommerce-production.up.railway.app/
