@@ -554,8 +554,18 @@ nav a {
 
 .login-form-container {
   display: flex;
-  justify-content: center;
+  flex-direction: column;
+  justify-content: space-evenly;
   align-items: center;
+  height: 100vh;
+}
+
+.login-form-container a {
+  text-decoration: none;
+  color: var(--dark-color);
+}
+.login-form-container a :visited {
+  color: var(--dark-color);
 }
 
 .login-form, .create-form, .password-recovery div {
@@ -565,7 +575,7 @@ nav a {
   row-gap: 1.25rem;
   -webkit-backdrop-filter: blur(20px);
           backdrop-filter: blur(20px);
-  padding: 2rem;
+  padding: 1.5rem 3.5rem;
   border-radius: 1rem;
   border: 2px solid var(--dark-color);
 }
@@ -677,6 +687,9 @@ nav a {
 .login-button.dark:hover, .create-form .dark.button:hover, .password-recovery div form button.dark:hover {
   box-shadow: 5px 5px 0px var(--light-color);
 }
+.login-button a, .create-form .button a, .password-recovery div form button a {
+  color: var(--dark-color);
+}
 .login-button a.dark, .create-form .button a.dark, .password-recovery div form button a.dark {
   color: var(--light-color);
 }
@@ -699,15 +712,20 @@ nav a {
   display: flex;
   align-items: center;
   background: var(--dark-color);
-  color: var(--light-color);
   box-shadow: none;
+}
+.login-button-ghost a {
+  color: var(--light-color);
+}
+.login-button-ghost a:hover {
+  color: var(--dark-color);
 }
 .login-button-ghost:hover {
   box-shadow: 5px 5px 0px rgba(0, 0, 0, 0.95);
   background: var(--brand-color);
 }
 
-.login-button-ghost > a:visited {
+.login-button-ghost a:visited {
   color: var(--light-color);
 }
 

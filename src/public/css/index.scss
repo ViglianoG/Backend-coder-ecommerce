@@ -620,8 +620,17 @@ nav {
 
 .login-form-container {
   display: flex;
-  justify-content: center;
+  flex-direction: column;
+  justify-content: space-evenly;
   align-items: center;
+  height: 100vh;
+}
+.login-form-container a {
+  text-decoration: none;
+  color: var(--dark-color);
+  :visited{
+    color: var(--dark-color);
+  }
 }
 
 .login-form {
@@ -630,7 +639,7 @@ nav {
   background-color: rgb(255, 255, 255, 0.5);
   row-gap: 1.25rem;
   backdrop-filter: blur(20px);
-  padding: 2rem;
+  padding: 1.5rem 3.5rem;
   border-radius: 1rem;
   border: 2px solid var(--dark-color);
   a {
@@ -749,6 +758,7 @@ nav {
   }
 
   a {
+    color: var(--dark-color);
     &.dark {
       color: var(--light-color);
 
@@ -775,7 +785,12 @@ nav {
   display: flex;
   align-items: center;
   background: var(--dark-color);
-  color: var(--light-color);
+  a {
+    color: var(--light-color);
+    &:hover{
+      color: var(--dark-color);
+    }
+  }
   box-shadow: none;
 
   &:hover {
@@ -784,7 +799,7 @@ nav {
   }
 }
 
-.login-button-ghost > a {
+.login-button-ghost a {
   &:visited {
     color: var(--light-color);
   }
@@ -803,11 +818,11 @@ nav {
   display: flex;
   justify-content: center;
   flex-direction: column;
-  h2{
+  h2 {
     margin-bottom: 1rem;
   }
-  input{
-    margin: .3rem 0;
+  input {
+    margin: 0.3rem 0;
   }
 }
 

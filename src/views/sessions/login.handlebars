@@ -1,4 +1,4 @@
-<div class="login-container">
+<section>
   <div class="login-form-container">
     <form class="login-form" action="/sessions/login" method="post">
       <h2 class="login-title">Iniciar sesión</h2>
@@ -21,20 +21,22 @@
       </div>
       <div class="login-buttons">
         <button class="login-button" type="submit">Log In</button>
-        <button class="login-button"><a href="/api/sessions/github">Ingresar con
-            Github</a>
-        </button>
-        <button class="login-button login-button-ghost"><a
-            href="/sessions/register"
-          >Registrate</a>
-        </button>
       </div>
-      <a href="/sessions/password_reset">Olvidé mi contraseña</a>
     </form>
+    <div class="login-buttons">
+      <button class="login-button"><a href="/api/sessions/github">Ingresar con
+          Github</a>
+      </button>
+      <button class="login-button login-button-ghost"><a
+          href="/sessions/register"
+        >Registrate</a>
+      </button>
+    </div>
+    <a href="/sessions/password_reset">Olvidé mi contraseña</a>
   </div>
   <div class="go-top-container">
     <div class="go-top-button">
       <i class="bx bx-chevron-up"></i>
     </div>
   </div>
-</div>
+</section>
